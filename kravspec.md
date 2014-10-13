@@ -1,3 +1,11 @@
+## Dokumentkonventioner
+Begrepp:
+*	Spelarkaraktär – Den ”gubbe” du styr i spelet
+*	Primära krav - Krav som MÅSTE uppfyllas.
+*	Sekundära krav - Krav som vi vill genomföra för att spelet ska bli bra.
+*	Tertiära krav - Krav som vi genomför i mån av tid.	
+
+
 ## Primära krav
 Användaren ska kunna:
 *	Med tangentbordet röra sig i en 2D-värld med ”top-down”-perspektiv och kollisionshantering.
@@ -20,7 +28,6 @@ Användaren ska kunna:
 *	Förstöra vissa föremål i spelvärlden.
 *	Uppleva någon form av partikeleffekter.
 *	Skjuta genom väggar av vissa material.
-
 
 ## Begränsningar
 Spelet kommer att vara i 2D. Spelet kommer endast att vara multiplayer. Ingen singleplayerkampanj eller spel mot botar kommer implementeras. Antalet spelare kommer vara begränsat uppåt, men det ska vara möjligt att spela åtminstone 4 spelare samtidigt.
