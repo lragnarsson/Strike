@@ -15,9 +15,6 @@
 ## Dokumentkonventioner
 Begrepp:
 *	Spelarkaraktär – Den ”gubbe” du styr i spelet
-*	Primära krav - Krav som MÅSTE uppfyllas.
-*	Sekundära krav - Krav som vi vill genomföra för att spelet ska bli bra.
-*	Tertiära krav - Krav som vi genomför i mån av tid.	
 
 ## Användargränssnitt
 Spelaren ska styra sin spelarkaraktär med tangentbord och mus. 
@@ -30,6 +27,14 @@ Musen styr:
 * musknappen får spelarkaraktären att avfyra sitt vapen.
 I första hand kommer både spel och server startas separat från en kommandotolk. När en spelare startar spelet får han ange vilken IP-adress han ska ansluta till. Eventuellt kan man ange vilket lag man ska vara med i när man ansluter. Spelaren som har startat servern får välja hur och när spelet startar. 
 Om en grafisk meny implementeras ska den styras med tangentbordet. Den ska i så fall innehålla 
+
+## Systembeskrivning
+Den grundläggande idén är att med en enkel uppsättning regler skapa ett spel som är så roligt som möjligt att spela. På så sätt maximeras glädjen medan arbetsinsatsen minimeras. Det hela påminner lite om Schack, där ett få antal regler gör en stor sport.
+
+Spelet är en topp-down-shooter där fokus ligger på taktik, samarbete och precision. För att uppnå detta ligger ett flerspelarläge samt diverse begränsningar för spelkaraktären, till exempel i form av begränsat synfält, i grunden. Precision uppnås genom att spelaren använder både tangentbord och mus för att kommunicera med spelet.
+Målsättningen är att göra spelet så utbyggbart som möjligt så att till exempel nya banor och spellägen kan läggas till med liten arbetsinsats.
+
+Nedan listas de konkreta krav som projektet innefattar. Primära krav är de krav som krävs för att få ett fungerande spel och som därmed MÅSTE uppfyllas. Under sekundära krav faller sådant som vi vill genomföra för att få spelet som vi har tänkt oss. Tertiära krav är de som tillför mervärde för spelupplevelsen men genomförs i mån av tid.
 
 ### Primära krav
 Användaren ska kunna:
