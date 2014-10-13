@@ -1,3 +1,16 @@
+# Strike: local defensive
+#####Kravspecifikation
+###### Projektmedlemmar:
+*	Jesper Otterholm
+*	Lage Ragnarsson
+*	Erik Sköld
+*	Rasmus Vilhelmsson
+*	Isak Viberg
+*	Filip Östman
+
+2014-10-13
+
+
 ## Dokumentkonventioner
 Begrepp:
 *	Spelarkaraktär – Den ”gubbe” du styr i spelet
