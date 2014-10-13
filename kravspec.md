@@ -1,5 +1,6 @@
-# Strike: local defensive
-#####Kravspecifikation
+# Kravspecifikation
+## Strike: local defensive
+### Projekt i kursen TDDC76, Linköpings Universitet
 ###### Projektmedlemmar:
 *	Jesper Otterholm
 *	Lage Ragnarsson
