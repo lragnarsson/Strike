@@ -15,6 +15,7 @@
 ## Dokumentkonventioner
 Begrepp:
 *	Spelarkaraktär – Den ”gubbe” du styr i spelet
+* 	Spelrunda - Ett avskiljt tillstånd för spelet med väldefinierade start- och slutvillkor som definieras av spelläget. 
 
 ## Användargränssnitt
 Spelaren ska styra sin spelarkaraktär med tangentbord och mus. 
@@ -26,7 +27,8 @@ Musen styr:
 * spelarkaraktärens riktning och därmed synfält samt sikte
 * musknappen får spelarkaraktären att avfyra sitt vapen.
 I första hand kommer både spel och server startas separat från en kommandotolk. När en spelare startar spelet får han ange vilken IP-adress han ska ansluta till. Eventuellt kan man ange vilket lag man ska vara med i när man ansluter. Spelaren som har startat servern får välja hur och när spelet startar. 
-Om en grafisk meny implementeras ska den styras med tangentbordet. Den ska i så fall innehålla 
+
+Om en grafisk meny implementeras ska den styras med tangentbordet. Den ska i så fall ge möjlighet att styra funktioner som definieras av sekundära och tertiära krav t.ex. spelläge och vilka vapen man ska börja spelrundan med. 
 
 ## Systembeskrivning
 Den grundläggande idén är att med en enkel uppsättning regler skapa ett spel som är så roligt som möjligt att spela. På så sätt maximeras glädjen medan arbetsinsatsen minimeras. Det hela påminner lite om Schack, där ett få antal regler gör en stor sport.
