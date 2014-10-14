@@ -6,7 +6,7 @@
 *	Lage Ragnarsson
 *	Erik Sköld
 *	Rasmus Vilhelmsson
-*	Isak Viberg
+*	Isak Wiberg
 *	Filip Östman
 
 2014-10-13
