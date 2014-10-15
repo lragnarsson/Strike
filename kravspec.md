@@ -14,8 +14,13 @@
 
 ## Dokumentkonventioner
 Begrepp:
-*	Spelarkaraktär – Den ”gubbe” du styr i spelet
-* 	Spelrunda - Ett avskiljt tillstånd för spelet med väldefinierade start- och slutvillkor som definieras av spelläget. 
+*	Spelarkaraktär - Den karaktär spelaren styr under spelrundan.
+* 	Spelrunda - Ett avskiljt tillstånd för spelet med väldefinierade start- och slutvillkor som specifiseras av spelläget.
+*	Spelsession - Tillståndet från det att programmet startar till dess att det avslutas.
+*	Spelvärld - Den miljö spelarkaraktären rör sig i och interagerar med.
+*	Karta - En specifik spelvärld som en spelrunda utspelar sig på.
+*	Top-down - Ovanifrånperspektiv
+*	Spelläge - En uppsättning regler för en spelrunda
 
 ## Användargränssnitt
 Spelaren ska styra sin spelarkaraktär med tangentbord och mus. 
@@ -33,7 +38,7 @@ Om en grafisk meny implementeras ska den styras med tangentbordet. Den ska i så
 ## Systembeskrivning
 Den grundläggande idén är att med en enkel uppsättning regler skapa ett spel som är så roligt som möjligt att spela. På så sätt maximeras glädjen medan arbetsinsatsen minimeras. Det hela påminner lite om Schack, där ett få antal regler gör en stor sport.
 
-Spelet är en topp-down-shooter där fokus ligger på taktik, samarbete och precision. För att uppnå detta ligger ett flerspelarläge samt diverse begränsningar för spelarkaraktären, till exempel i form av begränsat synfält, i grunden. Precision uppnås genom att spelaren använder både tangentbord och mus för att kommunicera med spelet.
+Spelet är en top-down-shooter där fokus ligger på taktik, samarbete och precision. För att uppnå detta ligger ett flerspelarläge samt diverse begränsningar för spelarkaraktären, till exempel i form av begränsat synfält, i grunden. Precision uppnås genom att spelaren använder både tangentbord och mus för att kommunicera med spelet.
 Målsättningen är att göra spelet så utbyggbart som möjligt så att till exempel nya banor och spellägen kan läggas till med liten arbetsinsats.
 
 Nedan listas de konkreta krav som projektet innefattar. Primära krav är de krav som krävs för att få ett fungerande spel och som därmed måste uppfyllas. Under sekundära krav faller sådant som vi vill genomföra för att få spelet som vi har tänkt oss. Tertiära krav är de som tillför mervärde för spelupplevelsen men genomförs i mån av tid.
@@ -47,7 +52,7 @@ Användaren ska kunna:
 ### Sekundära krav
 Användaren ska kunna:
 *	Ha ett synfält som beror av spelarens orientering och position.
-*	Starta spelet och ansluta till andra spelare från en grafisk meny.
+*	Starta och interagera med spelet från en grafisk meny.
 *	Nyttja någon typ av system för att hantera olika spelföremål, så som vapen.
 *	Se spelkaraktären genom en kameravy som följer spelarens rörelser.
 
@@ -62,7 +67,7 @@ Användaren ska kunna:
 *	Skjuta genom väggar av vissa material.
 
 ## Begränsningar
-Spelet kommer att vara i 2D. Spelet kommer endast att vara multiplayer. Ingen singleplayerkampanj eller spel mot botar kommer implementeras. Antalet spelare kommer vara begränsat uppåt, men det ska vara möjligt att spela åtminstone 4 spelare samtidigt.
+Spelet kommer att vara i 2D. Spelet kommer endast att ha ett multiplayer-läge. Ingen singleplayer-kampanj eller spel mot botar kommer att implementeras. Antalet spelare kommer att vara begränsat uppåt, men det ska vara möjligt att spela åtminstone 4 spelare samtidigt.
 
 ## Lagring av permanent data
-Filer för att representera kartan (inklusive kollisionshantering för kartan) kommer att lagras på separat fil. Denna ska vara utbytbar mot annan karta enkelt. Viss konfiguration kan komma att lagras på fil, t.ex. för att komma ihåg inställningar mellan spel. Lagring på fil under spel ska hållas så minimal som möjligt av prestationsskäl.
+En representation av kartan (inklusive kollisionshantering för kartan) kommer att lagras på separat fil. Denna ska vara trivialt utbytbar mot annan karta. Viss konfiguration kan komma att lagras på fil, t.ex. för att komma ihåg inställningar mellan spelsessioner. Lagring på fil under spelets gång ska hållas så minimal som möjligt av prestationsskäl.
