@@ -20,7 +20,8 @@ Begrepp:
 *	Spelvärld - Den miljö spelarkaraktären rör sig i och interagerar med.
 *	Karta - En specifik spelvärld som en spelrunda utspelar sig på.
 *	Top-down - Ovanifrånperspektiv
-*	Spelläge - En uppsättning regler för en spelrunda
+*	Spelläge - En uppsättning regler för en spelrunda.
+*	Kollisionsobjekt - Ett objekt i spelvärlden som påverkar spelarkaraktärens synfält, förmåga att skjuta eller förflytta sig.
 
 ## Användargränssnitt
 Spelaren ska styra sin spelarkaraktär med tangentbord och mus. 
@@ -45,13 +46,16 @@ Nedan listas de konkreta krav som projektet innefattar. Primära krav är de kra
 
 ### Primära krav
 Användaren ska kunna:
-*	Med tangentbordet röra sig i en 2D-värld med ”top-down”-perspektiv och kollisionshantering.
-*	Sikta och skjuta på motståndare med hjälp av musen.
-*	Spela med och mot andra spelare över internet eller LAN med fördefinierade regler. 
+*	Med tangentbordet röra sig i en 2D-värld med ”top-down”-perspektiv.
+*	Interagera med olika typer av kollisionsobjekt i spelvärlden.
+*	Sikta och skjuta med hjälp av musen.
+*	Skjuta med olika typer av vapen.
+*	Spela med andra spelare, uppdelade i lag, över internet eller LAN.
+*	Spela minst ett spelläge.
 
 ### Sekundära krav
 Användaren ska kunna:
-*	Ha ett synfält som beror av spelarens orientering och position.
+*	Ha ett synfält som beror av spelarens orientering, position och omgivande objekt.
 *	Starta och interagera med spelet från en grafisk meny.
 *	Nyttja någon typ av system för att hantera olika spelföremål, så som vapen.
 *	Se spelkaraktären genom en kameravy som följer spelarens rörelser.
