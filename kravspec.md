@@ -10,9 +10,12 @@
 *	Filip Östman
 
 2014-10-13
+
+<div style="page-break-after: always;"></div>
 ## Sammanfattning
 Detta dokument specificerar det projekt vi ämnar genomföra under projektdelen av kursen TDDC76 Programmering och datastrukturer. Ett avsnitt Användargränssnitt beskriver hur användaren är tänkt att interagera med de olika systemen, som i sin tur vidare specificeras under Systembeskrivning. Här listas även de krav som projektet omfattar, uppdelade i grupper efter prioritet. Avsnitten Begränsningar och Lagring av permanent data beskriver projektets omfattning respektive hur de olika systemen förväntas uppvisa ett återkommande beteende mellan körningar.
 
+<div style="page-break-after: always;"></div>
 ## Innehållsförteckning
 1. [Sammanfattning](#sammanfattning)
 2. [Innehållsförteckning](#innehållsförteckning)
@@ -26,6 +29,7 @@ Detta dokument specificerar det projekt vi ämnar genomföra under projektdelen 
 7. [Begränsningar](#begränsningar)
 8. [Lagring av permanent data](#lagring-av-permanent-data)
 
+<div style="page-break-after: always;"></div>
 ## Inledning
 Projektet som vi ska genomföra kommer bli en nätverksbaserad top-down-shooter där två lag möts bestående av spelare från olika datorer. Fokus kommer ligga på att spelläget ska bli intressant så att det blir en tydlig lagkänsla och samarbete ska uppmuntras. Grafik, ljud och utseende kommer får därför lägre prioritet i projektet. Spelarkaraktären kommer styras med hjälp av mus och tangentbord. Spelvärlden kommer ha objekt som spelarkaraktärer kan gömma sig bakom och utnyttja som skydd från fienden. Tanken är att spelet kommer byggas objektorienterat och därför vara enkelt att bygga ut med mer funktionalitet i framtiden. 
 
@@ -40,6 +44,7 @@ Begrepp:
 *	Spelvärld - Den miljö spelarkaraktären rör sig i och interagerar med.
 *	Top-down - Ovanifrånperspektiv
 
+<div style="page-break-after: always;"></div>
 ## Användargränssnitt
 Spelaren ska styra sin spelarkaraktär med tangentbord och mus. 
 
@@ -62,6 +67,7 @@ Målsättningen är att göra spelet så utbyggbart som möjligt så att till ex
 
 Nedan listas de konkreta krav som projektet innefattar. Primära krav är de krav som krävs för att få ett fungerande spel och som därmed måste uppfyllas. Under sekundära krav faller sådant som vi vill genomföra för att få spelet som vi har tänkt oss. Tertiära krav är de som tillför mervärde för spelupplevelsen men genomförs i mån av tid.
 
+<div style="page-break-after: always;"></div>
 ### Primära krav
 Användaren ska kunna:
 *	Med tangentbordet röra sig i en 2D-värld med ”top-down”-perspektiv.
@@ -89,8 +95,9 @@ Användaren ska kunna:
 *	Uppleva någon form av partikeleffekter.
 *	Skjuta genom väggar av vissa material.
 
+<div style="page-break-after: always;"></div>
 ## Begränsningar
 Spelet kommer att vara i 2D. Spelet kommer endast att ha ett flerspelarläge. Ingen enspelarkampanj eller spel mot botar kommer att implementeras. Antalet spelare kommer att vara begränsat uppåt, men det ska vara möjligt att spela åtminstone 4 spelare samtidigt.
 
 ## Lagring av permanent data
-En representation av kartan (inklusive kollisionshantering för kartan) kommer att lagras på separat fil. Denna ska vara trivialt utbytbar mot annan karta. Viss konfiguration kan komma att lagras på fil, t.ex. för att komma ihåg inställningar mellan spelsessioner. Lagring på fil under spelets gång ska hållas så minimal som möjligt av prestandaskäl.
+En representation av kartan (inklusive kollisionshantering) kommer att lagras på separat fil. Denna ska vara trivialt utbytbar mot annan karta. Viss konfiguration kan komma att lagras på fil, t.ex. för att komma ihåg inställningar mellan spelsessioner. Lagring på fil under spelets gång ska hållas så minimal som möjligt av prestandaskäl.
