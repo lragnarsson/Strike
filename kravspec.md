@@ -12,6 +12,18 @@
 2014-10-13
 ## Sammanfattning
 
+## Innehållsförteckning
+1. [Sammanfattning](#sammanfattning)
+2. [Innehållsförteckning](#innehållsförteckning)
+3. [Inledning](#inledning)
+4. [Dokumentkonventioner](#dokumentkonventioner)
+5. [Användargränssnitt](#användargränssnitt)
+6. [Systembeskrivning](#systembeskrivning)
+..1. [Primära krav](#primära-krav)
+..2. [Sekundära krav](#sekundära-krav)
+..3. [Tertiära krav](#tertiära-krav)
+7. [Begränsningar](#begränsningar)
+8. [Lagring av permanent data](#lagring-av-permanent-data)
 
 ## Inledning
 
