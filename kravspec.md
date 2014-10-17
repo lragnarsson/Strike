@@ -11,6 +11,7 @@
 
 2014-10-13
 ## Sammanfattning
+Detta dokument specificerar det projekt vi ämnar genomföra under projektdelen av kursen TDDC76 Programmering och datastrukturer. Ett avsnitt Användargränssnitt beskriver hur användaren är tänkt att interagera med de olika systemen, som i sin tur vidare specificeras under Systembeskrivning. Här listas även de krav som projektet omfattar, uppdelade i grupper efter prioritet. Avsnitten Begränsningar och Lagring av permanent data beskriver projektets omfattning respektive hur de olika systemen förväntas uppvisa ett återkommande beteende mellan körningar.
 
 ## Innehållsförteckning
 1. [Sammanfattning](#sammanfattning)
