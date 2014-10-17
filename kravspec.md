@@ -29,20 +29,21 @@ Begrepp:
 
 ## Användargränssnitt
 Spelaren ska styra sin spelarkaraktär med tangentbord och mus. 
+
 Tangentbordet styr:
-* förflyttning
-* eventuell interaktion med spelvärlden (t.ex. öppna dörrar)
-* eventuell meny.
+* Förflyttning.
+* Eventuell interaktion med spelvärlden (t.ex. öppna dörrar).
+* Eventuell meny.
+
 Musen styr:
-* spelarkaraktärens riktning och därmed synfält samt sikte
-* musknappen får spelarkaraktären att avfyra sitt vapen.
+* Spelarkaraktärens riktning och därmed synfält samt sikte.
+* Musknappen får spelarkaraktären att avfyra sitt vapen.
+
 I första hand kommer både spel och server startas separat från en kommandotolk. När en spelare startar spelet får han ange vilken IP-adress han ska ansluta till. Eventuellt kan man ange vilket lag man ska vara med i när man ansluter. Spelaren som har startat servern får välja hur och när spelet startar. 
 
 Om en grafisk meny implementeras ska den styras med tangentbordet. Den ska i så fall ge möjlighet att styra funktioner som definieras av sekundära och tertiära krav t.ex. spelläge och vilka vapen man ska börja spelrundan med. 
 
 ## Systembeskrivning
-Den grundläggande idén är att med en enkel uppsättning regler skapa ett spel som är så roligt som möjligt att spela. På så sätt maximeras glädjen medan arbetsinsatsen minimeras. Det hela påminner lite om Schack, där ett få antal regler gör en stor sport.
-
 Spelet är en top-down-shooter där fokus ligger på taktik, samarbete och precision. För att uppnå detta ligger ett flerspelarläge samt diverse begränsningar för spelarkaraktären, till exempel i form av begränsat synfält, i grunden. Precision uppnås genom att spelaren använder både tangentbord och mus för att kommunicera med spelet.
 Målsättningen är att göra spelet så utbyggbart som möjligt så att till exempel nya banor och spellägen kan läggas till med liten arbetsinsats.
 
@@ -55,6 +56,7 @@ Användaren ska kunna:
 *	Sikta och skjuta med hjälp av musen.
 *	Använda olika typer av vapen.
 *	Spela med andra spelare, uppdelade i lag, över internet eller LAN.
+* 	Minst 4 spelare ska kunna spela i samma match.
 *	Spela minst ett spelläge.
 
 ### Sekundära krav
@@ -78,4 +80,4 @@ Användaren ska kunna:
 Spelet kommer att vara i 2D. Spelet kommer endast att ha ett multiplayer-läge. Ingen singleplayer-kampanj eller spel mot botar kommer att implementeras. Antalet spelare kommer att vara begränsat uppåt, men det ska vara möjligt att spela åtminstone 4 spelare samtidigt.
 
 ## Lagring av permanent data
-En representation av kartan (inklusive kollisionshantering för kartan) kommer att lagras på separat fil. Denna ska vara trivialt utbytbar mot annan karta. Viss konfiguration kan komma att lagras på fil, t.ex. för att komma ihåg inställningar mellan spelsessioner. Lagring på fil under spelets gång ska hållas så minimal som möjligt av prestationsskäl.
+En representation av kartan (inklusive kollisionshantering för kartan) kommer att lagras på separat fil. Denna ska vara trivialt utbytbar mot annan karta. Viss konfiguration kan komma att lagras på fil, t.ex. för att komma ihåg inställningar mellan spelsessioner. Lagring på fil under spelets gång ska hållas så minimal som möjligt av prestandaskäl.
