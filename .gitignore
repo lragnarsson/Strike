@@ -1,0 +1,15 @@
+*
+!.gitignore
+!*/
+!*.cc
+!*.cpp
+!*.h
+!*.ogg
+!*.jpg
+!*.png
+!*.bmp
+!*.ttf
+!*.md
+*.depend
+*.layout
+/libraries
