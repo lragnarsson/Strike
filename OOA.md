@@ -31,9 +31,13 @@
 #### sf:Transformable
 #### Map
 #### PhysicalObject
+Abstrakt basklass för geometriska former som diverse linjer och strålar kan kollidera med.
 #### PhysicalPolygon
+Håller den geometriska beskrivningen av en godtycklig månghörning samt implementerar kollisionsalgoritmer för en sådan.
 #### PhysicalCircle
+Håller den geometriska beskrivningen av en cirkel samt implementerar kollisionsalgoritmer för en sådan.
 #### PhysicalAABox
+Håller den geometriska beskrivningen av en axeljusterad rektangel samt implementerar kollisionsalgoritmer för en sådan.
 #### Client
 #### Server
 #### Packet
