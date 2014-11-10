@@ -38,6 +38,11 @@
 #### PhysicalPolygon
 #### PhysicalCircle
 #### PhysicalAABox
+#### NetworkHandler
+En klass för att sköta kommunikation över nätverk. Innehåller mest metoder för att packetera och skicka data.
 #### Client
+Ärver från Game. I denna klass finns logiken för att köra en klients game-loop. Client har en Controller och en NetworkHandler.
 #### Server
+Ärver från Game. I denna klass finns logiken för att köra en servers game-loop. Denna skiljer sig från Client då den till exempel inte behöver rita någon spelgrafik. Kommunikationen över nätverket kommer också att vara lite annolunda.
 #### Packet
+En klass för att kapsla in meddelanden för att skicka över nätverket. Kan skilja på packet av olika typ, t.ex positionsuppdateringar, skott, mm. 
