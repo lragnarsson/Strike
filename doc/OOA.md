@@ -20,6 +20,10 @@
 2. [Klassbeskrivningar](#Klassbeskrivning)
 
 <div style="page-break-after: always;"></div>
+## Klassdiagram
+![alt text](OOA.jpg "Klassdiagram")
+
+<div style="page-break-after: always;"></div>
 ## Klassbeskrivningar
 #### Game
 Game är en abstrakt klass som har en gameloop och ett GameState-objekt. 
