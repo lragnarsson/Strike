@@ -10,6 +10,7 @@
 !*.bmp
 !*.ttf
 !*.md
+!*.pdf
 *.depend
 *.layout
 /libraries
