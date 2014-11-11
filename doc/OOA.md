@@ -63,6 +63,8 @@ En klass för att kapsla in meddelanden för att skicka över nätverket. Kan sk
 
 <div style="page-break-after: always;"></div>
 ## Användningsfall
-#### En spelare skjuter ett skott.
-Gameloopen i Client frågar input-funktionen i Controller om skjutknappen är nedtryckt. Knappen var nedtryckt och Controller säger åt Player att han sköt. Player säger åt Weapon att minska sin ammunition följt av att Weapon avfyrar ett Shot som får en startposition, riktningsvektor och ritar ut sig själv eftersom det är en sf::Drawable.
+#### Användaren startar en klient
+Använderen startar den exekverbara spelfilen och kan därefter genom ett terminalfönster ange detaljer för att ansluta till en server.
+#### En spelare skjuter ett skott
+Gameloopen i Client registrerar alla knapptryckningar och skickar det vidare till Controller som hanterar fallet då skjutknappen är nedtryckt. Knappen var nedtryckt och Controller säger åt Player att han sköt. Player säger åt Weapon att avfyras som minskar sin ammunition och skapar ett Shot som får en startposition, riktningsvektor och möjligheten att rita ut sig själv eftersom det är en sf::Drawable.
 
