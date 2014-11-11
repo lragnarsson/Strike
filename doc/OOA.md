@@ -13,15 +13,15 @@
 
 <div style="page-break-after: always;"></div>
 ## Sammanfattning
+Detta dokument ger en översiktlig klasstruktur för projektet. Klasserna beskrivs dels i ett diagram samt senare kort i text. I diagrammet kan man också se hur klasserna relaterar till varandra. 
 
-<div style="page-break-after: always;"></div>
 ## Innehållsförteckning
 1. [Sammanfattning](#sammanfattning)
 2. [Klassbeskrivningar](#Klassbeskrivning)
 
 <div style="page-break-after: always;"></div>
 ## Klassdiagram
-![alt text](OOA.jpg "Klassdiagram")
+![alt text](https://raw.githubusercontent.com/lragnarsson/Strike/master/doc/OOA.jpg "Klassdiagram")
 
 <div style="page-break-after: always;"></div>
 ## Klassbeskrivningar
