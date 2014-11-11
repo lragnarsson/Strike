@@ -9,15 +9,17 @@
 *	Isak Wiberg
 *	Filip Östman
 
-2014-10-13
+2014-11-11
 
 <div style="page-break-after: always;"></div>
 ## Sammanfattning
 Detta dokument ger en översiktlig klasstruktur för projektet. Klasserna beskrivs dels i ett diagram samt senare kort i text. I diagrammet kan man också se hur klasserna relaterar till varandra. 
 
 ## Innehållsförteckning
-1. [Sammanfattning](#sammanfattning)
-2. [Klassbeskrivningar](#Klassbeskrivning)
+1. [Sammanfattning](#Sammanfattning)
+2. [Klassdiagram](#Klassdiagram)
+3. [Klassbeskrivningar](#Klassbeskrivning)
+4. [Användningsfall](#Användningsfall)
 
 <div style="page-break-after: always;"></div>
 ## Klassdiagram
@@ -30,7 +32,7 @@ Game är en abstrakt klass som har en gameloop och ett GameState-objekt.
 #### Client
 Client är en subklass till Game som skapas hos användaren när denne startar spelet. Den har en controller som hanterar användarens input. Dessutom har den samma networkhandler-objekt som server har. Detta objekt hanterar nätverkskommunikationen. 
 #### Server
-Ärver från Game. I denna klass finns logiken för att köra en servers game-loop. Denna skiljer sig från Client då den till exempel inte behöver rita någon spelgrafik. Kommunikationen över nätverket kommer också att vara lite annolunda.
+Ärver från Game. I denna klass finns logiken för att köra en servers gameloop. Denna skiljer sig från Client då den till exempel inte behöver rita någon spelgrafik. Kommunikationen över nätverket kommer också att vara lite annolunda.
 #### Packet
 En klass för att kapsla in meddelanden för att skicka över nätverket. Kan skilja på packet av olika typ, t.ex positionsuppdateringar, skott, mm. 
 #### GameState
@@ -64,6 +66,7 @@ En klass för att sköta kommunikation över nätverk. Innehåller mest metoder 
 ## Användningsfall
 #### Användaren startar en klient
 Använderen startar den exekverbara spelfilen och kan därefter genom ett terminalfönster ange detaljer för att ansluta till en server.
+
 #### En spelare skjuter ett skott
 Gameloopen i Client registrerar alla knapptryckningar och skickar det vidare till Controller som hanterar fallet då skjutknappen är nedtryckt. Knappen var nedtryckt och Controller säger åt Player att han sköt. Player säger åt Weapon att avfyras som minskar sin ammunition och skapar ett Shot som får en startposition, riktningsvektor och möjligheten att rita ut sig själv eftersom det är en sf::Drawable.
 
