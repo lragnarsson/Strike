@@ -61,3 +61,8 @@ Client är en subklass till game som skapas hos spelaren när han startar spelet
 #### Packet
 En klass för att kapsla in meddelanden för att skicka över nätverket. Kan skilja på packet av olika typ, t.ex positionsuppdateringar, skott, mm. 
 
+<div style="page-break-after: always;"></div>
+## Användningsfall
+#### En spelare skjuter ett skott.
+Gameloopen i Client frågar input-funktionen i Controller om skjutknappen är nedtryckt. Knappen var nedtryckt och Controller säger åt Player att han sköt. Player säger åt Weapon att minska sin ammunition följt av att Weapon avfyrar ett Shot som får en startposition, riktningsvektor och ritar ut sig själv eftersom det är en sf::Drawable.
+
