@@ -27,7 +27,12 @@ Detta dokument ger en översiktlig klasstruktur för projektet. Klasserna beskri
 ## Klassbeskrivningar
 #### Game
 Game är en abstrakt klass som har en gameloop och ett GameState-objekt. 
-
+#### Client
+Client är en subklass till Game som skapas hos användaren när denne startar spelet. Den har en controller som hanterar användarens input. Dessutom har den samma networkhandler-objekt som server har. Detta objekt hanterar nätverkskommunikationen. 
+#### Server
+Ärver från Game. I denna klass finns logiken för att köra en servers game-loop. Denna skiljer sig från Client då den till exempel inte behöver rita någon spelgrafik. Kommunikationen över nätverket kommer också att vara lite annolunda.
+#### Packet
+En klass för att kapsla in meddelanden för att skicka över nätverket. Kan skilja på packet av olika typ, t.ex positionsuppdateringar, skott, mm. 
 #### GameState
 Detta objekt samordnar de olika delarna som beskriver spelsessionen. Den innehåller alla objekt som ska finnas i sessionen och alla objekt som skapas under sessionens gång. 
 #### Team
@@ -54,12 +59,6 @@ Håller den geometriska beskrivningen av en cirkel samt implementerar kollisions
 Håller den geometriska beskrivningen av en axeljusterad rektangel samt implementerar kollisionsalgoritmer för en sådan.
 #### NetworkHandler
 En klass för att sköta kommunikation över nätverk. Innehåller mest metoder för att packetera och skicka data.
-#### Client
-Client är en subklass till game som skapas hos spelaren när han startar spelet. Den har en controller som hanterar användarens input. Dessutom har den samma networkhandler-objekt som server har. Detta objekt hanterar nätverkskommunikationen. 
-#### Server
-Ärver från Game. I denna klass finns logiken för att köra en servers game-loop. Denna skiljer sig från Client då den till exempel inte behöver rita någon spelgrafik. Kommunikationen över nätverket kommer också att vara lite annolunda.
-#### Packet
-En klass för att kapsla in meddelanden för att skicka över nätverket. Kan skilja på packet av olika typ, t.ex positionsuppdateringar, skott, mm. 
 
 <div style="page-break-after: always;"></div>
 ## Användningsfall
@@ -67,4 +66,8 @@ En klass för att kapsla in meddelanden för att skicka över nätverket. Kan sk
 Använderen startar den exekverbara spelfilen och kan därefter genom ett terminalfönster ange detaljer för att ansluta till en server.
 #### En spelare skjuter ett skott
 Gameloopen i Client registrerar alla knapptryckningar och skickar det vidare till Controller som hanterar fallet då skjutknappen är nedtryckt. Knappen var nedtryckt och Controller säger åt Player att han sköt. Player säger åt Weapon att avfyras som minskar sin ammunition och skapar ett Shot som får en startposition, riktningsvektor och möjligheten att rita ut sig själv eftersom det är en sf::Drawable.
+
+#### Användaren startar en server
+När man startar en server ska man kunna ange parametrar för hur servern ska bete sig, t.ex vilken bana som ska spelas, maximalt antal spelare. Servern kommer vara ett terminalprogram som användaren interagerar med när spelsessionen ska startas. 
+
 
