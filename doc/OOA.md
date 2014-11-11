@@ -21,7 +21,7 @@ Detta dokument ger en översiktlig klasstruktur för projektet. Klasserna beskri
 
 <div style="page-break-after: always;"></div>
 ## Klassdiagram
-![alt text](https://raw.githubusercontent.com/lragnarsson/Strike/master/doc/OOA.jpg "Klassdiagram")
+<img src="OOA.jpg">Klassdiagram</img>
 
 <div style="page-break-after: always;"></div>
 ## Klassbeskrivningar
