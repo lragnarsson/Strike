@@ -29,7 +29,7 @@
 Game är en abstrakt klass som har en gameloop och ett GameState-objekt. 
 
 #### GameState
-
+Detta objekt samordnar de olika delarna som beskriver spelsessionen. Den innehåller alla objekt som ska finnas i sessionen och alla objekt som skapas under sessionens gång. 
 #### Team
  Klassen Team ska ha hand om spelare, deras lag och eventuellt ett poängsystem. Den är hårt knuten till GameState och Player är hårt bunden till Team.
 #### Player
