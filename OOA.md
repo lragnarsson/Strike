@@ -35,8 +35,11 @@ Game är en abstrakt klass som har en gameloop och ett GameState-objekt.
 #### Shot
  Shotklassen ska hålla reda på position och rörelsevektor för avlossad projektil. Shot ärver från sf::Drawable och kommunicerar med Weapon.
 #### sf::Drawable
-#### sf:Transformable
+sf::Drawable är en abstrakt klass i SFML-biblioteket som allt utritbart skall ärva.
+#### sf::Transformable
+sf::Transformable är en abstrakt klass i SFML-biblioteket som ärvs av de klasser som ska kunna transformeras. Dvs förflyttas, roteras eller skalas.
 #### Map
+Map är en drawable för att den ska kunna rita ut sin bakgrundsbild. Den har en lista över physical objects som utgör banans geometri.
 #### PhysicalObject
 Abstrakt basklass för geometriska former som diverse linjer och strålar kan kollidera med.
 #### PhysicalPolygon
