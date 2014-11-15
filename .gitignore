@@ -4,6 +4,8 @@
 !*.cc
 !*.cpp
 !*.h
+!*.mm
+!*.hpp
 !*.ogg
 !*.jpg
 !*.png
@@ -13,4 +15,5 @@
 !*.pdf
 *.depend
 *.layout
+
 /libraries
