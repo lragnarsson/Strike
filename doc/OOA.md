@@ -69,7 +69,6 @@ Använderen startar den exekverbara spelfilen och kan därefter genom ett termin
 
 #### En spelare skjuter ett skott
 Gameloopen i Client registrerar alla knapptryckningar och skickar det vidare till Controller som hanterar fallet då skjutknappen är nedtryckt. Knappen var nedtryckt och Controller säger åt Player att han sköt. Player säger åt Weapon att avfyras som minskar sin ammunition och skapar ett Shot som får en startposition, riktningsvektor och möjligheten att rita ut sig själv eftersom det är en sf::Drawable.
-
 #### Användaren startar en server
 När man startar en server ska man kunna ange parametrar för hur servern ska bete sig, t.ex vilken bana som ska spelas, maximalt antal spelare. Servern kommer vara ett terminalprogram som användaren interagerar med när spelsessionen ska startas. 
 
