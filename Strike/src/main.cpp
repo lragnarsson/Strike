@@ -19,15 +19,18 @@
 
 // Here is a small helper for you ! Have a look.
 #include "ResourcePath.hpp"
+#include "Player.h"
+#include "GameState.h"
 
 int main(int, char const**)
 {
     // Create the main window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
-
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground", sf::Style::Fullscreen);
+    
+    /*
     // Set the Icon
     sf::Image icon;
-    if (!icon.loadFromFile(resourcePath("res/img/")+ "icon.png")) {
+    if (!icon.loadFromFile(resourcePath("res/img/") + "icon.png")) {
         return EXIT_FAILURE;
     }
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
@@ -55,7 +58,13 @@ int main(int, char const**)
 
     // Play the music
     music.play();
-
+     */
+    
+    GameState Game;
+    Player player1;
+    
+    Game.addPlayer(player1);
+    
     // Start the game loop
     while (window.isOpen())
     {
@@ -76,13 +85,16 @@ int main(int, char const**)
 
         // Clear screen
         window.clear();
-
+/*
         // Draw the sprite
         window.draw(sprite);
 
         // Draw the string
         window.draw(text);
-
+*/
+        Game.draw(window);
+        
+        
         // Update the window
         window.display();
     }
