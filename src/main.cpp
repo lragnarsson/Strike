@@ -21,12 +21,13 @@
 #include "ResourcePath.hpp"
 #include "Player.h"
 #include "GameState.h"
+#include "Controller.hpp"
 
 int main(int, char const**)
 {
     // Create the main window
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground", sf::Style::Fullscreen);
-    
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground");
+
     /*
     // Set the Icon
     sf::Image icon;
@@ -59,12 +60,14 @@ int main(int, char const**)
     // Play the music
     music.play();
      */
-    
+
     GameState Game;
     Player player1;
-    
+    Controller controller;
+
     Game.addPlayer(player1);
-    
+    controller.bindPlayer(&player1);
+
     // Start the game loop
     while (window.isOpen())
     {
@@ -92,11 +95,13 @@ int main(int, char const**)
         // Draw the string
         window.draw(text);
 */
+        controller.movePlayer();
         Game.draw(window);
-        
-        
+
+
         // Update the window
         window.display();
+
     }
 
     return EXIT_SUCCESS;

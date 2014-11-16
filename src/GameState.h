@@ -17,15 +17,15 @@ class GameState{
 public:
     GameState();
     ~GameState() = default;
-    
-    void addPlayer(Player::Player &);
+
+    void addPlayer(Player&);
     void draw(sf::RenderWindow& window);
-    
+
 private:
-    std::vector<Player::Player> players_;
+    std::vector<Player> players_;
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
-    
+
 };
 
 #endif /* defined(__Strike__GameState__) */

@@ -14,21 +14,21 @@
 
 
 
-class Player: public sf::Drawable, sf::Transformable //PhysicalCircle, this will handle collissions.
+class Player: public sf::Drawable, public sf::Transformable //PhysicalCircle, this will handle collissions.
 {
 public:
     Player();
     ~Player() = default;
     float getSpeed() const;
-    
+
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    
+
     sf::Texture texture_;
     sf::Sprite sprite_;
-    
+
     float speed_ = 0.5f;
-    
+
 };
 
 

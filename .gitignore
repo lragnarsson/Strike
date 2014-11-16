@@ -1,0 +1,13 @@
+*
+!.gitignore
+!*/
+!*.cc
+!*.cpp
+!*.h
+!*.hpp
+!*.ogg
+!*.jpg
+!*.png
+!*.bmp
+!*.ttf
+libraries/
