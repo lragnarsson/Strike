@@ -18,11 +18,13 @@ public:
     GameState();
     ~GameState() = default;
 
-    void addPlayer(Player&);
+    void addPlayer(Player*);
+
     void draw(sf::RenderWindow& window);
 
 private:
-    std::vector<Player> players_;
+    std::vector<Player*> players_;
+
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
 

@@ -21,7 +21,8 @@
 #include "ResourcePath.hpp"
 #include "Player.h"
 #include "GameState.h"
-#include "Controller.hpp"
+#include "Controller.h"
+#include <iostream>
 
 int main(int, char const**)
 {
@@ -65,8 +66,9 @@ int main(int, char const**)
     Player player1;
     Controller controller;
 
-    Game.addPlayer(player1);
+    Game.addPlayer(&player1);
     controller.bindPlayer(&player1);
+
 
     // Start the game loop
     while (window.isOpen())
@@ -86,6 +88,7 @@ int main(int, char const**)
             }
         }
 
+    
         // Clear screen
         window.clear();
 /*
@@ -95,7 +98,11 @@ int main(int, char const**)
         // Draw the string
         window.draw(text);
 */
+        // Move the player, debug position in console
         controller.movePlayer();
+        controller.rotatePlayer(window);
+
+        
         Game.draw(window);
 
 
