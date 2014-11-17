@@ -26,7 +26,7 @@ private:
     
     sf::Texture texture_;
     //sf::Sprite weapon_;
-    float speed_ = 1.0f;
+    float speed_ = 0.2f;
     //float rotateSpeed_ = 1.0f;
     
 };

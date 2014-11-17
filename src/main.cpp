@@ -27,8 +27,18 @@
 int main(int, char const**)
 {
     // Create the main window
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground");
-
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground", sf::Style::Fullscreen);
+    //sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground");
+    
+    // let's define a view
+    sf::View view(sf::FloatRect(0, 0, 500, 300));
+    
+    // activate it
+    window.setView(view);
+    
+    // draw something to that view
+    //window.draw(some_sprite);
+    
     /*
     // Set the Icon
     sf::Image icon;
@@ -64,10 +74,14 @@ int main(int, char const**)
 
     GameState Game;
     Player player1;
+    Player player2;
     Controller controller;
-
+    
     Game.addPlayer(&player1);
+    Game.addPlayer(&player2); // this player does not have a controller. just for fun. 
+    player2.setPosition(100.0f,100.0f);
     controller.bindPlayer(&player1);
+    controller.bindView(&view);
 
 
     // Start the game loop
@@ -99,10 +113,11 @@ int main(int, char const**)
         window.draw(text);
 */
         // Move the player, debug position in console
-        controller.movePlayer();
-        controller.rotatePlayer(window);
+        controller.movePlayer(window);
+        //controller.rotatePlayer(window);
+        controller.updateView();
 
-        
+        window.setView(view);
         Game.draw(window);
 
 
