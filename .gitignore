@@ -10,4 +10,6 @@
 !*.png
 !*.bmp
 !*.ttf
+!*.md
 libraries/
+!doc/
