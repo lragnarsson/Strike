@@ -131,9 +131,9 @@ Datamedlem | Beskrivning
 --- | ---
 int timestamp | Representerar när skottet skapades.
 int clientID | Vem som skapade skottet. 
-sf::vector2f origin | Startpunkt. 
-sf::vector2f direction | Riktning. 
-sf::vector2f end | Slutpunkt. 
+sf::Vector2f origin | Startpunkt. 
+sf::Vector2f direction | Riktning. 
+sf::Vector2f end | Slutpunkt. 
 float damage | Skada som skottet orsakar vid träff. 
 
 Funktion | Beskrivning
@@ -194,7 +194,7 @@ En klass för att sköta kommunikation över nätverk. Innehåller främst metod
 Datamedlem | Beskrivning
 --- | ---
 int clientID |
-vector<sf::IpAdress> connectedIP |
+vector\<sf::IpAdress\> connectedIP |
 
 Funktion | Beskrivning
 --- | ---
@@ -206,10 +206,10 @@ Abstrakt basklass för geometriska former som diverse linjer och strålar kan ko
 
 Funktion | Beskrivning
 --- | ---
-bool intersectLine(Line line [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) = 0 const | Pure virtual-funktion
-bool intersectLineSegment(LineSegment lineSegment [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) = 0 const | Pure virtual-funktion
-bool intersectRay(Ray ray [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) = 0 const | Pure virtual-funktion
-bool intersectCircle(float radius, LineSegment displacement [, sf::vector2f& centerAfterCollision [, sf::vector2f& intersectionPoint [, sf::vector2f&  intersectionNormal]]]) = 0 const | Pure virtual-funktion
+bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) = 0 const | Pure virtual-funktion
+bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) = 0 const | Pure virtual-funktion
+bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) = 0 const | Pure virtual-funktion
+bool intersectCircle(float radius, LineSegment displacement [, sf::Vector2f& centerAfterCollision [, sf::Vector2f& intersectionPoint [, sf::Vector2f&  intersectionNormal]]]) = 0 const | Pure virtual-funktion
 
 
 ### PhysicalCircle : PhysicalObject
@@ -217,15 +217,15 @@ Håller den geometriska beskrivningen av en cirkel samt implementerar kollisions
 
 Datamedlem | Beskrivning
 --- | ---
-sf::vector2f& center | Cirkelns centrum.
+sf::Vector2f center | Cirkelns centrum.
 float radius | Cirkelns radie.
 
 Funktion | Beskrivning
 --- | ---
-bool intersectLine(Line line [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) const | Utför kollision mellan en given linje och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt kollisionspunkt och kollisionsnormal.
-bool intersectLineSegment(LineSegment lineSegment [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) const | Utför kollision mellan ett givet linjesegment och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
-bool intersectRay(Ray ray [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) const | Utför kollision mellan en given stråle och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
-bool intersectCircle(float radius, LineSegment displacement [, sf::vector2f& centerAfterCollision [, sf::vector2f& intersectionPoint [, sf::vector2f intersectionNormal]]]) const | Utför kollision mellan en given cirkel som rör sig längs ett givet linjesegment och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut den kolliderande cirkelns centrum vid kollision, + kollisionspunkt samt + kollisionsnormal.
+bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given linje och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
+bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan ett givet linjesegment och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
+bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given stråle och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
+bool intersectCircle(float radius, LineSegment displacement [, sf::Vector2f& centerAfterCollision [, sf::Vector2f& intersectionPoint [, sf::Vector2f intersectionNormal]]]) const | Utför kollision mellan en given cirkel som rör sig längs ett givet linjesegment och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut den kolliderande cirkelns centrum vid kollision, + kollisionspunkt samt + kollisionsnormal.
 
 
 ### PhysicalPolygon : PhysicalObject
@@ -233,14 +233,14 @@ Håller den geometriska beskrivningen av en cirkel samt implementerar kollisions
 
 Datamedlem | Beskrivning
 --- | ---
-vector<sf::vector2f> vertices | En lista med punkter som defienierar polygonen.
+vector<sf::Vector2f> vertices | En lista med punkter som defienierar polygonen.
 
 Funktion | Beskrivning
 --- | ---
-bool intersectLine(Line line [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) const | Utför kollision mellan en given linje och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
-bool intersectLineSegment(LineSegment lineSegment [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) const | Utför kollision mellan ett givet linjesegment och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
-bool intersectRay(Ray ray [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) const | Utför kollision mellan en given stråle och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
-bool intersectCircle(float radius, LineSegment displacement [, sf::vector2f& centerAfterCollision [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]]) const | Utför kollision mellan en given cirkel som rör sig längs ett givet linjesegment och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut den kolliderande cirkelns centrum vid kollision, + kollisionspunkt samt + kollisionsnormal.
+bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given linje och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
+bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan ett givet linjesegment och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
+bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given stråle och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
+bool intersectCircle(float radius, LineSegment displacement [, sf::Vector2f& centerAfterCollision [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]]) const | Utför kollision mellan en given cirkel som rör sig längs ett givet linjesegment och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut den kolliderande cirkelns centrum vid kollision, + kollisionspunkt samt + kollisionsnormal.
 
 
 ### PhysicalAABox : PhysicalObject
@@ -254,7 +254,7 @@ float height | Rektangelns höjd.
 
 Funktion | Beskrivning
 --- | ---
-bool intersectLine(Line line [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) const | Utför kollision mellan en given linje och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
-bool intersectLineSegment(LineSegment lineSegment [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) const | Utför kollision mellan ett givet linjesegment och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
-bool intersectRay(Ray ray [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]) const | Utför kollision mellan en given stråle och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
-bool intersectCircle(float radius, LineSegment displacement [, sf::vector2f& centerAfterCollision [, sf::vector2f& intersectionPoint [, sf::vector2f& intersectionNormal]]]) const | Utför kollision mellan en given cirkel som rör sig längs ett givet linjesegment och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut den kolliderande cirkelns centrum vid kollision, + kollisionspunkt samt + kollisionsnormal.
+bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given linje och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
+bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan ett givet linjesegment och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
+bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given stråle och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
+bool intersectCircle(float radius, LineSegment displacement [, sf::Vector2f& centerAfterCollision [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]]) const | Utför kollision mellan en given cirkel som rör sig längs ett givet linjesegment och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut den kolliderande cirkelns centrum vid kollision, + kollisionspunkt samt + kollisionsnormal.
