@@ -69,7 +69,7 @@ draw() |
 
 Datamedlem | Beskrivning
 --- | ---
-map<int, string> clients |
+map\<int, string\> clients |
 
 Funktion | Beskrivning
 --- | ---
@@ -83,10 +83,9 @@ Datamedlem | Beskrivning
 Player* player | Spelarkaraktären som styrs av detta objekt.
 sf::View* view | Detta objekt styr vad användaren ser på sin skärm. 
 
-
 Funktion | Beskrivning
 --- | ---
-movePlayer(vector<PhysicalObject*>* obstacles) | 
+movePlayer(vector\<PhysicalObject*\>* obstacles) | 
 bindPlayer(Player*) | Binder spelarkaraktären till detta objekt. Körs framförallt vid initiering. 
 updateView() | Uppdaterar view-objektet så att "kameran" följer spelarkaraktären. 
 bindView() | Binder ett view-objekt till detta objekt. Körs framförallt vid initiering. 
@@ -98,7 +97,7 @@ Klassen Team ska representera ett lag i spelet, med en lista över lagets spelar
 Datamedlem | Beskrivning
 --- | ---
 int teamID | Varje lag ska ha en unik identifierare.
-vector<Player*> players | En vektor med pekare till alla spelare i laget.
+vector\<Player*\> players | En vektor med pekare till alla spelare i laget.
 int score | Lagets poäng.
 
 Funktion | Beskrivning
@@ -113,9 +112,9 @@ Detta objekt samordnar de olika delarna som beskriver spelsessionen. Den innehå
 Datamedlem | Beskrivning
 --- | ---
 stateEnum state | Beskriver stadiet som spelet är i. T.ex. runda avslutad, lag x vann eller pågående spelläge. 
-vector<Team> teams | En vektor med lagen. Observera att det inte finns något lista med spelare, den finns i respektive lag. 
-vector<Shot> unhandledShots | Skott som skapats av klienten men som ännu inte replikerats över nätverket. De kommer att få slutpunkt beräknad innan de läggs till i handledShots. 
-vector<Shot> handledShots | Här ligger alla skott som existerar och som är klara för utritning. De behöver inte skickas över nätverket. 
+vector\<Team\> teams | En vektor med lagen. Observera att det inte finns något lista med spelare, den finns i respektive lag. 
+vector\<Shot\> unhandledShots | Skott som skapats av klienten men som ännu inte replikerats över nätverket. De kommer att få slutpunkt beräknad innan de läggs till i handledShots. 
+vector\<Shot\> handledShots | Här ligger alla skott som existerar och som är klara för utritning. De behöver inte skickas över nätverket. 
 Map map | Ett objekt som representerar spelvärldens grundutseende och geometri. 
 
 Funktion | Beskrivning
@@ -127,12 +126,12 @@ set*() |
 ### Shot : sf::Drawable
 Shotklassen ska hålla reda på position och rörelsevektor för avlossad projektil. Shot ärver från sf::Drawable och skapas av Weapon-objekt. Kollission kommer beräknas på klienten när skottet skapas men sedan kommer servern att räkna om det när den tar emot skottet. 
 
-Konstruktorer | Beskrivas
+Konstruktorer | Beskrivning
 --- | ---
-~Shot() = default | Destruktor
-Shot(int timestamp, int clientID, sf::vector2f origin, sf::vector2f direction, sf::vector2f end, float damage) | Initieringskonstruktor
-Shot() = default | Defaultkonstruktor
-Shot(const Shot& shot) | Kopieringskonstruktor
+~Shot() = default | Destruktor.
+Shot(int timestamp, int clientID, sf::vector2f origin, sf::vector2f direction, sf::vector2f end, float damage) | Initieringskonstruktor.
+Shot() = default | Defaultkonstruktor.
+Shot(const Shot& shot) | Kopieringskonstruktor.
 
 Datamedlem | Beskrivning
 --- | ---
@@ -147,6 +146,7 @@ Funktion | Beskrivning
 --- | ---
 void draw() | Utritning av skottet. Det kommer vara ett linjesegment med en bestämd färg. 
 
+
 ### Map : sf::Drawable
 Map ärver drawable för att den ska kunna rita ut sin bakgrundsbild. Den har en lista över physical objects som utgör banans geometri.
 
@@ -156,9 +156,10 @@ Map(sf::Texture) | En bana kan bara skapas med bild.
 
 Datamedlem | Beskrivning
 --- | ---
-vector<PhysicalObject*> physicalObjects | En vektor med alla kollissionsobjekt i spelsessionen. 
+vector\<PhysicalObject*\> physicalObjects | En vektor med alla kollissionsobjekt i spelsessionen. 
 sf::Sprite mapSprite | Bilden som är spelplanen representeras av detta objekt. 
 void load(string searchpath) | Ladda in kollissionsobjekt. 
+
 Funktion | Beskrivning
 --- | ---
 void draw() | Utritning av bakgrundskartan. 
@@ -228,24 +229,40 @@ sendUDPPacket() | Skickar ett paket till anslutna IP-adresser. NetworkHandler h�
 ### PhysicalObject
 Abstrakt basklass för geometriska former som diverse linjer och strålar kan kollidera med.
 
+Konstruktorer | Beskrivning
+--- | ---
+virtual ~PhysicalObject() = default | Virtuell destruktor.
+protected: PhysicalObject() = default | Defaultkonstruktor.
+PhysicalObject& operator=(const PhysicalObject& rhs) = delete | Borttagen kopieringstilldelning. Kopiering görs med clone().
+
 Funktion | Beskrivning
 --- | ---
-bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) = 0 const | Pure virtual-funktion
-bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) = 0 const | Pure virtual-funktion
-bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) = 0 const | Pure virtual-funktion
-bool intersectCircle(float radius, LineSegment displacement [, sf::Vector2f& centerAfterCollision [, sf::Vector2f& intersectionPoint [, sf::Vector2f&  intersectionNormal]]]) = 0 const | Pure virtual-funktion
+virtual PhysicalObject* clone() const = 0 | Klonar objektet.
+virtual bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const = 0 | Pure virtual-funktion
+virtual bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const = 0 | Pure virtual-funktion
+virtual bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const = 0 | Pure virtual-funktion
+virtual bool intersectCircle(float radius, LineSegment displacement [, sf::Vector2f& centerAfterCollision [, sf::Vector2f& intersectionPoint [, sf::Vector2f&  intersectionNormal]]]) const = 0 | Pure virtual-funktion
 
 
 ### PhysicalCircle : PhysicalObject
 Håller den geometriska beskrivningen av en cirkel samt implementerar kollisionsalgoritmer för en sådan.
 
+Konstruktorer etc. | Beskrivning
+--- | ---
+~PhysicalCircle() = default | Defaultad destruktor.
+PhysicalCircle() = delete | Borttagen defaultkonstruktor.
+PhysicalCircle(sf::Vector2f center, float radius) | Initieringskonstruktor.
+private: PhysicalCircle(const PhysicalCircle& other) | Privat Kopieringskonstruktor. Används av clone().
+PhysicalCircle& operator=(const PhysicalCircle& rhs) = delete | Borttagen kopieringstilldelning. Kopiering görs med clone().
+
 Datamedlem | Beskrivning
 --- | ---
 sf::Vector2f center | Cirkelns centrum.
-float radius | Cirkelns radie.
+float radius | Cirkelns radie.    
 
 Funktion | Beskrivning
 --- | ---
+PhysicalCircle* clone() const | Klonar objektet.
 bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given linje och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
 bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan ett givet linjesegment och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
 bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given stråle och den representerade cirkeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
@@ -255,12 +272,21 @@ bool intersectCircle(float radius, LineSegment displacement [, sf::Vector2f& cen
 ### PhysicalPolygon : PhysicalObject
 Håller den geometriska beskrivningen av en cirkel samt implementerar kollisionsalgoritmer för en sådan.
 
+Konstruktorer etc. | Beskrivning
+--- | ---
+~PhysicalPolygon() | Destruktor.
+PhysicalPolygon() = delete | Borttagen defaultkonstruktor.
+PhysicalPolygon(vector\<sf::Vector2f\> vertices) | Initieringskonstruktor.
+private: PhysicalPolygon(const PhysicalPolygon& other) | Privat kopieringskonstruktor. Används av clone().
+PhysicalPolygon& operator=(const PhysicalPolygon& rhs) = delete | Borttagen kopieringstilldelning. Kopiering görs med clone().
+
 Datamedlem | Beskrivning
 --- | ---
-vector<sf::Vector2f> vertices | En lista med punkter som defienierar polygonen.
+vector\<sf::Vector2f\> vertices | En lista med punkter som defienierar polygonen.
 
 Funktion | Beskrivning
 --- | ---
+PhysicalPolygon* clone() const | Klonar objektet.
 bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given linje och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
 bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan ett givet linjesegment och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
 bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given stråle och den representerade polygonen. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
@@ -270,6 +296,14 @@ bool intersectCircle(float radius, LineSegment displacement [, sf::Vector2f& cen
 ### PhysicalAABox : PhysicalObject
 Håller den geometriska beskrivningen av en axeljusterad rektangel samt implementerar kollisionsalgoritmer för en sådan.
 
+Konstruktorer etc. | Beskrivning
+--- | ---
+~PhysicalAABox() = default | Defaultad destruktor.
+PhysicalAABox() = delete | Borttagen defaultkonstruktor.
+PhysicalAABox(float origin, float width, float height) | Initieringskonstruktor.
+private: PhysicalAABox(const PhysicalAABox& other) | Privat kopieringskonstruktor. Används av clone().
+PhysicalAABox& operator=(const PhysicalAABox& rhs) = delete | Borttagen kopieringstilldelning. Kopiering görs med clone().
+
 Datamedlem | Beskrivning
 --- | ---
 float origin | Rektangelns övre vänstra hörn.
@@ -278,6 +312,7 @@ float height | Rektangelns höjd.
 
 Funktion | Beskrivning
 --- | ---
+PhysicalAABox* clone() const | Klonar objektet.
 bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given linje och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
 bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan ett givet linjesegment och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
 bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const | Utför kollision mellan en given stråle och den representerade rektangeln. Returnerar sant om kollision skett, falkst annars. Överlagringar finns tillgängliga för att få ut kollisionspunkt samt + kollisionsnormal.
