@@ -10,6 +10,7 @@
 #define __Strike__Player__
 
 #include <stdio.h>
+#include "Weapon.h"
 #include <SFML/Graphics.hpp>
 
 
@@ -23,15 +24,16 @@ public:
     float getSpeed() const;
     //float getRotateSpeed() const;
     int getClientID() const;
+    void setWeapon(Weapon* weapon);
 private:
     //virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    
+
     int clientID_;
     sf::Texture texture_;
     //sf::Sprite weapon_;
     float speed_ = 0.2f;
     //float rotateSpeed_ = 1.0f;
-    
+    Weapon* weapon_;
 };
 
 

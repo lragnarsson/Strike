@@ -23,6 +23,7 @@
 #include "GameState.h"
 #include "Controller.h"
 #include "Team.h"
+#include "Weapon.h"
 #include <iostream>
 
 int main(int, char const**)
@@ -30,16 +31,16 @@ int main(int, char const**)
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground", sf::Style::Fullscreen);
     //sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground");
-    
+
     // let's define a view
     sf::View view(sf::FloatRect(0, 0, 500, 300));
-    
+
     // activate it
     window.setView(view);
-    
+
     // draw something to that view
     //window.draw(some_sprite);
-    
+
     /*
     // Set the Icon
     sf::Image icon;
@@ -72,16 +73,25 @@ int main(int, char const**)
     // Play the music
     music.play();
      */
+    Team blueTeam;
+    Team redTeam;
+
+    Weapon weapon1{10,30,10,100,1000};
 
     GameState Game;
     Player player1{1};
     Player player2{2};
     Controller controller;
-    
+
     Game.addPlayer(&player1);
-    Game.addPlayer(&player2); // this player does not have a controller. just for fun. 
+    Game.addPlayer(&player2); // this player does not have a controller. just for fun.
+
+    blueTeam.addPlayer(&player1);
+    redTeam.addPlayer(&player2);
+
     player2.setPosition(100.0f,100.0f);
-    
+    player1.setWeapon(&weapon1);
+
     controller.bindPlayer(&player1);
     controller.bindView(&view);
 
@@ -91,7 +101,7 @@ int main(int, char const**)
     lines[1].position = sf::Vector2f(20, 0);
     lines[2].position = sf::Vector2f(30, 5);
     lines[3].position = sf::Vector2f(40, 2);
-    
+
 
     // Start the game loop
     while (window.isOpen())
@@ -110,10 +120,10 @@ int main(int, char const**)
                 window.close();
             }
         }
-        
+
         // Clear screen
         window.clear();
-/*   
+/*
         // Draw the sprite
         window.draw(sprite);
 
