@@ -22,6 +22,7 @@
 #include "Player.h"
 #include "GameState.h"
 #include "Controller.h"
+#include "Team.h"
 #include <iostream>
 
 int main(int, char const**)
@@ -73,13 +74,14 @@ int main(int, char const**)
      */
 
     GameState Game;
-    Player player1;
-    Player player2;
+    Player player1{1};
+    Player player2{2};
     Controller controller;
     
     Game.addPlayer(&player1);
     Game.addPlayer(&player2); // this player does not have a controller. just for fun. 
     player2.setPosition(100.0f,100.0f);
+    
     controller.bindPlayer(&player1);
     controller.bindView(&view);
 

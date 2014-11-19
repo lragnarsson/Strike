@@ -17,13 +17,16 @@
 class Player: public sf::Sprite //PhysicalCircle, this will handle collissions.
 {
 public:
-    Player();
+    Player(int ClientID);
+    Player() = delete;
     ~Player() = default;
     float getSpeed() const;
     //float getRotateSpeed() const;
+    int getClientID() const;
 private:
     //virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     
+    int clientID_;
     sf::Texture texture_;
     //sf::Sprite weapon_;
     float speed_ = 0.2f;

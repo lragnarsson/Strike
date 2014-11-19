@@ -9,6 +9,7 @@
 #include "ResourcePath.hpp"
 #include "GameState.h"
 #include "Player.h"
+#include "Team.h"
 
 void GameState::addPlayer(Player* playerP) {
 

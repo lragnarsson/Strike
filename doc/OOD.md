@@ -80,15 +80,16 @@ void run() |
 
 Datamedlem | Beskrivning
 --- | ---
-Player* player | 
-View* view |
+Player* player | Spelarkaraktären som styrs av detta objekt.
+sf::View* view | Detta objekt styr vad användaren ser på sin skärm. 
+
 
 Funktion | Beskrivning
 --- | ---
-movePlayer(vector<PhysicalObject*>* obstacles) |
-bindPlayer() |
-updateView() |
-bindView() |
+movePlayer(vector<PhysicalObject*>* obstacles) | 
+bindPlayer(Player*) | Binder spelarkaraktären till detta objekt. Körs framförallt vid initiering. 
+updateView() | Uppdaterar view-objektet så att "kameran" följer spelarkaraktären. 
+bindView() | Binder ett view-objekt till detta objekt. Körs framförallt vid initiering. 
 
 
 ### Team
@@ -124,7 +125,7 @@ set*() |
 
 
 ### Shot : sf::Drawable
-Shotklassen ska hålla reda på position och rörelsevektor för avlossad projektil. Shot ärver från sf::Drawable och skapas av Weapon-objekt.
+Shotklassen ska hålla reda på position och rörelsevektor för avlossad projektil. Shot ärver från sf::Drawable och skapas av Weapon-objekt. Kollission kommer beräknas på klienten när skottet skapas men sedan kommer servern att räkna om det när den tar emot skottet. 
 
 Datamedlem | Beskrivning
 --- | ---
@@ -152,7 +153,7 @@ void draw() | Utritning av bakgrundskartan.
 
 
 ### Player : sf::Drawable, sf::Transformable, PhysicalCircle
-Player är klassen som hanterar spelaren, alltså liv, position och rörelse. Player är hårt bunden till Team och Controller. Player känner till weapon. Player ärver från sf:Transformable, sf:Drawable och PhysicalCircle. Ett Player-objekt kan identifieras genom dess clientID, detta är samma id som klienten som skapade Player-objektet har,
+Player är klassen som hanterar spelaren, alltså liv, position och rörelse. Player är hårt bunden till Team och Controller. Player känner till weapon. Ett Player-objekt kan identifieras genom dess clientID, detta är samma id som klienten som skapade Player-objektet har,
 
 Datamedlem | Beskrivning
 --- | ---
@@ -167,23 +168,24 @@ void move(const Vector2f &offset) | Relativ förflyttning med offset angiven som
 void rotate(float angle) | Relativ rotation. 
 Shot* fire() | Säger till vapnet att skjuta. 
 void takeDamage(float amount) | Uppdatera sitt liv.
+int getClientID() const | Visa spelarkaraktärens identifierare.
 
 
 ### Weapon
-Weapon är en klass som hanterar spelarnas vapen. Det innefattar ammunition och hur mycket skada vapnet gör. Weapon är mjukt bunden till Player och känner till Shot.
+Weapon är en klass som hanterar spelarnas vapen. Det innefattar ammunition och hur mycket skada vapnet gör. Weapon är mjukt bunden till Player och känner till Shot. 
 
 Datamedlem | Beskrivning
 --- | ---
-unsigned int ammo |
-unsigned int additionalAmmo |
-int fireRate |
-int lastFired |
-float reloadTime |
-bool isReloading |
+unsigned int ammo | 
+unsigned int additionalAmmo | 
+int fireRate | Tid som anger hur lång många skott som kan avfyras per tidsenhet. 
+int lastFired | Ett tal som representerar tiden då det senast avfyrades.
+float reloadTime | Tid det tar att ladda om vapnet.
+bool isReloading | Representerar att man laddar om. 
 
 Funktion | Beskrivning
 --- | ---
-Shot* fire(string clientID) |
+Shot* fire(int clientID, Vector2f pos&&, Vector2f dir&&) | Denna funktion skapar ett skott med position, riktningsvektor och information om vem som skapade det. 
 
 
 ## NetworkHandler
