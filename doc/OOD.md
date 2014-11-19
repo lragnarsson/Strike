@@ -112,16 +112,16 @@ Detta objekt samordnar de olika delarna som beskriver spelsessionen. Den innehå
 
 Datamedlem | Beskrivning
 --- | ---
-stateEnum state | 
-vector<Team> teams |
-vector<Shot> unhandledShots |
-vector<Shot> handledShots |
-Map map |
+stateEnum state | Beskriver stadiet som spelet är i. T.ex. runda avslutad, lag x vann eller pågående spelläge. 
+vector<Team> teams | En vektor med lagen. Observera att det inte finns något lista med spelare, den finns i respektive lag. 
+vector<Shot> unhandledShots | Skott som skapats av klienten men som ännu inte replikerats över nätverket. De kommer att få slutpunkt beräknad innan de läggs till i handledShots. 
+vector<Shot> handledShots | Här ligger alla skott som existerar och som är klara för utritning. De behöver inte skickas över nätverket. 
+Map map | Ett objekt som representerar spelvärldens grundutseende och geometri. 
 
 Funktion | Beskrivning
 --- | ---
-get*() |
-set*() |
+get*() | 
+set*() | 
 
 
 ### Shot : sf::Drawable
@@ -150,17 +150,25 @@ void draw() | Utritning av skottet. Det kommer vara ett linjesegment med en best
 ### Map : sf::Drawable
 Map ärver drawable för att den ska kunna rita ut sin bakgrundsbild. Den har en lista över physical objects som utgör banans geometri.
 
+Konstruktorer | Beskrivning
+--- | ---
+Map(sf::Texture) | En bana kan bara skapas med bild.
+
 Datamedlem | Beskrivning
 --- | ---
 vector<PhysicalObject*> physicalObjects | En vektor med alla kollissionsobjekt i spelsessionen. 
-
+sf::Sprite mapSprite | Bilden som är spelplanen representeras av detta objekt. 
+void load(string searchpath) | Ladda in kollissionsobjekt. 
 Funktion | Beskrivning
 --- | ---
 void draw() | Utritning av bakgrundskartan. 
 
 
 ### Player : sf::Drawable, sf::Transformable, PhysicalCircle
-Player är klassen som hanterar spelaren, alltså liv, position och rörelse. Player är hårt bunden till Team och Controller. Player känner till weapon. Ett Player-objekt kan identifieras genom dess clientID, detta är samma id som klienten som skapade Player-objektet har,
+Player är klassen som hanterar spelaren, alltså liv, position och rörelse. Player är hårt bunden till Team och Controller. Player känner till weapon. Ett Player-objekt kan identifieras genom dess clientID, detta är samma id som klienten som skapade Player-objektet har.
+Konstruktorer | Beskrivning
+--- | --- 
+Player(int clientID) | För att skapa en spelarkaraktär måste man ange ett id.
 
 Datamedlem | Beskrivning
 --- | ---
