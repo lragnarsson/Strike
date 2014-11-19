@@ -184,7 +184,7 @@ Weapon är en klass som hanterar spelarnas vapen. Det innefattar ammunition och 
 Konstruktorer | Beskrivning
 --- | ---
 virtual ~Weapon() = default | Destruktor till klassen Weapon.
-Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int lastFired, float reloadTime, bool isReloading) | Initieringskonstruktor.
+Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int reloadTime) | Initieringskonstruktor.
 Weapon(const Weapon& weapon) | Kopieringskonstruktor.
 Weapon() = default | Defaultkonstruktor.
 
@@ -196,7 +196,7 @@ unsigned int additionalAmmo | Extra ammunition utöver det i vapnet.
 unsigned int magazineSize | Anger magasinstorlek.
 int fireRate | Tid som anger hur många skott som kan avfyras per tidsenhet. 
 int lastFired | Ett tal som representerar tiden då det senast avfyrades.
-float reloadTime | Tid det tar att ladda om vapnet.
+int reloadTime | Tid det tar att ladda om vapnet.
 bool isReloading | Representerar att man laddar om. 
 
 Funktion | Beskrivning
