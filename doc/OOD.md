@@ -127,6 +127,13 @@ set*() |
 ### Shot : sf::Drawable
 Shotklassen ska hålla reda på position och rörelsevektor för avlossad projektil. Shot ärver från sf::Drawable och skapas av Weapon-objekt. Kollission kommer beräknas på klienten när skottet skapas men sedan kommer servern att räkna om det när den tar emot skottet. 
 
+Konstruktorer | Beskrivas
+--- | ---
+~Shot() = default | Destruktor
+Shot(int timestamp, int clientID, sf::vector2f origin, sf::vector2f direction, sf::vector2f end, float damage) | Initieringskonstruktor
+Shot() = default | Defaultkonstruktor
+Shot(const Shot& shot) | Kopieringskonstruktor
+
 Datamedlem | Beskrivning
 --- | ---
 int timestamp | Representerar när skottet skapades.
@@ -174,11 +181,20 @@ int getClientID() const | Visa spelarkaraktärens identifierare.
 ### Weapon
 Weapon är en klass som hanterar spelarnas vapen. Det innefattar ammunition och hur mycket skada vapnet gör. Weapon är mjukt bunden till Player och känner till Shot. 
 
+Konstruktorer | Beskrivning
+--- | ---
+virtual ~Weapon() = default | Destruktor till klassen Weapon.
+Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int lastFired, float reloadTime, bool isReloading) | Initieringskonstruktor.
+Weapon(const Weapon& weapon) | Kopieringskonstruktor.
+Weapon() = default | Defaultkonstruktor.
+
+
 Datamedlem | Beskrivning
 --- | ---
-unsigned int ammo | 
-unsigned int additionalAmmo | 
-int fireRate | Tid som anger hur lång många skott som kan avfyras per tidsenhet. 
+unsigned int ammo | Antal skott i magasinet.
+unsigned int additionalAmmo | Extra ammunition utöver det i vapnet.
+unsigned int magazineSize | Anger magasinstorlek.
+int fireRate | Tid som anger hur många skott som kan avfyras per tidsenhet. 
 int lastFired | Ett tal som representerar tiden då det senast avfyrades.
 float reloadTime | Tid det tar att ladda om vapnet.
 bool isReloading | Representerar att man laddar om. 
