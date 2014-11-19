@@ -47,7 +47,6 @@ void writeNetwork() = 0 |
 Client är en subklass till Game som skapas hos användaren när denne startar spelet. Här finns bland annat information för att unikt identifiera en klient och ett Controller-objekt som hanterar användarens input. Logik för utritning finns i Client.
 
 Datamedlem | Beskrivning
-
 --- | ---
 int clientID |
 string clientName |
