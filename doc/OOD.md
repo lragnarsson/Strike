@@ -217,12 +217,12 @@ En klass för att sköta kommunikation över nätverk. Innehåller främst metod
 
 Datamedlem | Beskrivning
 --- | ---
-int clientID |
-vector\<sf::IpAdress\> connectedIP |
+vector\<sf::IpAdress\> connectedIP | Lista över anslutna IP-adresser
+std::map\<int playerID, int counter\> playerLatestUpdate | En datastruktur för att spara löpnumret på den senaste spelaruppdateringen för en spelare. Används för att filtrera bort gamla paket som hamnat i oordning på vägen genom etern.  
 
 Funktion | Beskrivning
 --- | ---
-getNewPackets() | Returnerar de paket som har tagits emot från nätverket. Den kollar om det har kommit in nya paket från klienter och returnerar dem förutsatt att ett paket av samma typ och från samma klient med ett högre löpnummer inte redan har levererats. Network handler måste således hålla koll på vilka klienter som är anslutna, vilka pakettyper de har skickat och vilket löpnummer som är det högsta som har tagits emot. Detta för att motverka att t.ex. gamla positionsuppdateringar som har hamnat i oordning över nätverket uppdaterar spelet. 
+vector\<sf::packets\>getNewPackets() | Returnerar de paket som har tagits emot från nätverket. Den kollar om det har kommit in nya paket från klienter och returnerar dem förutsatt att ett paket av samma typ och från samma klient med ett högre löpnummer inte redan har levererats. Network handler måste således hålla koll på vilka klienter som är anslutna, vilka pakettyper de har skickat och vilket löpnummer som är det högsta som har tagits emot. Detta för att motverka att t.ex. gamla positionsuppdateringar som har hamnat i oordning över nätverket uppdaterar spelet. 
 sendUDPPacket() | Skickar ett paket till anslutna IP-adresser. NetworkHandler håller en lista med alla som är anslutna. För en klient är denna lista kort, den innehåller bara serverns IP. För servern innehåller denna lista alla klienters IP. Då ett (UDP) paket alltid ska skickas till alla blir logiken samma för Client och Server.
 
 ### PhysicalObject
