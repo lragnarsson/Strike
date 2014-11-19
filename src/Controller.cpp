@@ -12,7 +12,7 @@ void Controller::movePlayer(const sf::RenderWindow& window)
     if (aim.x != 0 || aim.y != 0) // normalize the aimvector, don't rotate if strange length.
     {
         // debug
-        std::cout<< "(x, y, aimx, aimy): ("<< player_->getPosition().x << ", " << player_->getPosition().y << ", " << aim.x << ", " << aim.y << ")" << std::endl;
+        //std::cout<< "(x, y, aimx, aimy): ("<< player_->getPosition().x << ", " << player_->getPosition().y << ", " << aim.x << ", " << aim.y << ")" << std::endl;
         aim = aim / sqrtf(powf(aim.x, 2) + powf(aim.y, 2));
         float newAngle = (aim.y > 0) ? 57.3f * acos(aim.x) : 360 - 57.3f * acos(aim.x);
         player_->setRotation(newAngle);
@@ -23,22 +23,40 @@ void Controller::movePlayer(const sf::RenderWindow& window)
     moveVector_.x = 0;
     moveVector_.y = 0;
 
+    // Movement modes. Use only one.
+    //
+    // move relative to aim -----------------------------
+    /*
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         moveVector_ = aim;
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         moveVector_ = -aim;
-
+    
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
-        moveVector_.x = aim.y;
-        moveVector_.y = -aim.x;
-
+        moveVector_.x += aim.y;
+        moveVector_.y += -aim.x;
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
-        moveVector_.x = -aim.y;
-        moveVector_.y = aim.x;
+        moveVector_.x += -aim.y;
+        moveVector_.y += aim.x;
+    }*/
+    // move in fixed directions ----------------------------
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        moveVector_.y = -1;
+    
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        moveVector_.y = 1;
+    
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        moveVector_.x = -1;
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        moveVector_.x = 1;
     }
     if (moveVector_.x != 0 || moveVector_.y != 0)
     {

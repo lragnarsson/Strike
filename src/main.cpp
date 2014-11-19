@@ -83,6 +83,13 @@ int main(int, char const**)
     controller.bindPlayer(&player1);
     controller.bindView(&view);
 
+    // vertexArray test
+    sf::VertexArray lines(sf::LinesStrip, 4);
+    lines[0].position = sf::Vector2f(10, 0);
+    lines[1].position = sf::Vector2f(20, 0);
+    lines[2].position = sf::Vector2f(30, 5);
+    lines[3].position = sf::Vector2f(40, 2);
+    
 
     // Start the game loop
     while (window.isOpen())
@@ -101,11 +108,10 @@ int main(int, char const**)
                 window.close();
             }
         }
-
-    
+        
         // Clear screen
         window.clear();
-/*
+/*   
         // Draw the sprite
         window.draw(sprite);
 
@@ -119,6 +125,7 @@ int main(int, char const**)
 
         window.setView(view);
         Game.draw(window);
+        window.draw(lines);
 
 
         // Update the window

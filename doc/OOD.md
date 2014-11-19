@@ -92,14 +92,14 @@ bindView() |
 
 Datamedlem | Beskrivning
 --- | ---
-int teamID |
-vector<Player*> players |
-int score |
+int teamID | Varje lag ska ha en unik identifierare.
+vector<Player*> players | En vektor med pekare till alla spelare i laget.
+int score | Lagets poäng.
 
 Funktion | Beskrivning
 --- | ---
-get*() |
-set*() |
+get*() | Allmänna funktioner för att få info.
+set*() | Allmänna funktioner för att bestämma saker om laget. 
 
 
 ### GameState
@@ -122,43 +122,43 @@ set*() |
 
 Datamedlem | Beskrivning
 --- | ---
-int timestamp |
-int clientID |
-sf::vector2f origin |
-sf::vector2f direction |
-sf::vector2f end |
-float damage |
+int timestamp | Representerar när skottet skapades.
+int clientID | Vem som skapade skottet. 
+sf::vector2f origin | Startpunkt. 
+sf::vector2f direction | Riktning. 
+sf::vector2f end | Slutpunkt. 
+float damage | Skada som skottet orsakar vid träff. 
 
 Funktion | Beskrivning
 --- | ---
-void draw() |
+void draw() | Utritning av skottet. Det kommer vara ett linjesegment med en bestämd färg. 
 
 ### Map : sf::Drawable
 
 Datamedlem | Beskrivning
 --- | ---
-vector<PhysicalObject*> physicalObjects |
+vector<PhysicalObject*> physicalObjects | En vektor med alla kollissionsobjekt i spelsessionen. 
 
 Funktion | Beskrivning
 --- | ---
-void draw() |
+void draw() | Utritning av bakgrundskartan. 
 
 
 ### Player : sf::Drawable, sf::Transformable, PhysicalCircle
 
 Datamedlem | Beskrivning
 --- | ---
-int clientID |
-string playerName |
-float health |
-Weapon* weapon |
+int clientID | Identifierare för varje spelarkaraktär.
+string playerName | Spelarkaraktärens namn. Kan tänkas användas om man vill ha en poänglista. 
+float health | Hur mycket liv spelarkaraktären har.
+Weapon* weapon | En spelarkaraktär kan ha ett vapen.  
 
 Funktion | Beskrivning
 --- | ---
-void move() |
-void rotate() |
-Shot* fire() |
-void takeDamage(float amount) |
+void move(const Vector2f &offset) | Relativ förflyttning med offset angiven som vektor eller koordinater. Det finns fler varianter specifierade i sf::Transformable. 
+void rotate(float angle) | Relativ rotation. 
+Shot* fire() | Säger till vapnet att skjuta. 
+void takeDamage(float amount) | Uppdatera sitt liv.
 
 
 ### Weapon
