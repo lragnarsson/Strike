@@ -29,7 +29,7 @@ Lorem ipsum dolor sit amet.
 ## Klassbeskrivning
 
 ### Game
-Game är en abstrakt klass som har innehåller en run-funktion för att stara, ett GameState-objekt för att hålla reda på spelets tillstånd och ett NetworkHandler-objekt för att kommunicera med nätverket.
+Game är en abstrakt klass som innehåller en run-funktion för att starta, ett GameState-objekt för att hålla reda på spelets tillstånd och ett NetworkHandler-objekt för att kommunicera med nätverket.
 
 Datamedlem | Beskrivning
 --- | ---
@@ -101,9 +101,15 @@ void bindView() | Binder ett view-objekt till detta objekt. Körs framförallt v
 ### Team
 Klassen Team ska representera ett lag i spelet, med en lista över lagets spelare och lagets poäng. 
 
+Konstruktorer | Beskrivning
+--- | ---
+Team(std::string teamName) | Initieringskonstruktor för Team.
+~Team() = default | Defaultdestruktor.
+
 Datamedlem | Beskrivning
 --- | ---
 int teamID | Varje lag ska ha en unik identifierare.
+std::string teamName | Lagets namn.
 vector\<Player*\> players | En vektor med pekare till alla spelare i laget.
 int score | Lagets poäng.
 
@@ -111,7 +117,11 @@ Funktion | Beskrivning
 --- | ---
 * get*() | Allmänna funktioner för att få info.
 void set*() | Allmänna funktioner för att bestämma saker om laget. 
-
+std::vector<Player*> getPlayers() const | Vektor som innehåller lagets spelare.
+void addPlayer(Player* player) | Lägg till en spelare i laget.
+void removePlayer(int playerID) | Tar bort en spelare ur laget.
+int getScore() const | Returnerar lagets poäng.
+void setScore(int) | Ändrar lagets poäng.
 
 ### GameState
 Detta objekt samordnar de olika delarna som beskriver spelsessionen. Den innehåller alla objekt som ska finnas i sessionen och alla objekt som skapas under sessionens gång.
@@ -224,7 +234,6 @@ Funktion | Beskrivning
 --- | ---
 Shot* fire(int clientID, sf::Vector2f& pos, sf::Vector2f& dir) | Denna funktion skapar ett skott med position, riktningsvektor och information om vem som skapade det. 
 void reloadWeapon() | Denna funktion laddar om spelarens vapen.
-void shootWeapon() | Vapnet ska minska ammo och sätta lastfire.
 
 
 ## NetworkHandler
