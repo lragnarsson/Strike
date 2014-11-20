@@ -23,7 +23,7 @@ Lorem ipsum dolor sit amet.
 
 <div style="page-break-after: always;"></div>
 ## Klassdiagram
-<img src="https://raw.githubusercontent.com/lragnarsson/Strike/master/doc/OOA.jpg"></img>
+<img src="https://raw.githubusercontent.com/lragnarsson/Strike/master/doc/OOA1.jpg"></img>
 
 <div style="page-break-after: always;"></div>
 ## Klassbeskrivning
