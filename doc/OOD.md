@@ -38,9 +38,10 @@ GameState gameState |
 
 Funktion | Beskrivning
 --- | ---
-void run() = 0 |
-void readNetwork() = 0 |
-void writeNetwork() = 0 |
+virtual void run() = 0 |
+virtual void readNetwork() = 0 |
+virtual void writeNetwork() = 0 |
+virtual void logic() = 0 | 
 
 
 ### Client : Game
@@ -57,11 +58,11 @@ Controller |
 Funktion | Beskrivning
 --- | ---
 void run() |
-readNetwork() |
-input() |
-logic() |
-writeNetwork() |
-draw() |
+void readNetwork() |
+void input() |
+void logic() |
+void writeNetwork() |
+void draw() |
 
 
 ### Server : Game
@@ -74,6 +75,11 @@ map\<int, string\> clients |
 Funktion | Beskrivning
 --- | ---
 void run() |
+void readNetwork() |
+void input() |
+void logic() |
+void writeNetwork() |
+
 
 
 ### Controller
@@ -85,10 +91,10 @@ sf::View* view | Detta objekt styr vad användaren ser på sin skärm.
 
 Funktion | Beskrivning
 --- | ---
-movePlayer(vector\<PhysicalObject*\>* obstacles) | 
-bindPlayer(Player*) | Binder spelarkaraktären till detta objekt. Körs framförallt vid initiering. 
-updateView() | Uppdaterar view-objektet så att "kameran" följer spelarkaraktären. 
-bindView() | Binder ett view-objekt till detta objekt. Körs framförallt vid initiering. 
+void movePlayer(vector\<PhysicalObject*\>* obstacles) | 
+void bindPlayer(Player*) | Binder spelarkaraktären till detta objekt. Körs framförallt vid initiering. 
+void updateView() | Uppdaterar view-objektet så att "kameran" följer spelarkaraktären. 
+void bindView() | Binder ett view-objekt till detta objekt. Körs framförallt vid initiering. 
 
 
 ### Team
@@ -102,8 +108,8 @@ int score | Lagets poäng.
 
 Funktion | Beskrivning
 --- | ---
-get*() | Allmänna funktioner för att få info.
-set*() | Allmänna funktioner för att bestämma saker om laget. 
+* get*() | Allmänna funktioner för att få info.
+void set*() | Allmänna funktioner för att bestämma saker om laget. 
 
 
 ### GameState
@@ -119,8 +125,8 @@ Map map | Ett objekt som representerar spelvärldens grundutseende och geometri.
 
 Funktion | Beskrivning
 --- | ---
-get*() | 
-set*() | 
+* get*() | 
+void set*() | 
 
 
 ### Shot : sf::Drawable
@@ -152,7 +158,7 @@ Map ärver drawable för att den ska kunna rita ut sin bakgrundsbild. Den har en
 
 Konstruktorer | Beskrivning
 --- | ---
-Map(sf::Texture) | En bana kan bara skapas med bild.
+Map(string searchpath) | En bana kan bara skapas med bild.
 
 Datamedlem | Beskrivning
 --- | ---
