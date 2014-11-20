@@ -99,6 +99,12 @@ void writeNetwork() | Skickar det senaste GameStatet till var och en av anslutna
 
 
 ### Controller
+Detta objekt hanterar användarens interaktion med sin spelarkaraktär. Input är uppdelad i flera funktioner för att skapa logiska segment i gameloopen. 
+
+Konstruktorer | Beskrivning
+--- | ---
+Controller() = default | Man får se upp här så att pekarna verkligen sätts med bind* innan man använder objektet. 
+~Controller() | Denna får kolla så att pekarmedlemmarna verkligen får tas bort. I så fall tas de bort. 
 
 Datamedlem | Beskrivning
 --- | ---
@@ -107,7 +113,8 @@ sf::View* view | Detta objekt styr vad användaren ser på sin skärm.
 
 Funktion | Beskrivning
 --- | ---
-void movePlayer(vector\<PhysicalObject*\>* obstacles) | 
+void playerMove(vector\<PhysicalObject*\>& obstacles) | Läser input från tangentbordet och muspekarposition. Hanterar kollission med objekt i spelvärlden. 
+vector\<Shot*\> playerFire() | Läser input från musen. Flera skott kan komma att skapas samtidigt. 
 void bindPlayer(Player*) | Binder spelarkaraktären till detta objekt. Körs framförallt vid initiering. 
 void updateView() | Uppdaterar view-objektet så att "kameran" följer spelarkaraktären. 
 void bindView() | Binder ett view-objekt till detta objekt. Körs framförallt vid initiering. 
@@ -141,19 +148,27 @@ void setScore(int) | Ändrar lagets poäng.
 
 ### GameState
 Detta objekt samordnar de olika delarna som beskriver spelsessionen. Den innehåller alla objekt som ska finnas i sessionen och alla objekt som skapas under sessionens gång.
+Konstruktorer | Beskrivning
+--- | ---
+GameState() = default | När spelet startas är gamestate tom. Saker läggs till med add och set. 
+~GameState() | Förstör allt på bra sätt. 
 
 Datamedlem | Beskrivning
 --- | ---
 stateEnum state | Beskriver stadiet som spelet är i. T.ex. runda avslutad, lag x vann eller pågående spelläge. 
 vector\<Team\> teams | En vektor med lagen. Observera att det inte finns något lista med spelare, den finns i respektive lag. 
-vector\<Shot\> unhandledShots | Skott som skapats av klienten men som ännu inte replikerats över nätverket. De kommer att få slutpunkt beräknad innan de läggs till i handledShots. 
-vector\<Shot\> handledShots | Här ligger alla skott som existerar och som är klara för utritning. De behöver inte skickas över nätverket. 
+vector\<Shot*\> unhandledShots | Skott som skapats av klienten men som ännu inte replikerats över nätverket. De kommer att få slutpunkt beräknad innan de läggs till i handledShots. 
+vector\<Shot*\> handledShots | Här ligger alla skott som existerar och som är klara för utritning. De behöver inte skickas över nätverket. 
 Map map | Ett objekt som representerar spelvärldens grundutseende och geometri. 
 
 Funktion | Beskrivning
 --- | ---
+void setMap(string searchpath) | Funktion för att bestämma spelbana. 
+add* | 
+remove* |
 * get*() | 
 void set*() | 
+void draw(sf::RenderTarget&) | Utritningsfunktion. Säger till alla objekt att rita ut sig. 
 
 
 ### Shot : sf::Drawable
@@ -163,7 +178,7 @@ Konstruktorer | Beskrivning
 --- | ---
 ~Shot() = default | Destruktor.
 Shot(int timestamp, int clientID, sf::vector2f origin, sf::vector2f direction, sf::vector2f end, float damage) | Initieringskonstruktor.
-Shot() = default | Defaultkonstruktor.
+Shot() = delete | Defaultkonstruktor.
 Shot(const Shot& shot) | Kopieringskonstruktor.
 
 Datamedlem | Beskrivning
@@ -208,7 +223,7 @@ Player är klassen som hanterar spelaren, alltså liv, position och rörelse. Pl
 Konstruktorer | Beskrivning
 --- | --- 
 Player(int clientID) | För att skapa en spelarkaraktär måste man ange ett id.
-Virtual ~Player() = default | Destruktor till klassen Player
+~Player() = default | Destruktor till klassen Player
 
 Datamedlem | Beskrivning
 --- | ---
@@ -234,7 +249,7 @@ Weapon är en klass som hanterar spelarnas vapen. Det innefattar ammunition och 
 
 Konstruktorer | Beskrivning
 --- | ---
-virtual ~Weapon() = default | Destruktor till klassen Weapon.
+~Weapon() = default | Destruktor till klassen Weapon.
 Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int reloadTime) | Initieringskonstruktor.
 Weapon(const Weapon& weapon) | Kopieringskonstruktor.
 Weapon() = default | Defaultkonstruktor.
