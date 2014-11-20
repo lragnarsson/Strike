@@ -9,17 +9,32 @@
 *	Isak Wiberg
 *	Filip Östman
 
-2014-XX-XX
+2014-11-20
 
 <div style="page-break-after: always;"></div>
 ## Sammanfattning
-Lorem ipsum dolor sit amet.
+Detta dokument ger en utförlig beskrivning av klasstrukturen för projektet. Klasserna beskrivs dels i ett diagram samt senare kort i text. I diagrammet kan man också se hur klasserna relaterar till varandra. En lista över konstruktorer, funktioner och datamedlemmar finns för var klass. Vi kommer använda bibloteket SFML.
 
 ## Innehållsförteckning
-1. [Sammanfattning](#Sammanfattning)
-2. [Klassdiagram](#Klassdiagram)
-3. [Klassbeskrivningar](#Klassbeskrivning)
-4. [Användningsfall](#Användningsfall)
+1. [Sammanfattning](#sammanfattning)
+2. [Klassdiagram](#klassdiagram)
+3. [Klassbeskrivningar](#klassbeskrivning)
+--1.[Game](#game)
+--1.[Client](#client)
+--1.[Server](#server)
+--1.[Controller](#controller)
+--1.[Team](#team)
+--1.[GameState](#gamestate)
+--1.[Shot](#shot)
+--1.[Map](#map)
+--1.[Player](#player)
+--1.[Weapon](#weapon)
+--1.[NetworkHandler](#networkhandler)
+--1.[PhysicalObject](#physicalobject)
+--1.[PhysicalCircle](#physicalcircle)
+--1.[PhysicalPolygon](#physicalpolygon)
+--1.[PhysicalAABox](#physicalaabox)
+4. [Användningsfall](#användningsfall)
 
 <div style="page-break-after: always;"></div>
 ## Klassdiagram
