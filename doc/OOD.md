@@ -28,58 +28,74 @@ Lorem ipsum dolor sit amet.
 <div style="page-break-after: always;"></div>
 ## Klassbeskrivning
 
+
 ### Game
 Game är en abstrakt klass som innehåller en run-funktion för att starta, ett GameState-objekt för att hålla reda på spelets tillstånd och ett NetworkHandler-objekt för att kommunicera med nätverket.
 
+Konstruktorer | Beskrivning
+--- | ---
+virtual ~Game() = default | Virtuell destruktor.
+protected: Game() = default | Defaultkonstruktor.
+protected: Game(Game&) = delete | Borttagen kopieringskonstruktor.
+Game& operator=(const Game& rhs) = delete | Borttagen kopieringstilldelning.
+
 Datamedlem | Beskrivning
 --- | ---
-NetworkHandler networkHandler | 
-GameState gameState |
+NetworkHandler networkHandler | En instans av en NetworkHandler.
+GameState gameState | En instans av en GameState.
 
 Funktion | Beskrivning
 --- | ---
-virtual void run() = 0 |
-virtual void readNetwork() = 0 |
-virtual void writeNetwork() = 0 |
-virtual void logic() = 0 | 
+virtual void run() = 0 | Virtuell funktion som ska innehålla gameloopen för server och klient.
+virtual void readNetwork() = 0 | Virtuell funktion för att ta emot data från nätverket och behandla den.
+virtual void writeNetwork() = 0 | Virtuell funktion för att skicka data på nätverket.
+virtual void logic() = 0 | Virtuell funktion som sköter övrig spellogik.
 
 
 ### Client : Game
 Client är en subklass till Game som skapas hos användaren när denne startar spelet. Här finns bland annat information för att unikt identifiera en klient och ett Controller-objekt som hanterar användarens input. Logik för utritning finns i Client.
 
+Konstruktorer | Beskrivning
+--- | ---
+~Client() | Destruktor.
+Client() = default | Defaultkonstruktor.
+Client(Client&) = delete | Borttagen kopieringskonstruktor.
+Client& operator=(const Client& rhs) = delete | Borttagen kopieringstilldelning.
+
 Datamedlem | Beskrivning
 --- | ---
-int clientID |
-string clientName |
-sf::View view |
-sf::RenderWindow renderWindow |
-Controller |
+int clientID | Unikt ID för klienten. Delas ut av servern.
+string clientName | Namn för klienten.
+sf::View view | En instans av en sf::view. Kontrollerar utsnittet på RenderWindow.
+sf::RenderWindow renderWindow | En instans av en sf::RenderWindow. Här ritas allt ut.
+Controller controller | En instans av en Controller. Styr den lokala spelaren. 
 
 Funktion | Beskrivning
 --- | ---
-void run() |
-void readNetwork() |
-void input() |
-void logic() |
-void writeNetwork() |
-void draw() |
+void run() | Gameloopen för en klient.
+void readNetwork() | Läser data från nätverket och uppdeterar GameState därefter.
+void input() | Hanterar input från användaren. Spelarens input och förflyttning hanteras genom anrop till Controller.
+void logic() | Sköter övrig spellogik.
+void writeNetwork() | Sköter all packetering av data för att skicka över nätverket. Anropar NetworkHandler för själva skickandet.
+void draw() | Ritar ut spelvärlden.
 
 
 ### Server : Game
 Ärver från Game och skapas för att starta en server som klienter kan ansluta till. Server skiljer sig från Client då den till exempel inte behöver rita någon spelgrafik. Interaktionen med NetworkHandler-objektet kommer också att vara lite annolunda.
 
-Datamedlem | Beskrivning
+Konstruktorer | Beskrivning
 --- | ---
-map\<int, string\> clients |
+~Server() | Destruktor.
+protected: Server() = default | Defaultkonstruktor.
+protected: Server(Game&) = delete | Borttagen kopieringskonstruktor.
+Server& operator=(const Server& rhs) = delete | Borttagen kopieringstilldelning.
 
 Funktion | Beskrivning
 --- | ---
-void run() |
-void readNetwork() |
-void input() |
-void logic() |
-void writeNetwork() |
-
+void run() | Gameloopen för en server.
+void readNetwork() | Läser data från nätverket och uppdaterar GameState därefter.
+void logic() | Sköter all spelogik på servern.
+void writeNetwork() | Skickar det senaste GameStatet till var och en av anslutna klienter.
 
 
 ### Controller
@@ -242,21 +258,23 @@ En klass för att sköta kommunikation över nätverk. Innehåller främst metod
 Datamedlem | Beskrivning
 --- | ---
 vector\<sf::IpAdress\> connectedIP | Lista över anslutna IP-adresser
+vector\<sf::TcpSocket connection> TCPconnections | En struktur föratt lagra alla TCP-connections.
 std::map\<int playerID, int counter\> playerLatestUpdate | En datastruktur för att spara löpnumret på den senaste spelaruppdateringen för en spelare. Används för att filtrera bort gamla paket som hamnat i oordning på vägen genom etern.  
 
 Funktion | Beskrivning
 --- | ---
 vector\<sf::packets\>getNewPackets() | Returnerar de paket som har tagits emot från nätverket. Den kollar om det har kommit in nya paket från klienter och returnerar dem förutsatt att ett paket av samma typ och från samma klient med ett högre löpnummer inte redan har levererats. Network handler måste således hålla koll på vilka klienter som är anslutna, vilka pakettyper de har skickat och vilket löpnummer som är det högsta som har tagits emot. Detta för att motverka att t.ex. gamla positionsuppdateringar som har hamnat i oordning över nätverket uppdaterar spelet. 
 sendUDPPacket() | Skickar ett paket till anslutna IP-adresser. NetworkHandler håller en lista med alla som är anslutna. För en klient är denna lista kort, den innehåller bara serverns IP. För servern innehåller denna lista alla klienters IP. Då ett (UDP) paket alltid ska skickas till alla blir logiken samma för Client och Server.
+sendTCPPacket(sf::TcpSocket) | Skickar ett paket över TCP.
 
 ### PhysicalObject
 Abstrakt basklass för geometriska former som diverse linjer och strålar kan kollidera med.
 
 Konstruktorer | Beskrivning
 --- | ---
-virtual ~PhysicalObject() = default | Virtuell destruktor.
-protected: PhysicalObject() = default | Defaultkonstruktor.
-PhysicalObject& operator=(const PhysicalObject& rhs) = delete | Borttagen kopieringstilldelning. Kopiering görs med clone().
+virtual ~PbServer() | Destruktor.
+protected: PhysicalObServer() = default | Defaultkonstruktor.
+PhysicalObject& operaServer(const PhysicalObject& rhs) = delete | Borttagen kopieringstilldelning. Kopiering gServermed clone().
 
 Funktion | Beskrivning
 --- | ---
