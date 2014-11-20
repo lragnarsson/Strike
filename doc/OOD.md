@@ -185,16 +185,20 @@ Map ärver drawable för att den ska kunna rita ut sin bakgrundsbild. Den har en
 
 Konstruktorer | Beskrivning
 --- | ---
-Map(string searchpath) | En bana kan bara skapas med bild.
+~Map() | Destruktor.
+Map() = default | Defaultkonstruktor.
+Map(string filename) | Skapar en bana med kollisionsobjekt och bild från en kartfil.
+Map(const Map& other) | Kopieringskonstruktor.
 
 Datamedlem | Beskrivning
 --- | ---
+string filename | Kart-filens sökväg.
 vector\<PhysicalObject*\> physicalObjects | En vektor med alla kollissionsobjekt i spelsessionen. 
 sf::Sprite mapSprite | Bilden som är spelplanen representeras av detta objekt. 
-void load(string searchpath) | Ladda in kollissionsobjekt. 
 
 Funktion | Beskrivning
 --- | ---
+void load(string filename) | Laddar in kollisionsobjekt och bild från en kartfil. 
 void draw() | Utritning av bakgrundskartan. 
 
 
@@ -285,11 +289,11 @@ PhysicalObject& operaServer(const PhysicalObject& rhs) = delete | Borttagen kopi
 
 Funktion | Beskrivning
 --- | ---
-virtual PhysicalObject* clone() const = 0 | Klonar objektet.
-virtual bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const = 0 | Pure virtual-funktion
-virtual bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const = 0 | Pure virtual-funktion
-virtual bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const = 0 | Pure virtual-funktion
-virtual bool intersectCircle(float radius, LineSegment displacement [, sf::Vector2f& centerAfterCollision [, sf::Vector2f& intersectionPoint [, sf::Vector2f&  intersectionNormal]]]) const = 0 | Pure virtual-funktion
+virtual PhysicalObject* clone() const = 0 | Pure virtual-funktion.
+virtual bool intersectLine(Line line [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const = 0 | Pure virtual-funktion.
+virtual bool intersectLineSegment(LineSegment lineSegment [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const = 0 | Pure virtual-funktion.
+virtual bool intersectRay(Ray ray [, sf::Vector2f& intersectionPoint [, sf::Vector2f& intersectionNormal]]) const = 0 | Pure virtual-funktion.
+virtual bool intersectCircle(float radius, LineSegment displacement [, sf::Vector2f& centerAfterCollision [, sf::Vector2f& intersectionPoint [, sf::Vector2f&  intersectionNormal]]]) const = 0 | Pure virtual-funktion.
 
 
 ### PhysicalCircle : PhysicalObject
