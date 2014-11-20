@@ -22,6 +22,7 @@ public:
     std::vector<Player*> getPlayers() const;
     void addPlayer(Player*);
     void removePlayer(int playerID); // ska denna vara med?
+
     int getScore() const;
     void setScore(int);
     

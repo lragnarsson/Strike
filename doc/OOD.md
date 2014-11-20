@@ -97,6 +97,7 @@ void updateView() | Uppdaterar view-objektet så att "kameran" följer spelarkar
 void bindView() | Binder ett view-objekt till detta objekt. Körs framförallt vid initiering. 
 
 
+
 ### Team
 Klassen Team ska representera ett lag i spelet, med en lista över lagets spelare och lagets poäng. 
 

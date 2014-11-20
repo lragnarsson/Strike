@@ -24,6 +24,7 @@
 #include "Controller.h"
 #include "Team.h"
 #include "Weapon.h"
+
 #include <iostream>
 
 int main(int, char const**)
@@ -78,6 +79,8 @@ int main(int, char const**)
 
     Weapon weapon1{10,30,10,100,1000};
 
+    Weapon weapon2{weapon1};
+    
     GameState Game;
     Player player1{1};
     Player player2{2};
