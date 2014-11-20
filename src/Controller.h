@@ -3,6 +3,7 @@
 
 #include <SFML/System.hpp>
 #include "Player.h"
+//#include "Shot.h"
 
 class Controller
 {
@@ -10,7 +11,8 @@ public:
     Controller() = default;
     ~Controller() = default;
 
-    void movePlayer(const sf::RenderWindow&);
+    //std::vector<Shot*> playerFire();
+    void playerMove(const sf::RenderWindow&);
     //void rotatePlayer(const sf::Window&);
     void bindPlayer(Player*);
     void bindView(sf::View*);

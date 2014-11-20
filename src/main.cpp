@@ -134,7 +134,7 @@ int main(int, char const**)
         window.draw(text);
 */
         // Move the player, debug position in console
-        controller.movePlayer(window);
+        controller.playerMove(window);
         //controller.rotatePlayer(window);
         controller.updateView();
 

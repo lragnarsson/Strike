@@ -5,7 +5,14 @@
 #include <math.h>
 #include <iostream>
 
-void Controller::movePlayer(const sf::RenderWindow& window)
+
+/*
+std::vector<Shot*> playerFire(){
+    std::cout<< "Nu sköt spelaren" << std::endl;
+} 
+ */
+
+void Controller::playerMove(const sf::RenderWindow& window)
 {
     sf::Vector2i mouse {sf::Mouse::getPosition(window)}; // this gives the mouse pos relative to the window
     sf::Vector2f aim {window.mapPixelToCoords(mouse) - view_->getCenter()};
