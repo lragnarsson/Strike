@@ -20,25 +20,25 @@ Detta dokument ger en utförlig beskrivning av klasstrukturen för projektet. Kl
 2. [Klassdiagram](#klassdiagram)
 3. [Klassbeskrivningar](#klassbeskrivning)
   1. [Game](#game)
-  2. [Client](#client : game)
-  3. [Server](#server : game)
+  2. [Client](#client)
+  3. [Server](#server)
   4. [Controller](#controller)
   5. [Team](#team)
   6. [GameState](#gamestate)
-  7. [Shot](#shot : sf::drawable)
+  7. [Shot](#shot)
   8. [Map](#map)
-  9. [Player](#player : sf::drawable, sf::transformable, physicalcircle)
+  9. [Player](#player)
   10. [Weapon](#weapon)
   11. [NetworkHandler](#networkhandler)
   12. [PhysicalObject](#physicalobject)
-  13. [PhysicalCircle](#physicalcircle : physicalobject)
-  14. [PhysicalPolygon](#physicalpolygon : physicalobject)
-  15. [PhysicalAABox](#physicalaabox : physicalobject)
+  13. [PhysicalCircle](#physicalcircle)
+  14. [PhysicalPolygon](#physicalpolygon)
+  15. [PhysicalAABox](#physicalaabox)
 4. [Användningsfall](#användningsfall)
 
 <div style="page-break-after: always;"></div>
 ## Klassdiagram
-<img src="https://raw.githubusercontent.com/lragnarsson/Strike/master/doc/OOA1.jpg"></img>
+<img src="https://raw.githubusercontent.com/lragnarsson/Strike/develop/doc/OOD.jpg"></img>
 
 <div style="page-break-after: always;"></div>
 ## Klassbeskrivning
