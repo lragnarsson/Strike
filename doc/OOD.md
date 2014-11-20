@@ -255,6 +255,13 @@ void reloadWeapon() | Denna funktion laddar om spelarens vapen.
 ## NetworkHandler
 En klass för att sköta kommunikation över nätverk. Innehåller främst metoder för att packetera och skicka data.
 
+Konstruktorer | Beskrivning
+--- | ---
+~NetworkHandler() | Destruktor.
+NetworkHandler() = default | Defaultkonstruktor.
+NetworkHandler(NetworkHandler&) = delete | Borttagen kopieringskonstruktor.
+NetworkHandler& operator=(const NetworkHandler& rhs) = delete | Borttagen kopieringstilldelning.
+
 Datamedlem | Beskrivning
 --- | ---
 vector\<sf::IpAdress\> connectedIP | Lista över anslutna IP-adresser
