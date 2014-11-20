@@ -174,9 +174,11 @@ void draw() | Utritning av bakgrundskartan.
 
 ### Player : sf::Drawable, sf::Transformable, PhysicalCircle
 Player är klassen som hanterar spelaren, alltså liv, position och rörelse. Player är hårt bunden till Team och Controller. Player känner till weapon. Ett Player-objekt kan identifieras genom dess clientID, detta är samma id som klienten som skapade Player-objektet har.
+
 Konstruktorer | Beskrivning
 --- | --- 
 Player(int clientID) | För att skapa en spelarkaraktär måste man ange ett id.
+Virtual ~Player() = default | Destruktor till klassen Player
 
 Datamedlem | Beskrivning
 --- | ---
@@ -192,6 +194,9 @@ void rotate(float angle) | Relativ rotation.
 Shot* fire() | Säger till vapnet att skjuta. 
 void takeDamage(float amount) | Uppdatera sitt liv.
 int getClientID() const | Visa spelarkaraktärens identifierare.
+void setWeapon(Weapon* weapon) | Ge spelaren ett vapen.
+void removeWeapon() | Ta bort spelarens vapen.
+float getSpeed() const | Returnera spelarens hastighet.
 
 
 ### Weapon
@@ -218,6 +223,8 @@ bool isReloading | Representerar att man laddar om.
 Funktion | Beskrivning
 --- | ---
 Shot* fire(int clientID, sf::Vector2f& pos, sf::Vector2f& dir) | Denna funktion skapar ett skott med position, riktningsvektor och information om vem som skapade det. 
+void reloadWeapon() | Denna funktion laddar om spelarens vapen.
+void shootWeapon() | Vapnet ska minska ammo och sätta lastfire.
 
 
 ## NetworkHandler
