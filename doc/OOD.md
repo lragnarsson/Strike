@@ -251,7 +251,7 @@ Funktion | Beskrivning
 --- | ---
 void move(const Vector2f &offset) | Relativ förflyttning med offset angiven som vektor eller koordinater. Det finns fler varianter specifierade i sf::Transformable. 
 void rotate(float angle) | Relativ rotation. 
-Shot* fire() | Säger till vapnet att skjuta. 
+vector\<Shot*\> fire() | Säger till vapnet att skjuta. 
 void takeDamage(float amount) | Uppdatera sitt liv.
 int getClientID() const | Visa spelarkaraktärens identifierare.
 void setWeapon(Weapon* weapon) | Ge spelaren ett vapen.
@@ -269,7 +269,6 @@ Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize
 Weapon(const Weapon& weapon) | Kopieringskonstruktor.
 Weapon() = default | Defaultkonstruktor.
 
-
 Datamedlem | Beskrivning
 --- | ---
 unsigned int ammo | Antal skott i magasinet.
@@ -282,7 +281,7 @@ bool isReloading | Representerar att man laddar om.
 
 Funktion | Beskrivning
 --- | ---
-Shot* fire(int clientID, sf::Vector2f& pos, sf::Vector2f& dir) | Denna funktion skapar ett skott med position, riktningsvektor och information om vem som skapade det. 
+vector\<Shot*\> fire(int clientID, sf::Vector2f& pos, sf::Vector2f& dir) | Denna funktion skapar ett skott med position, riktningsvektor och information om vem som skapade det. 
 void reloadWeapon() | Denna funktion laddar om spelarens vapen.
 
 
