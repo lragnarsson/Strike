@@ -18,3 +18,20 @@ Weapon::Weapon(const Weapon& weapon){
     this->fireRate = weapon.fireRate;
     this->reloadTime = weapon.reloadTime;
 }
+
+//At the moment reloadWeapon does not handle time
+void Weapon::reloadWeapon(){
+	if(this->additionalAmmo > 0){
+		unsigned int allAmmo = this->ammo + this->additionalAmmo;
+		if(allAmmo >= this->magazineSize)
+		{
+			this->ammo = this->magazineSize;
+			this->additionalAmmo = allAmmo - this->magazineSize;
+		}
+		else
+		{
+			this->ammo = allAmmo;
+			this->additionalAmmo = 0;
+		}
+	}
+}
