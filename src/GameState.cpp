@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Isak Wiberg. All rights reserved.
 //
 
-#include "ResourcePath.hpp"
+#include "ResourcePath.h"
 #include "GameState.h"
 #include "Player.h"
 #include "Team.h"
@@ -18,7 +18,7 @@ void GameState::addPlayer(Player* playerP) {
 }
 
 GameState::GameState() {
-    if (!mapTexture_.loadFromFile(resourcePath("res/img/") + "boat_lvl.bmp"))
+    if (!mapTexture_.loadFromFile(resourcePath("res/images/") + "boat_lvl.bmp"))
         throw std::exception();
     mapSprite_.setTexture(mapTexture_);
 }

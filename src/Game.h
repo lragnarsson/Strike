@@ -10,7 +10,7 @@
 #define __Strike__Game__
 
 #include <stdio.h>
-#include "ResourcePath.hpp"
+#include "ResourcePath.h"
 #include "Player.h"
 #include "GameState.h"
 #include "Controller.h"

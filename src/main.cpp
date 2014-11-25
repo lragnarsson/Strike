@@ -18,7 +18,7 @@
 #include <SFML/Graphics.hpp>
 
 // Here is a small helper for you ! Have a look.
-#include "ResourcePath.hpp"
+#include "ResourcePath.h"
 #include "Player.h"
 #include "GameState.h"
 #include "Controller.h"
@@ -149,7 +149,6 @@ int main(int, char const**)
 
         // Update the window
         window.display();
-
     }
 
     return EXIT_SUCCESS;

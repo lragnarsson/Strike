@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "Game.h"
-#include "ResourcePath.hpp"
+#include "ResourcePath.h"
 #include "Player.h"
 #include "GameState.h"
 #include "Controller.h"

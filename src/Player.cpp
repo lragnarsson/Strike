@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Isak Wiberg. All rights reserved.
 //
 
-#include "ResourcePath.hpp"
+#include "ResourcePath.h"
 #include "Player.h"
 #include <math.h>
 
 Player::Player(int ClientID): clientID_(ClientID){
     sf::Texture weaponTexture;
-    if (!texture_.loadFromFile(resourcePath("res/img/") + "cage.png"))
+    if (!texture_.loadFromFile(resourcePath("res/images/") + "cage.png"))
         throw std::exception();
 
     // texture for self
