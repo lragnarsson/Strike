@@ -12,6 +12,11 @@ std::vector<Shot*> playerFire(){
 } 
  */
 
+Controller::~Controller(){
+    view_ = nullptr;        // objects are destroyed by GameState
+    player_ = nullptr;      // objects are destroyed by GameState
+}
+
 void Controller::playerMove(const sf::RenderWindow& window)
 {
     sf::Vector2i mouse {sf::Mouse::getPosition(window)}; // this gives the mouse pos relative to the window
@@ -51,6 +56,12 @@ void Controller::playerMove(const sf::RenderWindow& window)
         moveVector_.y += aim.x;
     }*/
     // move in fixed directions ----------------------------
+    sf::Time elapsed {clock_.getElapsedTime()};
+    
+    //float fps {1/elapsed.asSeconds()};
+    //std::cout << "elapsedTime, fps: " << elapsed.asSeconds() << ", " << fps <<  std::endl;
+    
+    clock_.restart();
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         moveVector_.y = -1;
     
@@ -68,7 +79,7 @@ void Controller::playerMove(const sf::RenderWindow& window)
     if (moveVector_.x != 0 || moveVector_.y != 0)
     {
         moveVector_ = moveVector_ / sqrtf(powf(moveVector_.x, 2) + powf(moveVector_.y, 2));
-        player_->move(moveVector_ * player_->getSpeed());
+        player_->move(moveVector_ * elapsed.asSeconds() * player_->getSpeed());
     }
 }
 /*

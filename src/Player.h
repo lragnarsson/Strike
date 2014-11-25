@@ -31,7 +31,7 @@ private:
     int clientID_;
     sf::Texture texture_;
     //sf::Sprite weapon_;
-    float speed_ = 0.2f;
+    float speed_ = 100.0f; // pixels per second
     //float rotateSpeed_ = 1.0f;
     Weapon* weapon_;
 };

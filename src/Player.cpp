@@ -33,7 +33,3 @@ int Player::getClientID() const{
 float Player::getSpeed() const{
     return speed_;
 }
-/*
-float Player::getRotateSpeed() const{
-    return rotateSpeed_;
-}*/

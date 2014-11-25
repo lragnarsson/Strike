@@ -9,7 +9,7 @@ class Controller
 {
 public:
     Controller() = default;
-    ~Controller() = default;
+    ~Controller();
 
     //std::vector<Shot*> playerFire();
     void playerMove(const sf::RenderWindow&);
@@ -23,6 +23,7 @@ private:
     sf::Vector2f moveVector_;
     Player* player_;
     sf::View* view_;
+    sf::Clock clock_;
     
 
 };

@@ -42,56 +42,7 @@ protected:
     
 };
 
-/*  Client är en subklass till Game som skapas hos användaren när denne startar 
- *  spelet. Här finns bland annat information för att unikt identifiera en klient
- *  och ett Controller-objekt som hanterar användarens input. Logik för utritning
- *  finns i Client.
- */
 
-class Client: public Game{
-public:
-    Client() = default;
-    ~Client();
-    
-    Client(const Client&) = delete;         // borttagen kopieringskonstruktor
-    Client& operator=(const Client&) = delete; // borttagen kopieringstilldelning
-    
-    void run() override;
-    void readNetwork() override;
-    void writeNetwork() override;
-    void logic() override;
-
-    
-    int clientID_;                          // detta fås av servern vid init.
-    std::string clientName_;                // detta borde man få välja själv vid start
-    sf::View view_;                         // en instans av en view som ska användas av Controller.
-    sf::RenderWindow renderWindow;          // en instans av ett fönster. Här ritas allt ut.
-    Controller controller;                  // en instans av en controller som används för att styra spelarkaraktären.
-    
-    
-};
-
-
-
-/*  Ärver från Game och skapas för att starta en server som klienter kan ansluta
- *  till. Server skiljer sig från Client då den till exempel inte behöver rita 
- *  någon spelgrafik. Interaktionen med NetworkHandler-objektet kommer också att 
- *  vara lite annolunda.
- */
-
-class Server: public Game{
-public:
-    Server() = default;
-    ~Server();
-    
-    Server(const Server&) = delete;         // borttagen kopieringskonstruktor
-    Server& operator=(const Server&) = delete; // borttagen kopieringstilldelning
-    
-    void run() override;
-    void readNetwork() override;
-    void writeNetwork() override;
-    void logic() override;
-};
 
 
 #endif /* defined(__Strike__Game__) */

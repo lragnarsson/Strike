@@ -30,8 +30,8 @@
 int main(int, char const**)
 {
     // Create the main window
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground", sf::Style::Fullscreen);
-    //sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground");
+    //sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground");
 
     // let's define a view
     sf::View view(sf::FloatRect(0, 0, 500, 300));
@@ -71,9 +71,14 @@ int main(int, char const**)
         return EXIT_FAILURE;
     }
 
+     
+    
     // Play the music
     music.play();
      */
+
+
+    
     Team blueTeam;
     Team redTeam;
 
@@ -141,7 +146,6 @@ int main(int, char const**)
         window.setView(view);
         Game.draw(window);
         window.draw(lines);
-
 
         // Update the window
         window.display();
