@@ -17,7 +17,7 @@ class Weapon{
 public:
     Weapon() = default; // Add appropriate values later
     ~Weapon() = default;
-    Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int reloadTime);
+    Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int reloadTime, int damage);
     Weapon(const Weapon& weapon);
     void reloadWeapon();
     std::vector<Shot*> fire(int clientID, sf::Vector2f& pos, sf::Vector2f& dir);
