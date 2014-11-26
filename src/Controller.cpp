@@ -5,12 +5,10 @@
 #include <math.h>
 #include <iostream>
 #include <vector>
-#include <Mouse.hpp>
-
 
 std::vector<Shot*> Controller::playerFire(){
-    if(sf::Mouse::isButtonpressed(sf::Mouse::Left)){
-        return player_.fire();
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+        return player_->fire();
     }
     else{
         std::vector<Shot*> shotVector;

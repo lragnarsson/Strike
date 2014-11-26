@@ -16,7 +16,7 @@ Player::Player(int ClientID): clientID_(ClientID){
     if (!texture_.loadFromFile(resourcePath("res/images/") + "cage.png"))
         throw std::exception();
 
-    // texture for self
+    // texture for playerSprite
     texture_.setSmooth(true);
     setTexture(texture_);
     setScale(sf::Vector2f(0.1f, 0.1f));
@@ -28,7 +28,8 @@ void Player::setWeapon(Weapon* newWeapon){
 }
 
 std::vector<Shot*> Player::fire(){
-    return weapon_.fire(player->clientID_, player->getPosition(), window.mapPixelToCoords(mouse) - view_->getCenter());
+    sf::Vector2f dir{cosf(getRotation()),-sinf(getRotation())}; // unit vector with direction
+    return weapon_->fire(clientID_, getPosition(), dir);
 }
 
 int Player::getClientID() const{

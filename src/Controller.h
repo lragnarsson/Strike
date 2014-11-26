@@ -4,15 +4,13 @@
 #include <SFML/System.hpp>
 #include "Player.h"
 #include <vector>
-//#include "Shot.h"
+#include "Shot.h"
 
-class Controller
-{
+class Controller{
 public:
     Controller() = default;
     ~Controller();
-
-    //std::vector<Shot*> playerFire();
+    
     void playerMove(const sf::RenderWindow&);
     //void rotatePlayer(const sf::Window&);
     void bindPlayer(Player*);

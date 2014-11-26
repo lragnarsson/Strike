@@ -7,13 +7,16 @@
 //
 
 #include "Client.h"
-#include "Client.h"
+#include "Game.h"
 
 /* Implementation av Client
  */
 
 void Client::run(){
-    // lite tom just nu
+    readNetwork();
+    logic();
+    writeNetwork();
+    
 }
 
 void Client::readNetwork(){
@@ -25,5 +28,21 @@ void Client::writeNetwork(){
 }
 
 void Client::logic(){
+
     // asså har du ens gjort något eller?
+}
+
+void Client::input(){
+    controller.playerMove(renderWindow);
+    //controller.playerRotate(renderWindow);
+    GameState.addUnhandledShots(controller.playerFire()); // adds the shots that were created by player (if there were any).
+    
+    
+}
+
+
+void Client::draw(){
+    controller.updateView();
+    
+    GameState.draw(renderWindow);
 }

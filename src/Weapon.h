@@ -11,16 +11,15 @@
 
 #include <stdio.h>
 #include "Shot.h"
-#include "Player.h"
 //Borde inte fire ta ett timestamp från clients lokala tid?
 class Weapon{
 public:
     Weapon() = default; // Add appropriate values later
     ~Weapon() = default;
-    Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int reloadTime);
-    Weapon(const Weapon& weapon);
+    Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int reloadTime, int Damage);
+    Weapon(const Weapon& weapon) = default;
     void reloadWeapon();
-    std::vector<Shot*> fire(int clientID, sf::Vector2f& pos, sf::Vector2f& dir);
+    std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir);
 private:
     unsigned int ammo_;
     unsigned int additionalAmmo_;

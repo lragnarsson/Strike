@@ -33,9 +33,13 @@ public:
     Client& operator=(const Client&) = delete; // borttagen kopieringstilldelning
     
     void run() override;
+    
+private:
     void readNetwork() override;
     void writeNetwork() override;
     void logic() override;
+    void input();
+    void draw();
     
     
     int clientID_;                          // detta fås av servern vid init.

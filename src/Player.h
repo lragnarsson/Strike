@@ -27,12 +27,12 @@ public:
     int getClientID() const;
     void setWeapon(Weapon* weapon);
     std::vector<Shot*> fire();
+
 private:
     //virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     int clientID_;
     sf::Texture texture_;
-    //sf::Sprite weapon_;
     float speed_ = 100.0f; // pixels per second
     //float rotateSpeed_ = 1.0f;
     Weapon* weapon_;
