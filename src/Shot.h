@@ -9,16 +9,15 @@
 #ifndef SHOT_H
 #define SHOT_H
 
-#define <Vector2.hpp>
-#define <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 class Shot
 {
     public:
         // Konstruktorer
         Shot() = default;
-        Shot(int timestamp, int clientID, sf::vector2f origin, sf::vector2f direction, sf::vector2f endPoint, float damage);
-        Shot(const Shot& shot);
+        Shot(int timestamp, int clientID, sf::Vector2f origin, sf::Vector2f direction, sf::Vector2f endPoint, float damage);
+        Shot(const Shot& shot) = default; 
         virtual ~Shot() = default;
 
 		// Funktioner

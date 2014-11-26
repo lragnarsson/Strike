@@ -8,14 +8,6 @@
 
 #include "Shot.h"
 
-Shot::Shot(int newTimestamp, int newClientID, sf::Vector2f newOrigin, sf::Vector2f newDirection, sf::Vector2f newEnd, float newDamage)
-:timestamp(newTimestamp), clientID(newClientID), origin(newOrigin), direction(newDirection), endPoint(newEndPoint), damage(newDamage) {}
+Shot::Shot(int newTimestamp, int newClientID, sf::Vector2f newOrigin, sf::Vector2f newDirection, sf::Vector2f newEnd, float newDamage):timestamp_(newTimestamp), clientID_(newClientID), origin_(newOrigin), direction_(newDirection), endPoint_(newEnd), damage_(newDamage) {}
 
-Shot::Shot(const Shot& shot){
-    this->timestamp = shot.timestamp;
-    this->clientID = shot.clientID;
-    this->origin = shot.newOrigin;
-    this->direction = shot.newDirection;
-    this->endPoint = newEndPoint;
-    this->damage = newDamage;
-}
+
