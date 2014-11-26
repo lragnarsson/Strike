@@ -16,7 +16,7 @@ class Shot
     public:
         // Konstruktorer
         Shot() = default;
-        Shot(int timestamp, int clientID, sf::Vector2f origin, sf::Vector2f direction, sf::Vector2f endPoint, float damage);
+        Shot(int clientID, sf::Vector2f origin, sf::Vector2f direction, sf::Vector2f endPoint, float damage);
         Shot(const Shot& shot) = default; 
         virtual ~Shot() = default;
 

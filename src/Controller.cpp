@@ -4,13 +4,19 @@
 #include "Player.h"
 #include <math.h>
 #include <iostream>
+#include <vector>
+#include <Mouse.hpp>
 
 
-/*
-std::vector<Shot*> playerFire(){
-    std::cout<< "Nu sköt spelaren" << std::endl;
+std::vector<Shot*> Controller::playerFire(){
+    if(sf::Mouse::isButtonpressed(sf::Mouse::Left)){
+        return player_.fire();
+    }
+    else{
+        std::vector<Shot*> shotVector;
+        return shotVector;
+    }
 } 
- */
 
 Controller::~Controller(){
     view_ = nullptr;        // objects are destroyed by GameState
@@ -103,7 +109,6 @@ void Controller::updateView()
     view_->setCenter(player_->getPosition());
     
 }
-
 
 void Controller::bindPlayer(Player* p)
 {

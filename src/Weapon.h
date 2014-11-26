@@ -10,6 +10,8 @@
 #define __Strike__Weapon__
 
 #include <stdio.h>
+#include "Shot.h"
+#include "Player.h"
 //Borde inte fire ta ett timestamp från clients lokala tid?
 class Weapon{
 public:
@@ -18,15 +20,17 @@ public:
     Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int reloadTime);
     Weapon(const Weapon& weapon);
     void reloadWeapon();
+    std::vector<Shot*> fire(int clientID, sf::Vector2f& pos, sf::Vector2f& dir);
 private:
-    unsigned int ammo;
-    unsigned int additionalAmmo;
-    unsigned int magazineSize;
-    int fireRate;
-    int lastFired;
+    unsigned int ammo_;
+    unsigned int additionalAmmo_;
+    unsigned int magazineSize_;
+    int fireRate_;
+    int lastFired_;
+    int damage_;
     //int lastReloaded; // Added a variable for controlling the reload process.
-    int reloadTime;
-    bool isReloading;
+    int reloadTime_;
+    bool isReloading_;
 };
 
 #endif

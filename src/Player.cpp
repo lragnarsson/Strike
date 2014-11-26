@@ -8,6 +8,7 @@
 
 #include "ResourcePath.h"
 #include "Player.h"
+#include "Weapon.h"
 #include <math.h>
 
 Player::Player(int ClientID): clientID_(ClientID){
@@ -24,6 +25,10 @@ Player::Player(int ClientID): clientID_(ClientID){
 }
 void Player::setWeapon(Weapon* newWeapon){
     weapon_ = newWeapon;
+}
+
+std::vector<Shot*> Player::fire(){
+    return weapon_.fire(player->clientID_, player->getPosition(), window.mapPixelToCoords(mouse) - view_->getCenter());
 }
 
 int Player::getClientID() const{

@@ -23,8 +23,10 @@ public:
     ~Player() = default;
     float getSpeed() const;
     //float getRotateSpeed() const;
+    //void setHealth(float amount);
     int getClientID() const;
     void setWeapon(Weapon* weapon);
+    std::vector<Shot*> fire();
 private:
     //virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
