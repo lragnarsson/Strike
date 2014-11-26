@@ -12,7 +12,7 @@
 #include <math.h>
 
 Player::Player(int ClientID): clientID_(ClientID){
-    sf::Texture weaponTexture;
+    sf::Texture texture_;
     if (!texture_.loadFromFile(resourcePath("res/images/") + "cage.png"))
         throw std::exception();
 
@@ -23,6 +23,7 @@ Player::Player(int ClientID): clientID_(ClientID){
     setOrigin(177.f, 245.f);
 
 }
+
 void Player::setWeapon(Weapon* newWeapon){
     weapon_ = newWeapon;
 }
@@ -36,6 +37,11 @@ int Player::getClientID() const{
     return clientID_;
 }
 
-float Player::getSpeed() const{
-    return speed_;
+void setMoveVector(sf::Vector2f moveVector, float elapsedSeconds) {
+    moveVector_ = moveVector * elapsedSeconds * speed_;
+}
+
+void handleRotation(sf::Vector2i aimDelta) {
+    // TODO: Change control scheme.
+    rotate(aimDelta.x);
 }

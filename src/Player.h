@@ -21,21 +21,22 @@ public:
     Player(int ClientID);
     Player() = delete;
     ~Player() = default;
-    float getSpeed() const;
+
     //float getRotateSpeed() const;
     //void setHealth(float amount);
     int getClientID() const;
     void setWeapon(Weapon* weapon);
     std::vector<Shot*> fire();
-
+    void setMoveVector(sf::Vector2f moveVector, int elapsedMS);
+    void handleRotation(sf::Vector2i aimDelta);
 private:
     //virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     int clientID_;
-    sf::Texture texture_;
     float speed_ = 100.0f; // pixels per second
-    //float rotateSpeed_ = 1.0f;
     Weapon* weapon_;
+    sf::Vector2f moveVector_;
+    
 };
 
 
