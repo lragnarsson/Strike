@@ -28,7 +28,7 @@ public:
     virtual ~Game() = default;
     
     // NetworkHandler NetworkHandler; lägg till detta när NetworkHandler är implementerad.
-    GameState GameState;
+    GameState gameState;
     
     virtual void run() = 0;                 // gameloopen för server och klient.
     virtual void readNetwork() = 0;         // ta emot data från nätverket och behandla den.

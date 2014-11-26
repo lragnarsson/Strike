@@ -33,9 +33,9 @@ void Client::logic(){
 }
 
 void Client::input(){
-    controller.playerMove(renderWindow);
-    //controller.playerRotate(renderWindow);
-    GameState.addUnhandledShots(controller.playerFire()); // adds the shots that were created by player (if there were any).
+    controller.updatePlayerMoveVector();
+    controller.playerRotate(renderWindow);
+    gameState.addUnhandledShots(controller.playerFire()); // adds the shots that were created by player (if there were any).
     
     
 }
@@ -44,5 +44,5 @@ void Client::input(){
 void Client::draw(){
     controller.updateView();
     
-    GameState.draw(renderWindow);
+    gameState.draw(renderWindow);
 }

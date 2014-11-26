@@ -21,7 +21,7 @@ Controller::~Controller(){
     player_ = nullptr;      // objects are destroyed by GameState
 }
 
-void Controller:updatePlayer()
+void Controller::updatePlayerMoveVector()
 {
 
     moveVector_.x = 0;
@@ -37,19 +37,20 @@ void Controller:updatePlayer()
         moveVector_.y += 1;
     
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        moveVector_.x += -1
+      moveVector_.x += -1;
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         moveVector_.x += 1;
 
     if (moveVector_.x != 0 && moveVector_.y != 0)
-        moveVector_ += moveVector_ / sqrt2;
+        moveVector_ /= sqrt2;
     
-    player_->setPositionVector(moveVector_, elapsed.asSeconds());
+    player_->setMoveVector(moveVector_, elapsed.asSeconds());
+    player_->move(sf::Vector2f{});
 
 }
 
-void Controller::rotatePlayer(const sf::RenderWindow& window)
+void Controller::playerRotate(const sf::RenderWindow& window)
 {
     sf::Vector2i deltaMousePosition = lastMousePosition_ - sf::Mouse::getPosition(window); // The change in mouse position since last tick
     lastMousePosition_ = sf::Mouse::getPosition(window);

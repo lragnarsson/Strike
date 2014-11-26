@@ -11,8 +11,8 @@ public:
     Controller() = default;
     ~Controller();
     
-    void playerMove(const sf::RenderWindow&);
-    //void rotatePlayer(const sf::Window&);
+    void updatePlayerMoveVector();
+    void playerRotate(const sf::RenderWindow&);
     void bindPlayer(Player*);
     void bindView(sf::View*);
     void updateView();

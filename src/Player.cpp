@@ -12,7 +12,6 @@
 #include <math.h>
 
 Player::Player(int ClientID): clientID_(ClientID){
-    sf::Texture texture_;
     if (!texture_.loadFromFile(resourcePath("res/images/") + "cage.png"))
         throw std::exception();
 
@@ -21,7 +20,6 @@ Player::Player(int ClientID): clientID_(ClientID){
     setTexture(texture_);
     setScale(sf::Vector2f(0.1f, 0.1f));
     setOrigin(177.f, 245.f);
-
 }
 
 void Player::setWeapon(Weapon* newWeapon){
@@ -37,11 +35,15 @@ int Player::getClientID() const{
     return clientID_;
 }
 
-void setMoveVector(sf::Vector2f moveVector, float elapsedSeconds) {
+void Player::setMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds) {
     moveVector_ = moveVector * elapsedSeconds * speed_;
 }
 
-void handleRotation(sf::Vector2i aimDelta) {
-    // TODO: Change control scheme.
+void Player::handleRotation(const sf::Vector2i& aimDelta) {
+    
     rotate(aimDelta.x);
+}
+
+void Player::move(const sf::Vector2f& offset) {
+    Sprite::move(moveVector_);
 }

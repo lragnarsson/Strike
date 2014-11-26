@@ -27,11 +27,13 @@ public:
     int getClientID() const;
     void setWeapon(Weapon* weapon);
     std::vector<Shot*> fire();
-    void setMoveVector(sf::Vector2f moveVector, int elapsedMS);
-    void handleRotation(sf::Vector2i aimDelta);
+    void setMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds);
+    void handleRotation(const sf::Vector2i& aimDelta);
+    void move(const sf::Vector2f& offset);
 private:
     //virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
+    sf::Texture texture_;
     int clientID_;
     float speed_ = 100.0f; // pixels per second
     Weapon* weapon_;
