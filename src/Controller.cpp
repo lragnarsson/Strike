@@ -16,6 +16,12 @@ std::vector<Shot*> Controller::playerFire(){
     }
 } 
 
+void Controller::reloadWeapon(){
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+        player_->reloadWeapon();
+    }
+}
+
 Controller::~Controller(){
     view_ = nullptr;        // objects are destroyed by GameState
     player_ = nullptr;      // objects are destroyed by GameState

@@ -30,6 +30,7 @@ public:
     void setMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds);
     void handleRotation(const sf::Vector2i& aimDelta);
     void move(const sf::Vector2f& offset);
+    void reloadWeapon();
 private:
     //virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 

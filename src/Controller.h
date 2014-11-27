@@ -17,6 +17,7 @@ public:
     void bindView(sf::View*);
     void updateView();
     std::vector<Shot*> playerFire();
+    void reloadWeapon();
 protected:
     
 private:

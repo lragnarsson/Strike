@@ -82,7 +82,7 @@ int main(int, char const**)
     Team blueTeam;
     Team redTeam;
 
-    Weapon weapon1{10,30,10,100,100,10};
+    Weapon weapon1{5,30,10,1000,100,10};
 
     Weapon weapon2{weapon1}; // just for lullz
     
@@ -141,6 +141,8 @@ int main(int, char const**)
         // Move the player, debug position in console
         controller.updatePlayerMoveVector();
         controller.playerRotate(window);
+        controller.reloadWeapon();
+        controller.playerFire();
         controller.updateView();
 
         window.setView(view);

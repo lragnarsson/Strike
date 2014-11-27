@@ -30,6 +30,7 @@ private:
     //int lastReloaded; // Added a variable for controlling the reload process.
     int reloadTime_;
     bool isReloading_;
+    sf::Clock clock_;
 };
 
 #endif

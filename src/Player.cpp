@@ -26,6 +26,10 @@ void Player::setWeapon(Weapon* newWeapon){
     weapon_ = newWeapon;
 }
 
+void Player::reloadWeapon(){
+    weapon_->reloadWeapon();
+}
+
 std::vector<Shot*> Player::fire(){
     sf::Vector2f dir{cosf(getRotation()),-sinf(getRotation())}; // unit vector with direction
     return weapon_->fire(clientID_, getPosition(), dir);
