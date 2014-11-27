@@ -19,23 +19,34 @@ void Weapon::reloadWeapon(){
 	{
 		if(additionalAmmo_ > 0){
 				unsigned int allAmmo_ = ammo_ + additionalAmmo_;
+				isReloading_ = true;
+				clock_.restart();
 			if(allAmmo_ >= magazineSize_)
 			{
-				std::cout << "Ammo: " << ammo_ << " additionalAmmo" << additionalAmmo_ << std::endl;
 				ammo_ = magazineSize_;
 				additionalAmmo_ = allAmmo_ - magazineSize_;
-				std::cout << "Ammo: " << ammo_ << " additionalAmmo" << additionalAmmo_ << std::endl;
+				std::cout << "Ammo: " << ammo_ << " AdditionalAmmo: " << additionalAmmo_ << std::endl;
 			}
 			else
 			{
 				ammo_ = allAmmo_;
 				additionalAmmo_ = 0;
+				std::cout << "Ammo: " << ammo_ << " AdditionalAmmo: " << additionalAmmo_ << std::endl;
 			}
 		}
 	}
 }
+
 std::vector<Shot*> Weapon::fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir){
 	std::vector<Shot*> shotVector;
+	if(isReloading_){
+		if(clock_.getElapsedTime().asMilliseconds() >= reloadTime_){
+			isReloading_ = false;
+		}
+		else{
+			return shotVector;
+		}
+	}
 	if(ammo_ > 0 && clock_.getElapsedTime().asMilliseconds() >= fireRate_){
 		ammo_ -= 1;
 		clock_.restart();

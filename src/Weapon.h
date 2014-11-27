@@ -11,10 +11,9 @@
 
 #include <stdio.h>
 #include "Shot.h"
-//Borde inte fire ta ett timestamp från clients lokala tid?
 class Weapon{
 public:
-    Weapon() = default; // Add appropriate values later
+    Weapon() = default;
     ~Weapon() = default;
     Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int reloadTime, int Damage);
     Weapon(const Weapon& weapon) = default;
@@ -27,7 +26,6 @@ private:
     int fireRate_;
     int lastFired_;
     int damage_;
-    //int lastReloaded; // Added a variable for controlling the reload process.
     int reloadTime_;
     bool isReloading_;
     sf::Clock clock_;
