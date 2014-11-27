@@ -32,7 +32,7 @@ int main(int, char const**)
     // Create the main window
     //sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground", sf::Style::Fullscreen);
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground");
-
+    window.setFramerateLimit(120);
     // let's define a view
     sf::View view(sf::FloatRect(0, 0, 500, 300));
 
@@ -82,9 +82,9 @@ int main(int, char const**)
     Team blueTeam;
     Team redTeam;
 
-    Weapon weapon1{10,30,10,100,1000};
+    Weapon weapon1{10,30,10,100,100,10};
 
-    Weapon weapon2{weapon1};
+    Weapon weapon2{weapon1}; // just for lullz
     
     GameState Game;
     Player player1{1};
@@ -139,8 +139,8 @@ int main(int, char const**)
         window.draw(text);
 */
         // Move the player, debug position in console
-        controller.playerMove(window);
-        //controller.rotatePlayer(window);
+        controller.updatePlayerMoveVector();
+        controller.playerRotate(window);
         controller.updateView();
 
         window.setView(view);

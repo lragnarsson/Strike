@@ -8,6 +8,6 @@
 
 #include "Shot.h"
 
-Shot::Shot(int newClientID, sf::Vector2f newOrigin, sf::Vector2f newDirection, sf::Vector2f newEnd, float newDamage):clientID_(newClientID), origin_(newOrigin), direction_(newDirection), endPoint_(newEnd), damage_(newDamage) {}
+Shot::Shot(int newClientID, sf::Vector2f newOrigin, sf::Vector2f newDirection, sf::Vector2f newEnd, int newDamage):clientID_(newClientID), origin_(newOrigin), direction_(newDirection), endPoint_(newEnd), damage_(newDamage) {}
 
 

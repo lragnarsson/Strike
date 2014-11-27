@@ -93,6 +93,8 @@ void input() | Hanterar input från användaren. Spelarens input och förflyttni
 void logic() | Sköter övrig spellogik.
 void writeNetwork() | Sköter all packetering av data för att skicka över nätverket. Anropar NetworkHandler för själva skickandet.
 void draw() | Ritar ut spelvärlden.
+void addUnhandledShots(vector<Shot*>) | Lägg till ohanterade skott. Från Controller.
+void addHandledShots(vector<Shot*>) | Lägg till hanterade skott från nätverket. 
 
 
 ### Server : Game

@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "Player.h"
+#include "Shot.h"
 #include <vector>
 
 class GameState{
@@ -19,14 +20,18 @@ public:
     ~GameState() = default;
 
     void addPlayer(Player*);
-
     void draw(sf::RenderWindow& window);
+    void addUnhandledShots(std::vector<Shot*>);
+    void addHandledShots(std::vector<Shot*>);
 
 private:
     std::vector<Player*> players_;
 
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
+    std::vector<Shot*> unhandledShots_;
+    std::vector<Shot*> handledShots_;
+    sf::Clock gameTime_;
 
 };
 

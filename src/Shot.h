@@ -11,27 +11,27 @@
 
 #include <SFML/Graphics.hpp>
 
-class Shot
-{
-    public:
-        // Konstruktorer
-        Shot() = default;
-        Shot(int clientID, sf::Vector2f origin, sf::Vector2f direction, sf::Vector2f endPoint, float damage);
-        Shot(const Shot& shot) = default; 
-        virtual ~Shot() = default;
 
-		// Funktioner
-        void draw() const;
+class Shot {
+public:
+    // Konstruktorer
+    Shot() = default;
+    Shot(int clientID, sf::Vector2f origin, sf::Vector2f direction, sf::Vector2f endPoint, int damage);
+    Shot(const Shot& shot) = default;
+    virtual ~Shot() = default;
 
-    protected:
-    private:
-		// Datamedlemmar
-        int timestamp_;
-        int clientID_;
-        sf::Vector2f origin_;
-        sf::Vector2f direction_;
-        sf::Vector2f endPoint_;
-        float damage_;
+    // Funktioner
+    void draw() const;
+    
+protected:
+private:
+    // Datamedlemmar
+    int timestamp_;
+    int clientID_;
+    sf::Vector2f origin_;
+    sf::Vector2f direction_;
+    sf::Vector2f endPoint_;
+    int damage_;
 };
 
 #endif // SHOT_H

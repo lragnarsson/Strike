@@ -4,17 +4,15 @@
 #include <SFML/System.hpp>
 #include "Player.h"
 #include <vector>
-//#include "Shot.h"
+#include "Shot.h"
 
-class Controller
-{
+class Controller{
 public:
     Controller() = default;
     ~Controller();
-
-    //std::vector<Shot*> playerFire();
-    void playerMove(const sf::RenderWindow&);
-    //void rotatePlayer(const sf::Window&);
+    
+    void updatePlayerMoveVector();
+    void playerRotate(const sf::RenderWindow&);
     void bindPlayer(Player*);
     void bindView(sf::View*);
     void updateView();
@@ -26,7 +24,8 @@ private:
     Player* player_;
     sf::View* view_;
     sf::Clock clock_;
-    
+    sf::Vector2i lastMousePosition_;
+    float sqrt2{1.4142135};
 
 };
 
