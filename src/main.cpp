@@ -32,12 +32,13 @@ int main(int, char const**)
     // Create the main window
     //sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground", sf::Style::Fullscreen);
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground");
-    window.setFramerateLimit(120);
+    window.setFramerateLimit(30);
     // let's define a view
     sf::View view(sf::FloatRect(0, 0, 500, 300));
 
     // activate it
     window.setView(view);
+    window.setMouseCursorVisible(false);
 
     // draw something to that view
     //window.draw(some_sprite);
@@ -110,11 +111,13 @@ int main(int, char const**)
     lines[2].position = sf::Vector2f(30, 5);
     lines[3].position = sf::Vector2f(40, 2);
 
+    sf::Clock clock;
+    clock.restart();
 
     // Start the game loop
-    while (window.isOpen())
-    {
-        // Process events
+    while (window.isOpen()) {
+	clock.restart();
+	// Process events
         sf::Event event;
         while (window.pollEvent(event))
         {

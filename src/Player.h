@@ -28,7 +28,7 @@ public:
     void setWeapon(Weapon* weapon);
     std::vector<Shot*> fire();
     void setMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds);
-    void handleRotation(const sf::Vector2i& aimDelta);
+    sf::Vector2f handleRotation(const sf::Vector2i& aimDelta);
     void move(const sf::Vector2f& offset);
     void reloadWeapon();
 private:
@@ -39,7 +39,8 @@ private:
     float speed_ = 100.0f; // pixels per second
     Weapon* weapon_;
     sf::Vector2f moveVector_;
-    
+    sf::Vector2f aimVector_;
+    float radConversion_ = 57.295779f;
 };
 
 

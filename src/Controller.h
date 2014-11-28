@@ -25,7 +25,6 @@ private:
     Player* player_;
     sf::View* view_;
     sf::Clock clock_;
-    sf::Vector2i lastMousePosition_;
     float sqrt2{1.4142135};
 
 };

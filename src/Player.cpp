@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Weapon.h"
 #include <math.h>
+#include <iostream>
 
 Player::Player(int ClientID): clientID_(ClientID){
     if (!texture_.loadFromFile(resourcePath("res/images/") + "cage.png"))
@@ -31,8 +32,7 @@ void Player::reloadWeapon(){
 }
 
 std::vector<Shot*> Player::fire(){
-    sf::Vector2f dir{cosf(getRotation()),-sinf(getRotation())}; // unit vector with direction
-    return weapon_->fire(clientID_, getPosition(), dir);
+    return weapon_->fire(clientID_, getPosition(), aimVector_);
 }
 
 int Player::getClientID() const{
@@ -43,9 +43,13 @@ void Player::setMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds)
     moveVector_ = moveVector * elapsedSeconds * speed_;
 }
 
-void Player::handleRotation(const sf::Vector2i& aimDelta) {
+sf::Vector2f Player::handleRotation(const sf::Vector2i& aimVector) {
+    sf::Vector2f dir = sf::Vector2f(mousePos.x - getPosition().y, mousePos.y - getPosition().y); 
+    aimVector_ = dir / (sqrtf(pow(dir.x, 2) + pow(dir.y, 2)));
+    float angle = (aimVector_.y > 0) ? radConversion_ * acos(aimVector_.x) : 360 - radConversion_ * acos(aimVector_.x);
+    rotate(angle);
     
-    rotate(aimDelta.x);
+    return aimVector_;
 }
 
 void Player::move(const sf::Vector2f& offset) {

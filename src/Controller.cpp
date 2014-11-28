@@ -58,9 +58,9 @@ void Controller::updatePlayerMoveVector()
 
 void Controller::playerRotate(const sf::RenderWindow& window)
 {
-    sf::Vector2i deltaMousePosition = lastMousePosition_ - sf::Mouse::getPosition(window); // The change in mouse position since last tick
-    lastMousePosition_ = sf::Mouse::getPosition(window);
-    player_->handleRotation(deltaMousePosition);
+    sf::Vector2f aimVector = window.mapPixelToCoords(sf::Mouse::getPosition)
+    player_->handleRotation(sf::Mouse::getPosition(window));
+    sf::Mouse::setPosition(
 }
 
 void Controller::updateView()
