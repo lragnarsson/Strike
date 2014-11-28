@@ -12,37 +12,65 @@
 /* Implementation av Client
  */
 
-void Client::run(){
+void Client::run() {
     readNetwork();
-    logic();
+    handleInput();
+    handleCollisions();
+    handleGameLogic();
     writeNetwork();
+    draw();
     
 }
 
-void Client::readNetwork(){
+void Client::readNetwork() {
     // tomt här med
 }
 
-void Client::writeNetwork(){
+void Client::writeNetwork() {
     // fan nu börjar det bli löjligt
 }
 
-void Client::logic(){
+void Client::handleCollisions() {
+    handleShots();
+}
+
+void Client::handleGameLogic() {
 
     // asså har du ens gjort något eller?
 }
 
-void Client::input(){
+
+void Client::handleInput() {
     controller.updatePlayerMoveVector();
     controller.playerRotate(renderWindow);
-    gameState.addUnhandledShots(controller.playerFire()); // adds the shots that were created by player (if there were any).
+    gameState_.addUnhandledShots(controller.playerFire()); // adds the shots that were created by player (if there were any).
+    controller.playerRotate(renderWindow);
+    controller.reloadWeapon();
+    
+
     
     
 }
 
 
-void Client::draw(){
+void Client::draw() {
     controller.updateView();
     
-    gameState.draw(renderWindow);
+    gameState_.draw(renderWindow);
+}
+
+
+void Client::handleShots() {
+    std::vector<Shot*> shots {gameState_.takeUnhandledShots()};
+    if (!shots.empty()) {
+        for (std::vector<Shot*>::iterator it = shots.begin(); it != shots.end(); ++it) {
+            // Calculate newEndPoint with proper collision later
+            sf::Vector2f newEndPoint {(*it)->getOrigin() + 100.0f * (*it)->getDirection()};
+        
+            // --- finished :D
+                (*it)->setEndPoint(newEndPoint);
+        }
+        
+    }
+    gameState_.addHandledShots(shots);
 }

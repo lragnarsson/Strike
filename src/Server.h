@@ -37,7 +37,7 @@ public:
     void run() override;
     void readNetwork() override;
     void writeNetwork() override;
-    void logic() override;
+    void handleGameLogic() override;
 };
 
 #endif /* defined(__Strike__Server__) */

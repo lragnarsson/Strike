@@ -37,9 +37,13 @@ public:
 private:
     void readNetwork() override;
     void writeNetwork() override;
-    void logic() override;
-    void input();
+    void handleGameLogic() override;
+    void handleInput();
+    void handleCollisions() override;
     void draw();
+    
+    
+    void handleShots(); // this should take collisionobjects when they are implemented. 
     
     
     int clientID_;                          // detta fås av servern vid init.

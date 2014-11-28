@@ -26,7 +26,7 @@ void Server::writeNetwork(){
     // Men ändå rätt chill att Isak gjorde skalet iaf.
 }
 
-void Server::logic(){
+void Server::handleGameLogic(){
     // fan Isak är ju bäst typ.
 }
 

@@ -34,7 +34,7 @@ void GameState::addHandledShots(std::vector<Shot*> newShots) {
     if (!newShots.empty())
     {
         for (std::vector<Shot*>::iterator it = newShots.begin(); it != newShots.end(); ++it){
-            
+            (*it)->setTimestamp(gameTime_.getElapsedTime()); // gameTime_ is never restarted.
         }
         handledShots_.insert(handledShots_.end(), newShots.begin(), newShots.end()); // add the new shots.
     }
@@ -48,4 +48,10 @@ void GameState::draw(sf::RenderWindow& window) {
         //it->draw(window, sf::RenderStates::RenderStates()); // calls draw with a default RenderState for all players
     }
 
+}
+
+std::vector<Shot*> GameState::takeUnhandledShots() {
+    std::vector<Shot*> tempVec {unhandledShots_};
+    unhandledShots_.clear();
+    return tempVec;
 }

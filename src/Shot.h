@@ -12,21 +12,28 @@
 #include <SFML/Graphics.hpp>
 
 
-class Shot {
+class Shot: public sf::Drawable {
 public:
     // Konstruktorer
     Shot() = default;
     Shot(int clientID, sf::Vector2f origin, sf::Vector2f direction, sf::Vector2f endPoint, int damage);
     Shot(const Shot& shot) = default;
     virtual ~Shot() = default;
-
-    // Funktioner
-    void draw() const;
     
+    // Funktioner
+    
+    void setEndPoint(sf::Vector2f);
+    void setTimestamp(sf::Time);
+    sf::Time getTimestamp() const;
+    sf::Vector2f getOrigin() const;
+    sf::Vector2f getDirection() const;
+    
+    
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 protected:
 private:
     // Datamedlemmar
-    int timestamp_;
+    int timestamp_; // in milliseconds
     int clientID_;
     sf::Vector2f origin_;
     sf::Vector2f direction_;
