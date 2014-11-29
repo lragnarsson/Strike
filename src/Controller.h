@@ -1,10 +1,13 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include <math.h>
 #include <SFML/System.hpp>
-#include "Player.h"
+#include <SFML/Window.hpp>
 #include <vector>
-#include "Shot.h"
+#include <iostream>
+#include "./Player.h"
+#include "./Shot.h"
 
 class Controller{
 public:

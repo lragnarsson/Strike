@@ -1,79 +1,69 @@
-#include "Controller.h"
+#include "./Controller.h"
 
-#include <SFML/Window.hpp>
-#include "Player.h"
-#include <math.h>
-#include <iostream>
-#include <vector>
-
-std::vector<Shot*> Controller::playerFire(){
-    if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+std::vector<Shot*> Controller::playerFire() {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         return player_->fire();
-    }
-    else{
+    } else {
         std::vector<Shot*> shotVector;
         return shotVector;
     }
 } 
 
-void Controller::reloadWeapon(){
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+void Controller::reloadWeapon() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
         player_->reloadWeapon();
     }
 }
 
-Controller::~Controller(){
+Controller::~Controller() {
     view_ = nullptr;        // objects are destroyed by GameState
     player_ = nullptr;      // objects are destroyed by GameState
 }
 
-void Controller::updatePlayerMoveVector()
-{
+void Controller::updatePlayerMoveVector() {
+  moveVector_.x = 0;
+  moveVector_.y = 0;
 
-    moveVector_.x = 0;
-    moveVector_.y = 0;
+  sf::Time elapsed {clock_.getElapsedTime()};
 
-    sf::Time elapsed {clock_.getElapsedTime()};
-    
-    clock_.restart();
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        moveVector_.y += -1;
-    
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        moveVector_.y += 1;
-    
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-      moveVector_.x += -1;
+  clock_.restart();
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+    moveVector_.y += -1;
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        moveVector_.x += 1;
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    moveVector_.y += 1;
 
-    if (moveVector_.x != 0 && moveVector_.y != 0)
-        moveVector_ /= sqrt2;
-    
-    player_->setMoveVector(moveVector_, elapsed.asSeconds());
-    player_->move(sf::Vector2f{});
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    moveVector_.x += -1;
 
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    moveVector_.x += 1;
+
+  if (moveVector_.x != 0 && moveVector_.y != 0)
+    moveVector_ /= sqrt2;
+
+  player_->setMoveVector(moveVector_, elapsed.asSeconds());
+  player_->move(sf::Vector2f {});
 }
 
-void Controller::playerRotate(const sf::RenderWindow& window)
-{
-    sf::Vector2f aimVector = window.mapPixelToCoords(sf::Mouse::getPosition)
-    player_->handleRotation(sf::Mouse::getPosition(window));
-    sf::Mouse::setPosition(
+void Controller::playerRotate(const sf::RenderWindow& window) {
+  auto aimVector = window.mapPixelToCoords(sf::Mouse::getPosition()) -
+      player_->getPosition();
+  aimVector /= (sqrtf(pow(aimVector.x, 2) + pow(aimVector.y, 2)));
+  player_->handleRotation(aimVector);
+  auto mousePos = window.mapCoordsToPixel(aimVector * 100.f +
+                                          player_->getPosition());
+  sf::Mouse::setPosition(mousePos);
 }
 
-void Controller::updateView()
-{
-    view_->setCenter(player_->getPosition());    
+void Controller::updateView() {
+    view_->setCenter(player_->getPosition());
 }
 
-void Controller::bindPlayer(Player* p)
-{
+void Controller::bindPlayer(Player* p) {
     player_ = p;
 }
 
-void Controller::bindView(sf::View* v)
-{
+void Controller::bindView(sf::View* v) {
     view_ = v;
 }

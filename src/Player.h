@@ -9,34 +9,36 @@
 #ifndef __Strike__Player__
 #define __Strike__Player__
 
-#include <stdio.h>
-#include "Weapon.h"
+#include <math.h>
 #include <SFML/Graphics.hpp>
+#include <stdio.h>
+#include <vector>
+#include <iostream>
+#include "./Weapon.h"
+#include "./ResourcePath.h"
 
+class Player: public sf::Sprite {
+ public:
+  explicit Player(int ClientID);
+  Player() = delete;
+  ~Player() = default;
 
-
-class Player: public sf::Sprite //PhysicalCircle, this will handle collissions.
-{
-public:
-    Player(int ClientID);
-    Player() = delete;
-    ~Player() = default;
-
-    //float getRotateSpeed() const;
-    //void setHealth(float amount);
-    int getClientID() const;
-    void setWeapon(Weapon* weapon);
-    std::vector<Shot*> fire();
+  // float getRotateSpeed() const;
+  // void setHealth(float amount);
+  int getClientID() const;
+  void setWeapon(Weapon* weapon);
+  std::vector<Shot*> fire();
     void setMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds);
-    sf::Vector2f handleRotation(const sf::Vector2i& aimDelta);
+    void handleRotation(const sf::Vector2f& aimVector);
     void move(const sf::Vector2f& offset);
     void reloadWeapon();
-private:
-    //virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
+ private:
+    // virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     sf::Texture texture_;
     int clientID_;
-    float speed_ = 100.0f; // pixels per second
+    float speed_ = 100.0f;  // pixels per second
     Weapon* weapon_;
     sf::Vector2f moveVector_;
     sf::Vector2f aimVector_;
