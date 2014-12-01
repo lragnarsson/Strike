@@ -1,0 +1,497 @@
+#include "PhysicalObject.h"
+#include "GeomUtils.h"
+#include <limits>
+#include <SFML/System/vector2.hpp>
+#include <stdlib.h>
+#include <cmath>
+#include <iostream>
+
+/*
+ * PHYSICAL_CIRCLE
+ */
+
+bool PhysicalCircle::lineIntersect(Line line, float& t1, float& t2) const {
+	sf::Vector2f f = line.origin - center_;
+	float a = dot(line.direction, line.direction);
+	float b = 2*dot(f, line.direction);
+	float c = dot(f, f) - radius_*radius_;
+
+	float discriminant = b*b - 4*a*c;
+
+	//std::cout << "f: " << f.x << " " << f.y << std::endl;
+	//std::cout << "a: " << a << " b: " << b << " c: " << c << " disc: " << discriminant << std::endl;
+
+	if (discriminant < 0) {
+		return false;
+	}
+	else {
+		discriminant = sqrtf(discriminant);
+		t1 = (-b - discriminant)/(2*a);
+		t2 = (-b + discriminant)/(2*a);
+	}
+
+	return true;
+}
+
+PhysicalCircle* PhysicalCircle::clone() const {
+	return new PhysicalCircle{*this};
+}
+
+bool PhysicalCircle::intersectLine(Line line) const {
+	sf::Vector2f dummy1;
+	sf::Vector2f dummy2;
+
+	return intersectLine(line, dummy1, dummy2);
+}
+
+bool PhysicalCircle::intersectLine(Line line, sf::Vector2f& intersectionPoint) const {
+	sf::Vector2f dummy;
+
+	return intersectLine(line, intersectionPoint, dummy);
+}
+
+bool PhysicalCircle::intersectLine(Line line, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	float t1, t2;
+	if (lineIntersect(line, t1, t2)) {
+		float t = (abs(t1) < abs(t2)) ? t1 : t2;
+		intersectionPoint = sf::Vector2f(line.origin + t*line.direction);
+		intersectionNormal = sf::Vector2f(normalize(intersectionPoint - center_));
+	}
+	else
+		return false;
+
+	return true;
+}
+
+bool PhysicalCircle::intersectLineSegment(LineSegment lineSegment) const {
+	sf::Vector2f dummy1;
+	sf::Vector2f dummy2;
+
+	return intersectLineSegment(lineSegment, dummy1, dummy2);
+}
+
+bool PhysicalCircle::intersectLineSegment(LineSegment lineSegment, sf::Vector2f& intersectionPoint) const {
+	sf::Vector2f dummy;
+
+	return intersectLineSegment(lineSegment, intersectionPoint, dummy);
+}
+
+bool PhysicalCircle::intersectLineSegment(LineSegment lineSegment, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	float t1, t2;
+	//std::cout << "lineSegment: " << lineSegment.start.x << " " << lineSegment.start.y << " " << lineSegment.end.x << " " << lineSegment.end.y << std::endl;
+	if (lineIntersect(Line(lineSegment.start, lineSegment.end - lineSegment.start), t1, t2)) {
+		float t;
+		if (t1 >= 0.0f && t1 <= 1.0f)
+			if (t2 >= 0.0f && t1 <= 1.0f)
+				t = (t1 < t2) ? t1 : t2;
+			else
+				t = t1;
+		else if (t2 >= 0.0f && t2 <= 1.0f)
+			t = t2;
+		else
+			return false;
+
+ 		intersectionPoint = lineSegment.start + t*(lineSegment.end - lineSegment.start);
+		intersectionNormal = sf::Vector2f(normalize(intersectionPoint - center_));
+	}
+	else
+		return false;
+
+	return true;
+}
+
+bool PhysicalCircle::intersectRay(Ray ray) const {
+	sf::Vector2f dummy1;
+	sf::Vector2f dummy2;
+
+	return intersectRay(ray, dummy1, dummy2);
+}
+
+bool PhysicalCircle::intersectRay(Ray ray, sf::Vector2f& intersectionPoint) const {
+	sf::Vector2f dummy;
+
+	return intersectRay(ray, intersectionPoint, dummy);
+}
+
+bool PhysicalCircle::intersectRay(Ray ray, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	float t1, t2;
+	if (lineIntersect(Line(ray.origin, ray.direction), t1, t2)) {
+		float t;
+		if (t1 >= 0.0f)
+			if (t2 >= 0.0f)
+				t = (t1 < t2) ? t1 : t2;
+			else
+				t = t1;
+		else if (t2 >= 0.0f)
+			t = t2;
+		else
+			return false;
+
+ 		intersectionPoint = sf::Vector2f(ray.origin + t*ray.direction);
+		intersectionNormal = sf::Vector2f(normalize(intersectionPoint - center_));
+	}
+	else
+		return false;
+
+	return true;
+}
+
+bool PhysicalCircle::intersectCircle(float radius, LineSegment displacement) const {
+	return true;
+}
+
+bool PhysicalCircle::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision) const {
+	return true;
+}
+
+bool PhysicalCircle::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision, sf::Vector2f& intersectionPoint) const {
+	return true;
+}
+
+bool PhysicalCircle::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	return true;
+}
+
+
+/*
+ * PHYSICAL_POLYGON
+ */
+
+bool PhysicalPolygon::lineIntersect(Line line, LineSegment lineSegment, float& t, float& u) const {
+	sf::Vector2f r = line.direction;
+	sf::Vector2f s = lineSegment.end - lineSegment.start;
+	sf::Vector2f CmP = lineSegment.start - line.origin;
+
+	float rxs = cross(r, s);
+
+	if (rxs == 0.0f)
+		return false;
+
+	float CmPxr = cross(CmP, r);
+	float CmPxs = cross(CmP, s);
+
+	float rxsr = 1.0f / rxs;
+	t = CmPxs * rxsr;
+	u = CmPxr * rxsr;
+
+	return true;
+}
+
+PhysicalPolygon* PhysicalPolygon::clone() const {
+	return new PhysicalPolygon{*this};
+}
+
+bool PhysicalPolygon::intersectLine(Line line) const {
+	sf::Vector2f dummy1;
+	sf::Vector2f dummy2;
+
+	return intersectLine(line, dummy1, dummy2);
+}
+
+bool PhysicalPolygon::intersectLine(Line line, sf::Vector2f& intersectionPoint) const {
+	sf::Vector2f dummy;
+
+	return intersectLine(line, intersectionPoint, dummy);
+}
+
+bool PhysicalPolygon::intersectLine(Line line, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	float minD{MAX_FLOAT};
+	sf::Vector2f closestIntersectionPoint;
+	sf::Vector2f closestIntersectionNormal;
+
+	for (auto pVertex = vertices_.begin() + 1; pVertex != vertices_.end(); pVertex++) {
+		float t, u;
+		if (lineIntersect(line, LineSegment(*pVertex, *(pVertex-1)), t, u)) {
+			if (u >= 0.0f && u <= 1.0f) {
+				float d = length(t*line.direction);
+				if (d < minD) {
+					minD = d;
+					closestIntersectionPoint = line.origin + t*line.direction;
+					closestIntersectionNormal = normalize(sf::Vector2f(-(*(pVertex-1)-*pVertex).x, (*(pVertex-1)-*pVertex).y));
+				}
+			}
+		}
+	}
+
+	if (minD == MAX_FLOAT)
+		return false;
+	else {
+		intersectionPoint = closestIntersectionPoint;
+		intersectionNormal = closestIntersectionNormal;
+	}
+
+	return true;
+}
+
+bool PhysicalPolygon::intersectLineSegment(LineSegment lineSegment) const {
+	sf::Vector2f dummy1;
+	sf::Vector2f dummy2;
+
+	return intersectLineSegment(lineSegment, dummy1, dummy2);
+}
+
+bool PhysicalPolygon::intersectLineSegment(LineSegment lineSegment, sf::Vector2f& intersectionPoint) const {
+	sf::Vector2f dummy;
+
+	return intersectLineSegment(lineSegment, intersectionPoint, dummy);
+}
+
+bool PhysicalPolygon::intersectLineSegment(LineSegment lineSegment, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	float minD{MAX_FLOAT};
+	sf::Vector2f closestIntersectionPoint;
+	sf::Vector2f closestIntersectionNormal;
+
+	Line line(lineSegment.start, lineSegment.end - lineSegment.start);
+
+	for (auto pVertex = vertices_.begin() + 1; pVertex != vertices_.end(); pVertex++) {
+		float t, u;
+		if (lineIntersect(line, LineSegment(*(pVertex - 1), *pVertex), t, u)) {
+			if (t >= 0.0f && t <= 1.0f && u >= 0.0f && u <= 1.0f) {
+				float d = length(t*line.direction);
+				if (d < minD) {
+					minD = d;
+					closestIntersectionPoint = line.origin + t*line.direction;
+					closestIntersectionNormal = normalize(sf::Vector2f(-(*(pVertex-1)-*pVertex).x, (*(pVertex-1)-*pVertex).y));
+				}
+			}
+		}
+	}
+
+	if (minD == MAX_FLOAT)
+		return false;
+	else {
+		intersectionPoint = closestIntersectionPoint;
+		intersectionNormal = closestIntersectionNormal;
+	}
+
+	return true;
+}
+
+bool PhysicalPolygon::intersectRay(Ray ray) const {
+	sf::Vector2f dummy1;
+	sf::Vector2f dummy2;
+
+	return intersectRay(ray, dummy1, dummy2);
+}
+
+bool PhysicalPolygon::intersectRay(Ray ray, sf::Vector2f& intersectionPoint) const {
+	sf::Vector2f dummy;
+
+	return intersectRay(ray, intersectionPoint, dummy);
+}
+
+bool PhysicalPolygon::intersectRay(Ray ray, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	float minD{MAX_FLOAT};
+	sf::Vector2f closestIntersectionPoint;
+	sf::Vector2f closestIntersectionNormal;
+
+	for (auto pVertex = vertices_.begin() + 1; pVertex != vertices_.end(); pVertex++) {
+		float t, u;
+		if (lineIntersect(Line(ray.origin, ray.direction), LineSegment(*pVertex, *(pVertex-1)), t, u)) {
+			if (t >= 0.0f && u >= 0.0f && u <= 1.0f) {
+				float d = length(t*ray.direction);
+				if (d < minD) {
+					minD = d;
+					closestIntersectionPoint = ray.origin + t*ray.direction;
+					closestIntersectionNormal = normalize(sf::Vector2f(-(*(pVertex-1)-*pVertex).x, (*(pVertex-1)-*pVertex).y));
+				}
+			}
+		}
+	}
+
+	if (minD == MAX_FLOAT)
+		return false;
+	else {
+		intersectionPoint = closestIntersectionPoint;
+		intersectionNormal = closestIntersectionNormal;
+	}
+
+	return true;
+}
+
+bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement) const {
+	return true;
+}
+
+bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision) const {
+	return true;
+}
+
+bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision, sf::Vector2f& intersectionPoint) const {
+	return true;
+}
+
+bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	return true;
+}
+
+
+/*
+ * PHYSICAL_AABOX
+ */
+
+PhysicalAABox* PhysicalAABox::clone() const {
+	return new PhysicalAABox{*this};
+}
+
+bool PhysicalAABox::intersectLine(Line line) const {
+	sf::Vector2f dummy1;
+	sf::Vector2f dummy2;
+
+	return intersectLine(line, dummy1, dummy2);
+}
+
+bool PhysicalAABox::intersectLine(Line line, sf::Vector2f& intersectionPoint) const {
+	sf::Vector2f dummy;
+
+	return intersectLine(line, intersectionPoint, dummy);
+}
+
+bool PhysicalAABox::intersectLine(Line line, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	// fulhaxx för jeppan vet inte hur u:sarna ska kollas
+	return intersectLineSegment(LineSegment(line.origin - 10000.0f*line.direction, line.origin + 10000.0f*line.direction), intersectionPoint, intersectionNormal);
+
+	/*
+	float p[4] = { -line.direction.x, line.direction.x, -line.direction.y, line.direction.y };
+	float q[4] = { (line.origin.x - origin_.x), (origin_.x + width_ - line.origin.x), (line.origin.y - origin_.y), (origin_.y + height_ - line.origin.y) };
+	float u1 = MIN_FLOAT;
+	float u2 = MAX_FLOAT;
+
+	for (int i = 0; i < 4; i++) {
+		if (p[i] == 0.0f) {
+			if (q[i] < 0.0f)
+				return false;
+		}
+		else {
+			float t = q[i] / p[i];
+			if (p[i] < 0.0f && u1 < t)
+				u1 = t;
+			else if (p[i] > 0.0f && u2 > t)
+				u2 = t;
+		}
+	}
+
+	std::cout << "u1: " << u1 << " u2: " << u2 << std::endl;
+
+	if (u1 < -10000000.0f && u2 > 10000000.0f)
+		return false;
+
+	intersectionPoint = line.origin + u1*line.direction;
+
+	return true;
+	*/
+}
+
+bool PhysicalAABox::intersectLineSegment(LineSegment lineSegment) const {
+	sf::Vector2f dummy1;
+	sf::Vector2f dummy2;
+
+	return intersectLineSegment(lineSegment, dummy1, dummy2);
+}
+
+bool PhysicalAABox::intersectLineSegment(LineSegment lineSegment, sf::Vector2f& intersectionPoint) const {
+	sf::Vector2f dummy;
+
+	return intersectLineSegment(lineSegment, intersectionPoint, dummy);
+}
+
+bool PhysicalAABox::intersectLineSegment(LineSegment lineSegment, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	sf::Vector2f direction = lineSegment.end - lineSegment.start;
+	float p[4] = { -direction.x, direction.x, -direction.y, direction.y };
+	float q[4] = { (lineSegment.start.x - origin_.x), (origin_.x + width_ - lineSegment.start.x), (lineSegment.start.y - origin_.y), (origin_.y + height_ - lineSegment.start.y) };
+	float u1 = MIN_FLOAT;
+	float u2 = MAX_FLOAT;
+
+	for (int i = 0; i < 4; i++) {
+		if (p[i] == 0.0f) {
+			if (q[i] < 0.0f)
+				return false;
+		}
+		else {
+			float t = q[i] / p[i];
+			if (p[i] < 0.0f && u1 < t)
+				u1 = t;
+			else if (p[i] > 0.0f && u2 > t)
+				u2 = t;
+		}
+	}
+
+	if (u1 > u2 || u1 > 1.0f || u1 < 0.0f)
+		return false;
+
+	intersectionPoint = lineSegment.start + u1*direction;
+	if (intersectionPoint.x == origin_.x)
+		intersectionNormal = sf::Vector2f(-1, 0);
+	else if (intersectionPoint.x == origin_.x + width_)
+		intersectionNormal = sf::Vector2f(1, 0);
+	else if (intersectionPoint.y == origin_.y)
+		intersectionNormal = sf::Vector2f(0, -1);
+	else if (intersectionPoint.y == origin_.y + height_)
+		intersectionNormal = sf::Vector2f(0, 1);
+
+	return true;
+}
+
+bool PhysicalAABox::intersectRay(Ray ray) const {
+	sf::Vector2f dummy1;
+	sf::Vector2f dummy2;
+
+	return intersectRay(ray, dummy1, dummy2);
+}
+
+bool PhysicalAABox::intersectRay(Ray ray, sf::Vector2f& intersectionPoint) const {
+	sf::Vector2f dummy;
+
+	return intersectRay(ray, intersectionPoint, dummy);
+}
+
+bool PhysicalAABox::intersectRay(Ray ray, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	// fulhaxx för jeppan vet inte hur u:sarna ska kollas
+	return intersectLineSegment(LineSegment(ray.origin, ray.origin + 10000.0f*ray.direction), intersectionPoint, intersectionNormal);
+
+	/*
+	float p[4] = { -ray.direction.x, ray.direction.x, -ray.direction.y, ray.direction.y };
+	float q[4] = { (ray.origin.x - origin_.x), (origin_.x + width_ - ray.origin.x), (ray.origin.y - origin_.y), (origin_.y + height_ - ray.origin.y) };
+	float u1 = MIN_FLOAT;
+	float u2 = MAX_FLOAT;
+
+	for (int i = 0; i < 4; i++) {
+		if (p[i] == 0.0f) {
+			if (q[i] < 0.0f)
+				return false;
+		}
+		else {
+			float t = q[i] / p[i];
+			if (p[i] < 0.0f && u1 < t)
+				u1 = t;
+			else if (p[i] > 0.0f && u2 > t)
+				u2 = t;
+		}
+	}
+
+	std::cout << "u1: " << u1 << " u2: " << u2 << std::endl;
+
+	if (u1 < 0.0f)
+		return false;
+
+	intersectionPoint = ray.origin + u1*ray.direction;
+
+	return true;
+	*/
+}
+
+bool PhysicalAABox::intersectCircle(float radius, LineSegment displacement) const {
+	return true;
+}
+
+bool PhysicalAABox::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision) const {
+	return true;
+}
+
+bool PhysicalAABox::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision, sf::Vector2f& intersectionPoint) const {
+	return true;
+}
+
+bool PhysicalAABox::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+	return true;
+}
