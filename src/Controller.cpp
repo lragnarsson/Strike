@@ -20,38 +20,55 @@ Controller::~Controller() {
     player_ = nullptr;      // objects are destroyed by GameState
 }
 
-void Controller::updatePlayerMoveVector() {
-  moveVector_.x = 0;
-  moveVector_.y = 0;
+void Controller::handleKeyEvents(sf::RenderWindow* window) {
+    sf::Event event;
+    while (window->pollEvent(event)) {
+        // Close window : exit
+        if (event.type == sf::Event::Closed)
+            window->close();
 
-  sf::Time elapsed {clock_.getElapsedTime()};
-
-  clock_.restart();
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-    moveVector_.y += -1;
-
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-    moveVector_.y += 1;
-
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    moveVector_.x += -1;
-
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    moveVector_.x += 1;
-
-  if (moveVector_.x != 0 && moveVector_.y != 0)
-    moveVector_ /= sqrt2;
-
-  player_->setMoveVector(moveVector_, elapsed.asSeconds());
-  player_->move(sf::Vector2f {});
+        // Escape pressed : exit
+        if (event.type == sf::Event::KeyPressed &&
+            event.key.code == sf::Keyboard::Escape)
+            window->close();
+    }
 }
 
-void Controller::playerRotate(const sf::RenderWindow& window) {
+void Controller::setPlayerInputVector() {
+    inputVector_.x = 0;
+    inputVector_.y = 0;
+
+    sf::Time elapsed {clock_.getElapsedTime()};
+
+    clock_.restart();
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        inputVector_.y += -1;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        inputVector_.y += 1;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        inputVector_.x += -1;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+       inputVector_.x += 1;
+
+    if (inputVector_.x != 0 && inputVector_.y != 0)
+        inputVector_ /= sqrt2;
+
+    player_->setMoveVector(inputVector_, elapsed.asSeconds());
+}
+
+void Controller::playerMove(const sf::Vector2f& moveVector) {
+    player_->move(moveVector);
+}
+
+void Controller::setPlayerRotation(const sf::RenderWindow& window) {
   auto aimVector = window.mapPixelToCoords(sf::Mouse::getPosition()) -
       player_->getPosition();
   aimVector /= (sqrtf(pow(aimVector.x, 2) + pow(aimVector.y, 2)));
   player_->handleRotation(aimVector);
-  auto mousePos = window.mapCoordsToPixel(aimVector * 100.f +
+  auto mousePos = window.mapCoordsToPixel(aimVector * 50.f +
                                           player_->getPosition());
   sf::Mouse::setPosition(mousePos);
 }

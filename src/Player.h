@@ -18,22 +18,23 @@
 #include "./ResourcePath.h"
 
 class Player: public sf::Sprite {
- public:
-  explicit Player(int ClientID);
-  Player() = delete;
-  ~Player() = default;
+public:
+    explicit Player(int ClientID);
+    Player() = delete;
+    ~Player() = default;
 
-  // float getRotateSpeed() const;
-  // void setHealth(float amount);
-  int getClientID() const;
-  void setWeapon(Weapon* weapon);
-  std::vector<Shot*> fire();
+    // float getRotateSpeed() const;
+    // void setHealth(float amount);
+    int getClientID() const;
+    void setWeapon(Weapon* weapon);
+    std::vector<Shot*> fire();
+    sf::Vector2f& getMoveVector();
     void setMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds);
     void handleRotation(const sf::Vector2f& aimVector);
-    void move(const sf::Vector2f& offset);
+    void move();
     void reloadWeapon();
 
- private:
+private:
     // virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     sf::Texture texture_;

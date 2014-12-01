@@ -23,8 +23,9 @@ public:
     void draw(sf::RenderWindow& window);
     void addUnhandledShots(std::vector<Shot*>);
     void addHandledShots(std::vector<Shot*>);
-    
+    vector<PhysicalObject*> getPhysicalObjects();
     std::vector<Shot*> takeUnhandledShots();
+
 private:
     std::vector<Player*> players_;
 
@@ -33,7 +34,6 @@ private:
     std::vector<Shot*> unhandledShots_;
     std::vector<Shot*> handledShots_;       // shots here have both timestamp and endpoint.
     sf::Clock gameTime_;
-
 };
 
 #endif /* defined(__Strike__GameState__) */

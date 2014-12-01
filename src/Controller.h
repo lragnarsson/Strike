@@ -13,18 +13,19 @@ class Controller{
 public:
     Controller() = default;
     ~Controller();
-    
-    void updatePlayerMoveVector();
-    void playerRotate(const sf::RenderWindow&);
+    void handleKeyEvents(sf::RenderWindow*)
+    void setPlayerInputVector();
+    void playerMove(const sf::Veector2f&);
+    void setPlayerRotation(const sf::RenderWindow&);
     void bindPlayer(Player*);
     void bindView(sf::View*);
     void updateView();
     std::vector<Shot*> playerFire();
     void reloadWeapon();
 protected:
-    
+
 private:
-    sf::Vector2f moveVector_;
+    sf::Vector2f inputVector_;
     Player* player_;
     sf::View* view_;
     sf::Clock clock_;

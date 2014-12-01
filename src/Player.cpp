@@ -35,6 +35,10 @@ int Player::getClientID() const {
   return clientID_;
 }
 
+sf::Vector2f& Player::getMoveVector() {
+  return moveVector_;
+}
+
 void Player::setMoveVector(const sf::Vector2f& moveVector,
                            float elapsedSeconds) {
   moveVector_ = moveVector * elapsedSeconds * speed_;
@@ -47,6 +51,7 @@ void Player::handleRotation(const sf::Vector2f& aimVector) {
   setRotation(angle);
 }
 
-void Player::move(const sf::Vector2f& offset) {
+void Player::move() {
   Sprite::move(moveVector_);
 }
+

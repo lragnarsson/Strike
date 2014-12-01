@@ -12,7 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include <stdio.h>
 
-class Map{
+class Map {
 public:
     Map() = default; // farligt att använda sprite osv om inte load körs.
     ~Map();
