@@ -23,6 +23,15 @@ void Player::setWeapon(Weapon* newWeapon) {
   weapon_ = newWeapon;
 }
 
+void Player::changeSpeed(float speed) {
+  if (health_ <=50) {
+    speedConstant_ = 0.5f; //If the player is severe damaged he will not be able to move faster than speed_/2
+  }
+  else {
+    speedConstant_ = speed; //Else, accept the given speed
+  }
+}
+
 void Player::reloadWeapon() {
   weapon_->reloadWeapon();
 }
@@ -37,7 +46,7 @@ int Player::getClientID() const {
 
 void Player::setMoveVector(const sf::Vector2f& moveVector,
                            float elapsedSeconds) {
-  moveVector_ = moveVector * elapsedSeconds * speed_;
+  moveVector_ = moveVector * elapsedSeconds * speed_ * speedConstant_;
 }
 
 void Player::handleRotation(const sf::Vector2f& aimVector) {

@@ -32,13 +32,15 @@ class Player: public sf::Sprite {
     void handleRotation(const sf::Vector2f& aimVector);
     void move(const sf::Vector2f& offset);
     void reloadWeapon();
+    void changeSpeed(float speed);
 
  private:
     // virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-
+    unsigned int health_ = 100;
     sf::Texture texture_;
     int clientID_;
     float speed_ = 100.0f;  // pixels per second
+    float speedConstant_ = 1.0f; //Speed constant, varies when sprinting, damaged, carrying heavy weapons etc
     Weapon* weapon_;
     sf::Vector2f moveVector_;
     sf::Vector2f aimVector_;

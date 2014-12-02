@@ -147,6 +147,7 @@ int main(int, char const**)
         controller.reloadWeapon();
         controller.playerFire();
         controller.updateView();
+        controller.isSprinting();
 
         window.setView(view);
         Game.draw(window);

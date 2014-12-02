@@ -21,6 +21,7 @@ public:
     void updateView();
     std::vector<Shot*> playerFire();
     void reloadWeapon();
+    void isSprinting();
 protected:
     
 private:

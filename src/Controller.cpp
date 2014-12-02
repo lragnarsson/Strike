@@ -15,6 +15,15 @@ void Controller::reloadWeapon() {
     }
 }
 
+void Controller::isSprinting() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+        player_->changeSpeed(2.0f);
+    }
+    else {
+        player_->changeSpeed(1.0f);
+    }
+}
+
 Controller::~Controller() {
     view_ = nullptr;        // objects are destroyed by GameState
     player_ = nullptr;      // objects are destroyed by GameState

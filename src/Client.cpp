@@ -46,6 +46,7 @@ void Client::handleInput() {
     gameState_.addUnhandledShots(controller.playerFire()); // adds the shots that were created by player (if there were any).
     controller.playerRotate(renderWindow);
     controller.reloadWeapon();
+    controller.isSprinting();
     
 
     
