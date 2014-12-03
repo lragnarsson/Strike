@@ -1,4 +1,5 @@
 #include "./Controller.h"
+#include <iostream>
 
 Controller::Controller() {
   view_ = new sf::View(sf::FloatRect(0, 0, 500, 300));
@@ -12,12 +13,6 @@ std::vector<Shot*> Controller::playerFire() {
         return shotVector;
     }
 } 
-
-void Controller::reloadWeapon() {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-        player_->reloadWeapon();
-    }
-}
 
 Controller::~Controller() {
     delete view_;
@@ -40,9 +35,15 @@ void Controller::handleKeyEvents(sf::RenderWindow* window) {
 }
 
 void Controller::handlePlayerActions() {
-
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+        player_->reloadWeapon();
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        player_->setSpeedMultiplier(2.0f);
+    else
+        player_->setSpeedMultiplier(1.0f);
 }
-void Controller::setPlayerInputVector() {
+
+void Controller::updatePlayerInputVector() {
     inputVector_.x = 0;
     inputVector_.y = 0;
 
@@ -59,12 +60,12 @@ void Controller::setPlayerInputVector() {
         inputVector_.x += -1;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-       inputVector_.x += 1;
+        inputVector_.x += 1;
 
     if (inputVector_.x != 0 && inputVector_.y != 0)
         inputVector_ /= sqrt2;
 
-    player_->setMoveVector(inputVector_, elapsed.asSeconds());
+    player_->calculateMoveVector(inputVector_, elapsed.asSeconds());
 }
 
 void Controller::playerMove() {

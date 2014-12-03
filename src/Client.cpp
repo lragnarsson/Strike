@@ -3,9 +3,9 @@
 
 #include "Client.h"
 
-Client::Client() : Game(), renderWindow_(sf::VideoMode(1280, 720), "SFML-Playground") {
+Client::Client() : Game(), renderWindow_(sf::VideoMode(1280, 720), "Strike: Local Defensive") {
     renderWindow_.setFramerateLimit(120);
-    renderWindow_.setMouseCursorVisible(true);
+    renderWindow_.setMouseCursorVisible(false);
     Player* player = new Player(1);
     gameState_.addPlayer(player);
     controller_.bindPlayer(player);
@@ -13,11 +13,11 @@ Client::Client() : Game(), renderWindow_(sf::VideoMode(1280, 720), "SFML-Playgro
 
 void Client::run() {
     while (renderWindow_.isOpen()) {
-        //readNetwork();
+        readNetwork();
         handleInput();
         handleCollisions();
-        //handleGameLogic();
-        //writeNetwork();
+        handleGameLogic();
+        writeNetwork();
         draw();
     }
 }
@@ -45,7 +45,7 @@ void Client::handleGameLogic() {
 void Client::handleInput() {
     controller_.handleKeyEvents(&renderWindow_);
     controller_.handlePlayerActions();
-    controller_.setPlayerInputVector();
+    controller_.updatePlayerInputVector();
     controller_.setPlayerRotation(renderWindow_);
     gameState_.addUnhandledShots(controller_.playerFire());  // adds the shots that were created by player (if there were any).
 }

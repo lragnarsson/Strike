@@ -4,9 +4,11 @@
 #include <SFML/System.hpp>
 #include <stdlib.h>
 #include <cmath>
+#include <limits>
 
 #define MIN_FLOAT std::numeric_limits<float>::min()
 #define MAX_FLOAT std::numeric_limits<float>::max()
+#define EPSILON std::numeric_limits<float>::epsilon()
 
 
 inline float dot(sf::Vector2f v1, sf::Vector2f v2) {
@@ -23,6 +25,10 @@ inline float length(sf::Vector2f v) {
 
 inline sf::Vector2f normalize(sf::Vector2f v) {
 	return v/length(v);
+}
+
+inline bool equalf(float a, float b) {
+	return fabs(a - b) < EPSILON;
 }
 
 struct Line {

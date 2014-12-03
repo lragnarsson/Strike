@@ -2,7 +2,7 @@
 # Makefile for Strike, GNU GCC (g++)
 #
 
-CCC = gccfilter -c -a g++
+CCC = g++
 
 SRC = src
 # Kompilatorflaggor, lägg till '-g' om kompilering för avlusning ska göras.

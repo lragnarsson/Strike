@@ -24,25 +24,28 @@ public:
     Player() = delete;
     ~Player() = default;
 
-    // float getRotateSpeed() const;
-    // void setHealth(float amount);
     int getClientID() const;
     void setWeapon(Weapon* weapon);
     std::vector<Shot*> fire();
     sf::Vector2f& getMoveVector();
-    void setMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds);
+    void setHealth(unsigned int amount);
+    void calculateMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds);
     void handleRotation(const sf::Vector2f& aimVector);
     void move();
     void reloadWeapon();
+    void setSpeedMultiplier(float speed);
 
 private:
-    // virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-
+    unsigned int health_ = 100;
     sf::Texture texture_;
     int clientID_;
-    float speed_ = 100.0f;  // pixels per second
+    float speedMultiplier_ = 1.0f; //Speed constant, varies when sprinting, damaged, carrying heavy weapons etc
+    float maxSpeed_ = 100.0f;  // pixels per second
+    float acceleration_ = 400.0f;    // pixels per second^2
+
     Weapon* weapon_;
     sf::Vector2f moveVector_;
+    sf::Vector2f curSpeed_;
     sf::Vector2f aimVector_;
     float radConversion_ = 57.295779f;
 };
