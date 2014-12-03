@@ -7,6 +7,7 @@ Client::Client() : Game(), renderWindow_(sf::VideoMode(1280, 720), "Strike: Loca
     renderWindow_.setFramerateLimit(120);
     renderWindow_.setMouseCursorVisible(false);
     Player* player = new Player(1);
+    player->setWeapon(new Weapon(5,30,10,1000,5000,10));
     gameState_.addPlayer(player);
     controller_.bindPlayer(player);
 }
@@ -62,14 +63,14 @@ void Client::draw() {
 void Client::handleShots() {
     std::vector<Shot*> shots {gameState_.takeUnhandledShots()};
     if (!shots.empty()) {
-      for (std::vector<Shot*>::iterator it = shots.begin(); it != shots.end(); ++it) {
-      // Calculate newEndPoint with proper collision later
-      sf::Vector2f newEndPoint {(*it)->getOrigin() + 100.0f * (*it)->getDirection()};
-      // --- finished :D
-      (*it)->setEndPoint(newEndPoint);
+        for (auto shot : shots) {
+            // Calculate newEndPoint with proper collision later
+            sf::Vector2f newEndPoint {shot->getOrigin() + 100.0f * shot->getDirection()};
+            // --- finished :D
+            shot->setEndPoint(newEndPoint);
+        }
     }
-  }
-  gameState_.addHandledShots(shots);
+    gameState_.addHandledShots(shots);
 }
 
 void Client::collideMoveVector(sf::Vector2f position,

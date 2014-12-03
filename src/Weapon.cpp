@@ -43,7 +43,7 @@ std::vector<Shot*> Weapon::fire(int clientID, const sf::Vector2f& pos, const sf:
 		if(clock_.getElapsedTime().asMilliseconds() >= reloadTime_){
 			isReloading_ = false;
 		}
-		else{
+		else {
 			return shotVector;
 		}
 	}
