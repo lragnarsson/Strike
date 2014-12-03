@@ -11,27 +11,11 @@
 /* Implementation av Client
  */
 Client::Client() : Game(), renderWindow_(sf::VideoMode(1280, 720), "SFML-Playground") {
-
     renderWindow_.setFramerateLimit(120);
-    //renderWindow_.setMouseCursorVisible(false);
+    renderWindow_.setMouseCursorVisible(true);
     Player* player = new Player(1);
     gameState_.addPlayer(player);
     controller_.bindPlayer(player);
-
-    //Team blueTeam_;
-    //Team redTeam_;
-
-    //Weapon weapon1{5,30,10,1000,5000,10};
-
-    //Player player_{1};
-
-    //gameState_.addPlayer(&player_);
-    //blueTeam_.addPlayer(&player_);
-
-    //player_.setWeapon(&weapon1);
-
-    //controller_.bindPlayer(&player_);
-    //controller_.bindView(&view_);
 }
 
 void Client::run() {
@@ -65,13 +49,12 @@ void Client::handleGameLogic() {
     return;
 }
 
-
 void Client::handleInput() {
     controller_.handleKeyEvents(&renderWindow_);
     controller_.handlePlayerActions();
     controller_.setPlayerInputVector();
     controller_.setPlayerRotation(renderWindow_);
-    //gameState_.addUnhandledShots(controller_.playerFire());  // adds the shots that were created by player (if there were any).
+    gameState_.addUnhandledShots(controller_.playerFire());  // adds the shots that were created by player (if there were any).
 }
 
 void Client::draw() {
