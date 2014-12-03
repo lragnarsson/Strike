@@ -10,7 +10,8 @@
 #define __Strike__Map__
 
 #include <SFML/Graphics.hpp>
-#include <stdio.h>
+#include "tinyxml.h"
+#include "PhysicalObject.h"
 
 class Map {
 public:
@@ -19,14 +20,14 @@ public:
     Map(std::string filename); // skapa utifrån kartfil
     Map(const Map&);
     
-    
+	vector<sf::Vector2f> makePolygonVector(string rawVector, float xpos, float ypos);
     void load(std::string filename);
     void draw(sf::RenderTarget&);
     
 private:
-    std::string filename;
-    // vector<PhysicalObject*> physicalObjects;
-    sf::Sprite mapSprite;
+    vector<PhysicalObject*> physicalObjects_;
+	sf::Texture mapTexture_;
+    sf::Sprite mapSprite_;
 };
 
 
