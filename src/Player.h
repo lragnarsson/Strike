@@ -34,7 +34,7 @@ public:
     void move();
     void reloadWeapon();
     void setSpeedMultiplier(float speed);
-
+    void hasNotFired();
 private:
     unsigned int health_ = 100;
     sf::Texture texture_;

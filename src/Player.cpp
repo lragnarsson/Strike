@@ -46,6 +46,10 @@ void Player::setHealth(unsigned int amount) {
   }
 }
 
+void Player::hasNotFired() {
+  weapon_->hasNotFired();
+}
+
 void Player::reloadWeapon() {
   weapon_->reloadWeapon();
 }

@@ -8,8 +8,10 @@ Controller::Controller() {
 std::vector<Shot*> Controller::playerFire() {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         return player_->fire();
-    } else {
+    } 
+    else {
         std::vector<Shot*> shotVector;
+        player_->hasNotFired();
         return shotVector;
     }
 } 
