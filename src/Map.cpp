@@ -21,6 +21,9 @@ Map::~Map(){
     for(auto pObj : physicalObjects_)
         delete pObj;
 }
+std::vector<PhysicalObject*> Map::getPhysicalObjects() const {
+    return physicalObjects_;
+}
 
 std::vector<sf::Vector2f> Map::makePolygonVector(std::string rawVector, float xpos, float ypos){
     std::vector<sf::Vector2f> pointPairVector;
@@ -88,7 +91,7 @@ void Map::load(std::string filename){
 
         if(elemName == "background"){
             std::string mapfile = elem->Attribute("src");
-            if (!mapTexture_.loadFromFile(resourcePath("res/images/") + mapfile))
+            if (!mapTexture_.loadFromFile(resourcePath("res/maps/") + mapfile))
                 std::cerr << "Failed to load background file.";
             mapSprite_.setTexture(mapTexture_);
         }

@@ -21,11 +21,13 @@ public:
     Map(std::string filename); // skapa utifrån kartfil
     Map(const Map&);
     
-    std::vector<sf::Vector2f> makePolygonVector(std::string rawVector, float xpos, float ypos);
+
+    std::vector<PhysicalObject*> getPhysicalObjects() const;
     void load(std::string filename);
     void draw(sf::RenderTarget&);
     
 private:
+    std::vector<sf::Vector2f> makePolygonVector(std::string rawVector, float xpos, float ypos);
     std::vector<PhysicalObject*> physicalObjects_;
 	sf::Texture mapTexture_;
     sf::Sprite mapSprite_;

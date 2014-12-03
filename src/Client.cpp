@@ -7,7 +7,7 @@ Client::Client() : Game(), renderWindow_(sf::VideoMode(1280, 720), "Strike: Loca
     renderWindow_.setFramerateLimit(120);
     renderWindow_.setMouseCursorVisible(false);
     Player* player = new Player(1);
-    player->setWeapon(new Weapon(5,30,10,1000,5000,10));
+    player->setWeapon(new Shotgun(5,30,10,1000,5000,10,6));
     gameState_.addPlayer(player);
     controller_.bindPlayer(player);
 }

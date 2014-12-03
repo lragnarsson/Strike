@@ -12,10 +12,9 @@
 #include "Team.h"
 
 
-GameState::GameState() {
-    if (!mapTexture_.loadFromFile(resourcePath("res/images/") + "boat_lvl.bmp"))
-        throw std::exception();
-    mapSprite_.setTexture(mapTexture_);
+GameState::GameState()  {
+    Map map_;
+    map_.load(resourcePath("res/maps/") + "map_test1.xml");
 }
 
 void GameState::addPlayer(Player* playerP) {
@@ -40,7 +39,7 @@ void GameState::addHandledShots(std::vector<Shot*> newShots) {
 }
 
 void GameState::draw(sf::RenderWindow& window) {
-    window.draw(mapSprite_);
+    map_.draw(window);
     for (auto player : players_){
         window.draw(*player); // calls draw for every player
 
@@ -52,7 +51,7 @@ void GameState::draw(sf::RenderWindow& window) {
 }
 
 std::vector<PhysicalObject*> GameState::getPhysicalObjects() {
-  return physicalObjects_;
+  return map_.getPhysicalObjects();
 }
 
 std::vector<Shot*> GameState::takeUnhandledShots() {
