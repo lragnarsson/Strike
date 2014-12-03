@@ -10,7 +10,7 @@
 #define __Strike__Map__
 
 #include <SFML/Graphics.hpp>
-#include "tinyxml.h"
+#include <tinyxml.h>
 #include "PhysicalObject.h"
 #include <vector>
 
