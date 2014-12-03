@@ -16,26 +16,26 @@
 #include <iostream>
 #include "./Weapon.h"
 #include "./ResourcePath.h"
+#include "./PhysicalObject.h"
 
-class Player: public sf::Sprite {
- public:
+class Player: public sf::Sprite, public PhysicalCircle {
+public:
     explicit Player(int ClientID);
     Player() = delete;
     ~Player() = default;
 
-    // float getRotateSpeed() const;
-    void setHealth(unsigned int amount);
     int getClientID() const;
     void setWeapon(Weapon* weapon);
     std::vector<Shot*> fire();
+    sf::Vector2f& getMoveVector();
+    void setHealth(unsigned int amount);
     void calculateMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds);
     void handleRotation(const sf::Vector2f& aimVector);
-    void move(const sf::Vector2f& offset);
+    void move();
     void reloadWeapon();
     void setSpeedMultiplier(float speed);
-
- private:
-
+    void hasNotFired();
+private:
     unsigned int health_ = 100;
     sf::Texture texture_;
     int clientID_;
@@ -43,7 +43,6 @@ class Player: public sf::Sprite {
     float maxSpeed_ = 100.0f;  // pixels per second
     float acceleration_ = 400.0f;    // pixels per second^2
 
-    
     Weapon* weapon_;
     sf::Vector2f moveVector_;
     sf::Vector2f curSpeed_;

@@ -1,77 +1,88 @@
-//
 //  Client.cpp
 //  Strike
-//
-//  Created by Isak Wiberg on 2014-11-25.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
 
 #include "Client.h"
-#include "Game.h"
 
-/* Implementation av Client
- */
+Client::Client() : Game(), renderWindow_(sf::VideoMode(1280, 720), "Strike: Local Defensive") {
+    renderWindow_.setFramerateLimit(120);
+    renderWindow_.setMouseCursorVisible(false);
+    Player* player = new Player(1);
+    gameState_.addPlayer(player);
+    controller_.bindPlayer(player);
+}
 
 void Client::run() {
-    readNetwork();
-    handleInput();
-    handleCollisions();
-    handleGameLogic();
-    writeNetwork();
-    draw();
-    
+    while (renderWindow_.isOpen()) {
+        readNetwork();
+        handleInput();
+        handleCollisions();
+        handleGameLogic();
+        writeNetwork();
+        draw();
+    }
 }
 
 void Client::readNetwork() {
-    // tomt här med
+    return;
 }
 
 void Client::writeNetwork() {
-    // fan nu börjar det bli löjligt
+    return;
 }
 
 void Client::handleCollisions() {
+    collideMoveVector(controller_.getPlayer()->getPosition(),
+                        controller_.getPlayer()->getMoveVector(),
+                        controller_.getPlayer()->getRadius());
+    controller_.playerMove();
     handleShots();
 }
 
 void Client::handleGameLogic() {
-
-    // asså har du ens gjort något eller?
+    return;
 }
-
 
 void Client::handleInput() {
-    controller.updatePlayerInputVector();
-    controller.playerRotate(renderWindow);
-    gameState_.addUnhandledShots(controller.playerFire()); // adds the shots that were created by player (if there were any).
-    controller.playerRotate(renderWindow);
-    controller.reloadWeapon();
-    controller.isSprinting();
-    
-
-    
-    
+    controller_.handleKeyEvents(&renderWindow_);
+    controller_.handlePlayerActions();
+    controller_.updatePlayerInputVector();
+    controller_.setPlayerRotation(renderWindow_);
+    gameState_.addUnhandledShots(controller_.playerFire());  // adds the shots that were created by player (if there were any).
 }
 
-
 void Client::draw() {
-    controller.updateView();
-    
-    gameState_.draw(renderWindow);
+    renderWindow_.clear();
+    controller_.updateView();
+    renderWindow_.setView(*controller_.getView());
+    gameState_.draw(renderWindow_);
+    renderWindow_.display();
 }
 
 
 void Client::handleShots() {
     std::vector<Shot*> shots {gameState_.takeUnhandledShots()};
     if (!shots.empty()) {
-        for (std::vector<Shot*>::iterator it = shots.begin(); it != shots.end(); ++it) {
-            // Calculate newEndPoint with proper collision later
-            sf::Vector2f newEndPoint {(*it)->getOrigin() + 100.0f * (*it)->getDirection()};
-        
-            // --- finished :D
-                (*it)->setEndPoint(newEndPoint);
-        }
-        
+      for (std::vector<Shot*>::iterator it = shots.begin(); it != shots.end(); ++it) {
+      // Calculate newEndPoint with proper collision later
+      sf::Vector2f newEndPoint {(*it)->getOrigin() + 100.0f * (*it)->getDirection()};
+      // --- finished :D
+      (*it)->setEndPoint(newEndPoint);
     }
-    gameState_.addHandledShots(shots);
+  }
+  gameState_.addHandledShots(shots);
+}
+
+void Client::collideMoveVector(sf::Vector2f position,
+                         sf::Vector2f& moveVector,
+                         float radius) {
+  sf::Vector2f collisionPoint = position + moveVector;
+  float maxDistance = length(moveVector);
+  LineSegment ls = LineSegment(position, collisionPoint);
+  for (auto physObj : gameState_.getPhysicalObjects())
+    if (physObj->intersectCircle(radius, ls, collisionPoint)) {
+      if (length(collisionPoint - position) < maxDistance) {
+        moveVector = position + collisionPoint;
+        maxDistance = length(moveVector);
+      }
+    }
 }

@@ -1,6 +1,9 @@
 #include "PhysicalObject.h"
 #include "GeomUtils.h"
-#include <SFML/System/vector2.hpp>
+#include <limits>
+#include <SFML/System.hpp>
+#include <stdlib.h>
+#include <cmath>
 #include <iostream>
 
 /*
@@ -172,10 +175,14 @@ bool PhysicalCircle::intersectCircle(float radius, LineSegment displacement, sf:
 	return false;
 }
 
+float PhysicalCircle::getRadius() const {
+    return radius_;
+}
+
 
 /*
  * PHYSICAL_POLYGON
- */
++ */
 
 bool PhysicalPolygon::lineIntersect(Line line, LineSegment lineSegment, float& t, float& u) const {
 	sf::Vector2f r = line.direction;

@@ -11,7 +11,7 @@ CCFLAGS = -I$(SRC) -std=c++11 -Wpedantic -Wall -Wextra #-fpermissive
 LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio
 
 # Objektkodsmoduler som ingår i den kompletta kalkylatorn.
-OBJECTS = Client.o Controller.o GameState.o main.o Map.o Player.o ResourcePath.o Server.o Shot.o Team.o Weapon.o
+OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o Shot.o Team.o Weapon.o main.o
 
 # Huvudmål - skapas med kommandot 'make' eller 'make kalkylator'.
 startClient: $(OBJECTS) makefile
@@ -50,6 +50,9 @@ Team.o: $(SRC)/Team.h $(SRC)/Team.cpp
 
 Weapon.o: $(SRC)/Weapon.h $(SRC)/Weapon.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/Weapon.cpp
+
+PhysicalObject.o: $(SRC)/PhysicalObject.h $(SRC)/PhysicalObject.cpp
+	$(CCC) $(CCFLAGS) -c $(SRC)/PhysicalObject.cpp
 
 clean:
 	@ \rm -rf *.o *.gch core

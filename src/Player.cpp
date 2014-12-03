@@ -13,7 +13,7 @@ int sgn(float x) {
     return (x > 0) - (x < 0);
 }
 
-Player::Player(int ClientID): clientID_(ClientID) {
+Player::Player(int ClientID): PhysicalCircle(getPosition(), 32.0f),  clientID_(ClientID) {
   if (!texture_.loadFromFile(resourcePath("res/images/") + "cage.png"))
     throw std::exception();
 
@@ -30,7 +30,7 @@ void Player::setWeapon(Weapon* newWeapon) {
 
 void Player::setSpeedMultiplier(float speed) {
   if (health_ <=50) {
-    speedMultiplier_ = 0.5f; //If the player is severe damaged he will not be able to move faster than speed_/2
+    speedMultiplier_ = 0.5f;  // If the player is severe damaged he will not be able to move faster than speed_/2
   }
   else {
     speedMultiplier_ = speed; //Else, accept the given speed
@@ -46,6 +46,10 @@ void Player::setHealth(unsigned int amount) {
   }
 }
 
+void Player::hasNotFired() {
+  weapon_->hasNotFired();
+}
+
 void Player::reloadWeapon() {
   weapon_->reloadWeapon();
 }
@@ -58,21 +62,23 @@ int Player::getClientID() const {
   return clientID_;
 }
 
+sf::Vector2f& Player::getMoveVector() {
+  return moveVector_;
+}
+
 void Player::calculateMoveVector(const sf::Vector2f& inputVector,
-                           float elapsedSeconds) {
-    
+                                 float elapsedSeconds) {
     sf::Vector2f targetSpeed = inputVector * maxSpeed_ * speedMultiplier_;
     sf::Vector2f direction {static_cast<float>(sgn(targetSpeed.x - curSpeed_.x)), static_cast<float>(sgn(targetSpeed.y - curSpeed_.y))};
-    
+
     curSpeed_ += acceleration_ * direction * elapsedSeconds;
-    
+
     if (sgn(targetSpeed.x - curSpeed_.x) != direction.x) // is the speed higher than allowed
         curSpeed_.x = targetSpeed.x;
     if (sgn(targetSpeed.y - curSpeed_.y) != direction.y)
         curSpeed_.y = targetSpeed.y;
     moveVector_ = curSpeed_ * elapsedSeconds;
 }
-
 
 void Player::handleRotation(const sf::Vector2f& aimVector) {
   aimVector_ = aimVector;
@@ -81,6 +87,8 @@ void Player::handleRotation(const sf::Vector2f& aimVector) {
   setRotation(angle);
 }
 
-void Player::move(const sf::Vector2f& offset) {
-  Sprite::move(moveVector_);
+void Player::move() {
+    Sprite::move(moveVector_);
+    // PhysicalCircle::setCenter(getPosition());
 }
+
