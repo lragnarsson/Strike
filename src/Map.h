@@ -12,6 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include "tinyxml.h"
 #include "PhysicalObject.h"
+#include <vector>
 
 class Map {
 public:
@@ -20,12 +21,12 @@ public:
     Map(std::string filename); // skapa utifrån kartfil
     Map(const Map&);
     
-	vector<sf::Vector2f> makePolygonVector(string rawVector, float xpos, float ypos);
+    std::vector<sf::Vector2f> makePolygonVector(std::string rawVector, float xpos, float ypos);
     void load(std::string filename);
     void draw(sf::RenderTarget&);
     
 private:
-    vector<PhysicalObject*> physicalObjects_;
+    std::vector<PhysicalObject*> physicalObjects_;
 	sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
 };
