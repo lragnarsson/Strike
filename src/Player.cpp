@@ -37,6 +37,15 @@ void Player::setSpeedMultiplier(float speed) {
   }
 }
 
+void Player::setHealth(unsigned int amount) {
+  if (amount >= health_) {
+    health_ = 0;
+  }
+  else {
+    health_ -= amount;
+  }
+}
+
 void Player::reloadWeapon() {
   weapon_->reloadWeapon();
 }

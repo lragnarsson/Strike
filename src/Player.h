@@ -24,7 +24,7 @@ class Player: public sf::Sprite {
     ~Player() = default;
 
     // float getRotateSpeed() const;
-    // void setHealth(float amount);
+    void setHealth(unsigned int amount);
     int getClientID() const;
     void setWeapon(Weapon* weapon);
     std::vector<Shot*> fire();
