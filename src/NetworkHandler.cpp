@@ -91,6 +91,8 @@ void NetworkHandler::checkForNewTcpConnections()
     }
     else
     {
+        //skicka accept m. playerID
+        //skicka "skapaspelareobjekt"
         newConn->setBlocking(false);
 
         std::cout << "Ny klient ansluten! Ip: " << newConn->getRemoteAddress() << " Port: " << newConn->getRemotePort() << std::endl;
@@ -116,6 +118,7 @@ void NetworkHandler::connectToServer(sf::IpAddress ip)
     if (conn->connect(ip, serverPort_) != sf::Socket::Done)
     {
         std::cout << "Kunde inte ansluta till servern" << std::endl;
+        delete conn;
     }
     else
     {
@@ -146,7 +149,22 @@ Message* NetworkHandler::unpackPacket(sf::Packet packet)
     packet >> header;
     switch(header)
     {
-    case CONSOLE_PRINT_STRING:
+        case CLIENT_NOTIFY_UDP_PORT:
+        {
+            return new ClientNotifyUDPPort(packet);
+            break;
+        }
+        case SERVER_ACCEPT_CONNECTION:
+        {
+            return new ServerAcceptConnection(packet);
+            break;
+        }
+        case ADD_PLAYER:
+        {
+            return new AddPlayer(packet);
+            break;
+        }
+        case CONSOLE_PRINT_STRING:
         {
             return new ConsolePrintString{packet};
             break;

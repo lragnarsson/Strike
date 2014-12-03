@@ -23,11 +23,36 @@ protected:
 class ServerAcceptConnection : public Message
 {
 public:
-    std::string str;
+    int playerID;
 
     ServerAcceptConnection() : Message(SERVER_ACCEPT_CONNECTION) {}
     ServerAcceptConnection(sf::Packet);
-    ServerAcceptConnection(std::string s) : Message(CONSOLE_PRINT_STRING), str(s) {}
+    ServerAcceptConnection(int pID) : Message(CONSOLE_PRINT_STRING), playerID(pID) {}
+
+    sf::Packet asPacket();
+};
+
+class AddPlayer : public Message
+{
+public:
+    int playerID;
+
+    AddPlayer() : Message(ADD_PLAYER) {}
+    AddPlayer(sf::Packet);
+    AddPlayer(int pID) : Message(ADD_PLAYER), playerID(pID) {}
+
+    sf::Packet asPacket();
+};
+
+class ClientNotifyUDPPort : public Message
+{
+public:
+    int playerID;
+    unsigned short port;
+
+    ClientNotifyUDPPort() : Message(CLIENT_NOTIFY_UDP_PORT) {}
+    ClientNotifyUDPPort(sf::Packet);
+    ClientNotifyUDPPort(int pID, unsigned short prt) : Message(CONSOLE_PRINT_STRING), playerID(pID), port(prt)  {}
 
     sf::Packet asPacket();
 };

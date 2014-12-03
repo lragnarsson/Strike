@@ -50,10 +50,9 @@ class NetworkHandler
         };
 
         std::vector<client_> clients_;
-        //std::vector<sf::Packet> packets_;
         std::vector<Message*> messages_;
+        std::vector<Message*> internalMessages_;
 
-        //std::vector<sf::TcpSocket*> TCPconnections_;
         std::map<int, int> playerLatestUpdate_;
 
         Message* unpackPacket(sf::Packet);
