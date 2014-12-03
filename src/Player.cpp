@@ -7,6 +7,11 @@
 //
 
 #include "./Player.h"
+#include <math.h>
+
+int sgn(float x) {
+    return (x > 0) - (x < 0);
+}
 
 Player::Player(int ClientID): clientID_(ClientID) {
   if (!texture_.loadFromFile(resourcePath("res/images/") + "cage.png"))
@@ -23,12 +28,12 @@ void Player::setWeapon(Weapon* newWeapon) {
   weapon_ = newWeapon;
 }
 
-void Player::changeSpeed(float speed) {
+void Player::setSpeedMultiplier(float speed) {
   if (health_ <=50) {
-    speedConstant_ = 0.5f; //If the player is severe damaged he will not be able to move faster than speed_/2
+    speedMultiplier_ = 0.5f; //If the player is severe damaged he will not be able to move faster than speed_/2
   }
   else {
-    speedConstant_ = speed; //Else, accept the given speed
+    speedMultiplier_ = speed; //Else, accept the given speed
   }
 }
 
@@ -44,10 +49,21 @@ int Player::getClientID() const {
   return clientID_;
 }
 
-void Player::setMoveVector(const sf::Vector2f& moveVector,
+void Player::calculateMoveVector(const sf::Vector2f& inputVector,
                            float elapsedSeconds) {
-  moveVector_ = moveVector * elapsedSeconds * speed_ * speedConstant_;
+    
+    sf::Vector2f targetSpeed = inputVector * maxSpeed_ * speedMultiplier_;
+    sf::Vector2f direction {static_cast<float>(sgn(targetSpeed.x - curSpeed_.x)), static_cast<float>(sgn(targetSpeed.y - curSpeed_.y))};
+    
+    curSpeed_ += acceleration_ * direction * elapsedSeconds;
+    
+    if (sgn(targetSpeed.x - curSpeed_.x) != direction.x) // is the speed higher than allowed
+        curSpeed_.x = targetSpeed.x;
+    if (sgn(targetSpeed.y - curSpeed_.y) != direction.y)
+        curSpeed_.y = targetSpeed.y;
+    moveVector_ = curSpeed_ * elapsedSeconds;
 }
+
 
 void Player::handleRotation(const sf::Vector2f& aimVector) {
   aimVector_ = aimVector;

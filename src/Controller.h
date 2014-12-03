@@ -14,7 +14,7 @@ public:
     Controller() = default;
     ~Controller();
     
-    void updatePlayerMoveVector();
+    void updatePlayerInputVector();
     void playerRotate(const sf::RenderWindow&);
     void bindPlayer(Player*);
     void bindView(sf::View*);
@@ -25,7 +25,7 @@ public:
 protected:
     
 private:
-    sf::Vector2f moveVector_;
+    sf::Vector2f inputVector_;
     Player* player_;
     sf::View* view_;
     sf::Clock clock_;

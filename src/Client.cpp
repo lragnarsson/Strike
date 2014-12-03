@@ -41,7 +41,7 @@ void Client::handleGameLogic() {
 
 
 void Client::handleInput() {
-    controller.updatePlayerMoveVector();
+    controller.updatePlayerInputVector();
     controller.playerRotate(renderWindow);
     gameState_.addUnhandledShots(controller.playerFire()); // adds the shots that were created by player (if there were any).
     controller.playerRotate(renderWindow);

@@ -1,5 +1,5 @@
 #include "./Controller.h"
-
+#include <iostream>
 std::vector<Shot*> Controller::playerFire() {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         return player_->fire();
@@ -17,10 +17,10 @@ void Controller::reloadWeapon() {
 
 void Controller::isSprinting() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
-        player_->changeSpeed(2.0f);
+        player_->setSpeedMultiplier(2.0f);
     }
     else {
-        player_->changeSpeed(1.0f);
+        player_->setSpeedMultiplier(1.0f);
     }
 }
 
@@ -29,30 +29,30 @@ Controller::~Controller() {
     player_ = nullptr;      // objects are destroyed by GameState
 }
 
-void Controller::updatePlayerMoveVector() {
-  moveVector_.x = 0;
-  moveVector_.y = 0;
+void Controller::updatePlayerInputVector() {
+    inputVector_.x = 0;
+    inputVector_.y = 0;
 
-  sf::Time elapsed {clock_.getElapsedTime()};
+    sf::Time elapsed {clock_.getElapsedTime()};
 
-  clock_.restart();
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-    moveVector_.y += -1;
+    clock_.restart();
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        inputVector_.y += -1;
 
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-    moveVector_.y += 1;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        inputVector_.y += 1;
 
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    moveVector_.x += -1;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        inputVector_.x += -1;
 
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    moveVector_.x += 1;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        inputVector_.x += 1;
 
-  if (moveVector_.x != 0 && moveVector_.y != 0)
-    moveVector_ /= sqrt2;
-
-  player_->setMoveVector(moveVector_, elapsed.asSeconds());
-  player_->move(sf::Vector2f {});
+    if (inputVector_.x != 0 && inputVector_.y != 0)
+        inputVector_ /= sqrt2;
+    //std::cout << "elapsed time: " << elapsed.asSeconds() << std::endl;
+    player_->calculateMoveVector(inputVector_, elapsed.asSeconds());
+    player_->move(sf::Vector2f {});
 }
 
 void Controller::playerRotate(const sf::RenderWindow& window) {
@@ -60,7 +60,7 @@ void Controller::playerRotate(const sf::RenderWindow& window) {
       player_->getPosition();
   aimVector /= (sqrtf(pow(aimVector.x, 2) + pow(aimVector.y, 2)));
   player_->handleRotation(aimVector);
-  auto mousePos = window.mapCoordsToPixel(aimVector * 100.f +
+  auto mousePos = window.mapCoordsToPixel(aimVector * 50.f +
                                           player_->getPosition());
   sf::Mouse::setPosition(mousePos);
 }

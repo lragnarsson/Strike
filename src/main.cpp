@@ -1,23 +1,8 @@
 
-//
-// Disclamer:
-// ----------
-//
-// This code will work only if you selected window, graphics and audio.
-//
-// Note that the "Run Script" build phase will copy the required frameworks
-// or dylibs to your application bundle so you can execute it on any OS X
-// computer.
-//
-// Your resource files (images, sounds, fonts, ...) are also copied to your
-// application bundle. To get the path to these resource, use the helper
-// method resourcePath() from ResourcePath.hpp
-//
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-// Here is a small helper for you ! Have a look.
 #include "ResourcePath.h"
 #include "Player.h"
 #include "GameState.h"
@@ -32,7 +17,7 @@ int main(int, char const**)
     // Create the main window
     //sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground", sf::Style::Fullscreen);
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML-Playground");
-    window.setFramerateLimit(30);
+    window.setFramerateLimit(120);
     // let's define a view
     sf::View view(sf::FloatRect(0, 0, 500, 300));
 
@@ -114,6 +99,7 @@ int main(int, char const**)
     sf::Clock clock;
     clock.restart();
 
+    std::vector<Shot*> shots;
     // Start the game loop
     while (window.isOpen()) {
 	clock.restart();
@@ -142,17 +128,31 @@ int main(int, char const**)
         window.draw(text);
 */
         // Move the player, debug position in console
-        controller.updatePlayerMoveVector();
+        controller.updatePlayerInputVector();
         controller.playerRotate(window);
         controller.reloadWeapon();
-        controller.playerFire();
+        std::vector<Shot*> newShots {controller.playerFire()};
+        shots.insert(shots.end(),newShots.begin(), newShots.end());
+        if (!shots.empty()) {
+            for (std::vector<Shot*>::iterator it = shots.begin(); it != shots.end(); ++it) {
+                // Calculate newEndPoint with proper collision later
+                sf::Vector2f newEndPoint {(*it)->getOrigin() + 1000.0f * (*it)->getDirection()};
+                
+                // --- finished :D
+                (*it)->setEndPoint(newEndPoint);
+            }
+        }
+       
+
         controller.updateView();
         controller.isSprinting();
 
         window.setView(view);
         Game.draw(window);
         window.draw(lines);
-
+        for (std::vector<Shot*>::iterator it = shots.begin(); it != shots.end(); ++it){
+            window.draw(**it);
+        }
         // Update the window
         window.display();
     }
