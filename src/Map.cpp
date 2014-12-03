@@ -14,8 +14,6 @@
 #include <cstring>
 #include <vector>
 #include "ResourcePath.h"
-#include "tinyxml.h"
-
 
 Map::~Map(){
     for(auto pObj : physicalObjects_)
