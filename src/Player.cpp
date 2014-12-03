@@ -8,9 +8,10 @@
 
 #include "./Player.h"
 
-Player::Player(int ClientID): clientID_(ClientID) {
+Player::Player(int ClientID): PhysicalCircle(getPosition(), 32.0f),  clientID_(ClientID) {
   if (!texture_.loadFromFile(resourcePath("res/images/") + "cage.png"))
     throw std::exception();
+  
 
   // texture for playerSprite
   texture_.setSmooth(true);
@@ -52,6 +53,7 @@ void Player::handleRotation(const sf::Vector2f& aimVector) {
 }
 
 void Player::move() {
-  Sprite::move(moveVector_);
+    Sprite::move(moveVector_);
+    // PhysicalCircle::setCenter(getPosition());
 }
 

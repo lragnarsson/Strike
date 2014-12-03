@@ -29,7 +29,7 @@
 class Client: public Game{
 public:
     Client();
-    ~Client();
+    ~Client() {}
 
     Client(const Client&) = delete;         // borttagen kopieringskonstruktor
     Client& operator=(const Client&) = delete; // borttagen kopieringstilldelning
@@ -44,13 +44,14 @@ private:
     void handleInput();
     void handleCollisions() override;
     void draw();
-    void calculateMoveVector();
+    void collideMoveVector(sf::Vector2f position,
+                         sf::Vector2f& moveVector,
+                         float radius);
     void handleShots();
 
     GameState gameState_;
     int clientID_;                          // detta fås av servern vid init.
     std::string clientName_;                // detta borde man få välja själv vid start
-    sf::View view_;                         // en instans av en view som ska användas av Controller.
     sf::RenderWindow renderWindow_;          // en instans av ett fönster. Här ritas allt ut.
     Controller controller_;                  // en instans av en controller som används för att styra spelarkaraktären.
 };

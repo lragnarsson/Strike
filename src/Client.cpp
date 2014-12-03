@@ -10,37 +10,39 @@
 
 /* Implementation av Client
  */
-void Client::Client() {
-    sf::RenderWindow renderWindow_(sf::VideoMode(1280, 720), "SFML-Playground");
-    view_(sf::FloatRect(0, 0, 500, 300));
+Client::Client() : Game(), renderWindow_(sf::VideoMode(1280, 720), "SFML-Playground") {
 
     renderWindow_.setFramerateLimit(120);
-    window.setView(view);
-    renderWindow_.setMouseCursorVisible(false);
+    //renderWindow_.setMouseCursorVisible(false);
+    Player* player = new Player(1);
+    gameState_.addPlayer(player);
+    controller_.bindPlayer(player);
 
-    Team blueTeam_;
-    Team redTeam_;
+    //Team blueTeam_;
+    //Team redTeam_;
 
-    Weapon weapon1{5,30,10,1000,5000,10};
+    //Weapon weapon1{5,30,10,1000,5000,10};
 
-    Player player1{1};
+    //Player player_{1};
 
-    gameState_.addPlayer(&player1);
-    blueTeam.addPlayer(&player1);
+    //gameState_.addPlayer(&player_);
+    //blueTeam_.addPlayer(&player_);
 
-    player1.setWeapon(&weapon1);
+    //player_.setWeapon(&weapon1);
 
-    controller_.bindPlayer(&player1);
-    controller_.bindView(&view_);
+    //controller_.bindPlayer(&player_);
+    //controller_.bindView(&view_);
 }
 
 void Client::run() {
-    readNetwork();
-    handleInput();
-    handleCollisions();
-    handleGameLogic();
-    writeNetwork();
-    draw();
+    while (renderWindow_.isOpen()) {
+        //readNetwork();
+        handleInput();
+        handleCollisions();
+        //handleGameLogic();
+        //writeNetwork();
+        draw();
+    }
 }
 
 void Client::readNetwork() {
@@ -52,8 +54,10 @@ void Client::writeNetwork() {
 }
 
 void Client::handleCollisions() {
-    calculateMoveVector(player_-> getMoveVector());
-    controller.playerMove();
+    collideMoveVector(controller_.getPlayer()->getPosition(),
+                        controller_.getPlayer()->getMoveVector(),
+                        controller_.getPlayer()->getRadius());
+    controller_.playerMove();
     handleShots();
 }
 
@@ -63,17 +67,17 @@ void Client::handleGameLogic() {
 
 
 void Client::handleInput() {
-    controller.handleKeyEvents(renderWindow);
-    controller.handlePlayerActions();
-    controller.setPlayerInputVector();
-    controller.setplayerRotation(renderWindow);
-    gameState_.addUnhandledShots(controller.playerFire());  // adds the shots that were created by player (if there were any).
+    controller_.handleKeyEvents(&renderWindow_);
+    controller_.handlePlayerActions();
+    controller_.setPlayerInputVector();
+    controller_.setPlayerRotation(renderWindow_);
+    //gameState_.addUnhandledShots(controller_.playerFire());  // adds the shots that were created by player (if there were any).
 }
 
 void Client::draw() {
     renderWindow_.clear();
-    controller.updateView();
-    renderWindow_.setView(view_);
+    controller_.updateView();
+    renderWindow_.setView(*controller_.getView());
     gameState_.draw(renderWindow_);
     renderWindow_.display();
 }
@@ -92,8 +96,8 @@ void Client::handleShots() {
   gameState_.addHandledShots(shots);
 }
 
-void calculateMoveVector(sf::Vector2f position,
-                         sf::Veector2f& moveVector,
+void Client::collideMoveVector(sf::Vector2f position,
+                         sf::Vector2f& moveVector,
                          float radius) {
   sf::Vector2f collisionPoint = position + moveVector;
   float maxDistance = length(moveVector);
@@ -104,4 +108,5 @@ void calculateMoveVector(sf::Vector2f position,
         moveVector = position + collisionPoint;
         maxDistance = length(moveVector);
       }
+    }
 }

@@ -1,7 +1,7 @@
 #ifndef _GEOM_UTILS_
 #define _GEOM_UTILS_
 
-#include <SFML/System/vector2.hpp>
+#include <SFML/System.hpp>
 #include <stdlib.h>
 #include <cmath>
 

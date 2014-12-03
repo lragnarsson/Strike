@@ -16,8 +16,9 @@
 #include <iostream>
 #include "./Weapon.h"
 #include "./ResourcePath.h"
+#include "./PhysicalObject.h"
 
-class Player: public sf::Sprite {
+class Player: public sf::Sprite, public PhysicalCircle {
 public:
     explicit Player(int ClientID);
     Player() = delete;

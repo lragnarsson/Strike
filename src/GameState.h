@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "Player.h"
 #include "Shot.h"
+#include "PhysicalObject.h"
 #include <vector>
 
 class GameState{
@@ -23,12 +24,12 @@ public:
     void draw(sf::RenderWindow& window);
     void addUnhandledShots(std::vector<Shot*>);
     void addHandledShots(std::vector<Shot*>);
-    vector<PhysicalObject*> getPhysicalObjects();
+    std::vector<PhysicalObject*> getPhysicalObjects();
     std::vector<Shot*> takeUnhandledShots();
 
 private:
     std::vector<Player*> players_;
-
+    std::vector<PhysicalObject*> physicalObjects_; 
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
     std::vector<Shot*> unhandledShots_;

@@ -3,7 +3,6 @@
 #define _PHYSICAL_OBJECT_
 
 #include "GeomUtils.h"
-#include <SFML/System/vector2.hpp>
 #include <vector>
 
 class PhysicalObject {
@@ -54,6 +53,7 @@ public:
 	bool intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision) const override;
 	bool intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision, sf::Vector2f& intersectionPoint) const override;
 	bool intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const override;
+        float getRadius() const;
 
 private:
 	PhysicalCircle(const PhysicalCircle& other) = default;

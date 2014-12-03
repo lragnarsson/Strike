@@ -1,5 +1,9 @@
 #include "./Controller.h"
 
+Controller::Controller() {
+  view_ = new sf::View(sf::FloatRect(0, 0, 500, 300));
+}
+
 std::vector<Shot*> Controller::playerFire() {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         return player_->fire();
@@ -16,6 +20,7 @@ void Controller::reloadWeapon() {
 }
 
 Controller::~Controller() {
+    delete view_;
     view_ = nullptr;        // objects are destroyed by GameState
     player_ = nullptr;      // objects are destroyed by GameState
 }
@@ -34,6 +39,9 @@ void Controller::handleKeyEvents(sf::RenderWindow* window) {
     }
 }
 
+void Controller::handlePlayerActions() {
+
+}
 void Controller::setPlayerInputVector() {
     inputVector_.x = 0;
     inputVector_.y = 0;
@@ -59,8 +67,8 @@ void Controller::setPlayerInputVector() {
     player_->setMoveVector(inputVector_, elapsed.asSeconds());
 }
 
-void Controller::playerMove(const sf::Vector2f& moveVector) {
-    player_->move(moveVector);
+void Controller::playerMove() {
+    player_->move();
 }
 
 void Controller::setPlayerRotation(const sf::RenderWindow& window) {
@@ -77,6 +85,13 @@ void Controller::updateView() {
     view_->setCenter(player_->getPosition());
 }
 
+sf::View* Controller::getView() {
+    return view_;
+}
+
+Player* Controller::getPlayer() {
+    return player_;
+}
 void Controller::bindPlayer(Player* p) {
     player_ = p;
 }
