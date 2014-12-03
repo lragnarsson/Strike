@@ -1,15 +1,8 @@
-//
 //  Client.cpp
 //  Strike
-//
-//  Created by Isak Wiberg on 2014-11-25.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
 
 #include "Client.h"
 
-/* Implementation av Client
- */
 Client::Client() : Game(), renderWindow_(sf::VideoMode(1280, 720), "SFML-Playground") {
     renderWindow_.setFramerateLimit(120);
     renderWindow_.setMouseCursorVisible(true);
