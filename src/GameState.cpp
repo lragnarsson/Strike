@@ -63,7 +63,8 @@ void GameState::draw(sf::RenderWindow* window) {
 }
 
 std::vector<PhysicalObject*> GameState::getPhysicalObjects() {
-  return map_.getPhysicalObjects();
+    return physicalObjects_;
+    //return map_.getPhysicalObjects();
 }
 
 std::vector<Shot*> GameState::takeUnhandledShots() {
