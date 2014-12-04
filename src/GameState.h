@@ -32,8 +32,8 @@ public:
 
 private:
     std::vector<Player*> players_;
-    //sf::Texture mapTexture_;
-    //sf::Sprite mapSprite_;
+    sf::Texture mapTexture_;
+    sf::Sprite mapSprite_;
     Map map_;
     std::vector<PhysicalObject*> physicalObjects_;
     std::vector<Shot*> unhandledShots_;

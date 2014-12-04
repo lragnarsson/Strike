@@ -11,10 +11,14 @@
 #include "./Player.h"
 #include "./Team.h"
 
+
 GameState::GameState()  {
-    Map map_;
-    map_.load(resourcePath("res/maps/") + "map_test1.xml");
-    physicalObjects_.push_back(new PhysicalAABox(sf::Vector2f(200.f, 0.f), 50.f, 500.f));
+    //Map map_;
+    //map_.load(resourcePath("res/maps/") + "map_test1.xml");
+    if (!mapTexture_.loadFromFile(resourcePath("res/images/") + "boat_lvl.bmp"))
+        throw std::exception();
+    mapSprite_.setTexture(mapTexture_);
+    physicalObjects_.push_back(new PhysicalAABox(sf::Vector2f(200.f, 50.f), 50.f, 300.f));
 }
 
 void GameState::addPlayer(Player* playerP) {
@@ -48,7 +52,8 @@ void GameState::removeOldShots() {
 }
 
 void GameState::draw(sf::RenderWindow* window) {
-    map_.draw(window);
+    window->draw(mapSprite_);
+    //map_.draw(window);
     for (auto player : players_) {
         window->draw(*player);
     }
