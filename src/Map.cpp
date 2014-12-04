@@ -136,7 +136,7 @@ void Map::load(std::string filename){
     }
 }
 
-void Map::draw(sf::RenderTarget& window){
-    window.draw(mapSprite_);
+void Map::draw(sf::RenderWindow* window){
+    window->draw(mapSprite_);
 }
 

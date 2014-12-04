@@ -20,12 +20,11 @@ public:
     ~Map();
     Map(std::string filename); // skapa utifrån kartfil
     Map(const Map&);
-    
 
     std::vector<PhysicalObject*> getPhysicalObjects() const;
     void load(std::string filename);
-    void draw(sf::RenderTarget&);
-    
+    void draw(sf::RenderWindow* window);
+
 private:
     std::vector<sf::Vector2f> makePolygonVector(std::string rawVector, float xpos, float ypos);
     std::vector<PhysicalObject*> physicalObjects_;

@@ -1,5 +1,6 @@
 #include "./Controller.h"
 #include <iostream>
+#include <vector>
 
 Controller::Controller() {
   view_ = new sf::View(sf::FloatRect(0, 0, 500, 300));
@@ -8,18 +9,17 @@ Controller::Controller() {
 std::vector<Shot*> Controller::playerFire() {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         return player_->fire();
-    } 
-    else {
+    } else {
         std::vector<Shot*> shotVector;
         player_->hasNotFired();
         return shotVector;
     }
-} 
+}
 
 Controller::~Controller() {
     delete view_;
-    view_ = nullptr;        // objects are destroyed by GameState
-    player_ = nullptr;      // objects are destroyed by GameState
+    view_ = nullptr;
+    player_ = nullptr;
 }
 
 void Controller::handleKeyEvents(sf::RenderWindow* window) {
@@ -75,13 +75,13 @@ void Controller::playerMove() {
 }
 
 void Controller::setPlayerRotation(const sf::RenderWindow& window) {
-  auto aimVector = window.mapPixelToCoords(sf::Mouse::getPosition()) -
-      player_->getPosition();
-  aimVector /= (sqrtf(pow(aimVector.x, 2) + pow(aimVector.y, 2)));
-  player_->handleRotation(aimVector);
-  auto mousePos = window.mapCoordsToPixel(aimVector * 50.f +
-                                          player_->getPosition());
-  sf::Mouse::setPosition(mousePos);
+    auto aimVector = window.mapPixelToCoords(sf::Mouse::getPosition()) -
+                     player_->getPosition();
+    aimVector /= (sqrtf(pow(aimVector.x, 2) + pow(aimVector.y, 2)));
+    player_->handleRotation(aimVector);
+    auto mousePos = window.mapCoordsToPixel(aimVector * 75.f +
+                                            player_->getPosition());
+    sf::Mouse::setPosition(mousePos);
 }
 
 void Controller::updateView() {

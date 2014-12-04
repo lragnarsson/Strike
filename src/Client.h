@@ -12,13 +12,15 @@
 #include <stdio.h>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include "Game.h"
-#include "ResourcePath.h"
-#include "Player.h"
-#include "GameState.h"
-#include "Controller.h"
-#include "Team.h"
-#include "Weapon.h"
+#include <SFML/Network.hpp>
+#include <string>
+#include "./Game.h"
+#include "./ResourcePath.h"
+#include "./Player.h"
+#include "./GameState.h"
+#include "./Controller.h"
+#include "./Team.h"
+#include "./Weapon.h"
 
 /*  Client är en subklass till Game som skapas hos användaren när denne startar
  *  spelet. Här finns bland annat information för att unikt identifiera en klient
@@ -26,15 +28,15 @@
  *  finns i Client.
  */
 
-class Client: public Game{
+class Client: public Game {
 public:
     Client();
     ~Client() {}
 
-    Client(const Client&) = delete;         // borttagen kopieringskonstruktor
-    Client& operator=(const Client&) = delete; // borttagen kopieringstilldelning
+    Client(const Client&) = delete;
+    Client& operator=(const Client&) = delete;
 
-    void initiate();
+    bool connectToServer(std::string name, unsigned int team, sf::IpAddress ip);
     void run() override;
 
 private:
@@ -45,15 +47,15 @@ private:
     void handleCollisions() override;
     void draw();
     void collideMoveVector(sf::Vector2f position,
-                         sf::Vector2f& moveVector,
-                         float radius);
+                           sf::Vector2f& moveVector,
+                           float radius);
     void handleShots();
 
     GameState gameState_;
-    int clientID_;                          // detta fås av servern vid init.
-    std::string clientName_;                // detta borde man få välja själv vid start
-    sf::RenderWindow renderWindow_;          // en instans av ett fönster. Här ritas allt ut.
-    Controller controller_;                  // en instans av en controller som används för att styra spelarkaraktären.
+    int clientID_;
+    std::string clientName_;
+    sf::RenderWindow renderWindow_;
+    Controller controller_;
 };
 
 #endif /* defined(__Strike__Client__) */

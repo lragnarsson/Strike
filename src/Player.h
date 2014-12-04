@@ -29,19 +29,21 @@ public:
     std::vector<Shot*> fire();
     sf::Vector2f& getMoveVector();
     void setHealth(unsigned int amount);
-    void calculateMoveVector(const sf::Vector2f& moveVector, float elapsedSeconds);
+    void calculateMoveVector(const sf::Vector2f& moveVector,
+                             float elapsedSeconds);
     void handleRotation(const sf::Vector2f& aimVector);
     void move();
     void reloadWeapon();
     void setSpeedMultiplier(float speed);
     void hasNotFired();
+
 private:
     unsigned int health_ = 100;
     sf::Texture texture_;
     int clientID_;
-    float speedMultiplier_ = 1.0f; //Speed constant, varies when sprinting, damaged, carrying heavy weapons etc
+    float speedMultiplier_ = 1.0f;
     float maxSpeed_ = 100.0f;  // pixels per second
-    float acceleration_ = 400.0f;    // pixels per second^2
+    float acceleration_ = 400.0f;  // pixels per second^2
 
     Weapon* weapon_;
     sf::Vector2f moveVector_;
@@ -49,6 +51,5 @@ private:
     sf::Vector2f aimVector_;
     float radConversion_ = 57.295779f;
 };
-
 
 #endif /* defined(__Strike__Player__) */

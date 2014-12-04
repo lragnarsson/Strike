@@ -6,15 +6,15 @@
 //  Copyright (c) 2014 Isak Wiberg. All rights reserved.
 //
 
-#include "ResourcePath.h"
-#include "GameState.h"
-#include "Player.h"
-#include "Team.h"
-
+#include "./ResourcePath.h"
+#include "./GameState.h"
+#include "./Player.h"
+#include "./Team.h"
 
 GameState::GameState()  {
     Map map_;
     map_.load(resourcePath("res/maps/") + "map_test1.xml");
+    physicalObjects_.push_back(new PhysicalAABox(sf::Vector2f(200.f, 0.f), 50.f, 500.f));
 }
 
 void GameState::addPlayer(Player* playerP) {
@@ -22,31 +22,38 @@ void GameState::addPlayer(Player* playerP) {
 }
 
 void GameState::addUnhandledShots(std::vector<Shot*> newShots) {
-    if (!newShots.empty())
-    {
-        unhandledShots_.insert(unhandledShots_.end(), newShots.begin(), newShots.end()); // add the new shots.
+    if (!newShots.empty()) {
+        unhandledShots_.insert(unhandledShots_.end(),
+                               newShots.begin(),
+                               newShots.end());
     }
 }
 
 void GameState::addHandledShots(std::vector<Shot*> newShots) {
-    if (!newShots.empty())
-    {
-        for (std::vector<Shot*>::iterator it = newShots.begin(); it != newShots.end(); ++it){
-            (*it)->setTimestamp(gameTime_.getElapsedTime()); // gameTime_ is never restarted.
-        }
-        handledShots_.insert(handledShots_.end(), newShots.begin(), newShots.end()); // add the new shots.
+    if (!newShots.empty()) {
+        for (auto shot : newShots)
+            shot->setTimestamp(gameTime_.getElapsedTime());
+        handledShots_.insert(handledShots_.end(),
+                             newShots.begin(),
+                             newShots.end());
     }
 }
 
-void GameState::draw(sf::RenderWindow& window) {
-    map_.draw(window);
-    for (auto player : players_){
-        window.draw(*player); // calls draw for every player
+void GameState::removeOldShots() {
+  int elapsed = gameTime_.getElapsedTime().asMilliseconds();
+  auto f = [elapsed](Shot* s){return (elapsed - s->getTimestamp().asMilliseconds() > 5000);};
+  handledShots_.erase(std::remove_if(handledShots_.begin(),
+                                       handledShots_.end(), f),
+                        handledShots_.end());
+}
 
-        //it->draw(window, sf::RenderStates::RenderStates()); // calls draw with a default RenderState for all players
+void GameState::draw(sf::RenderWindow* window) {
+    map_.draw(window);
+    for (auto player : players_) {
+        window->draw(*player);
     }
-    for (auto shot : handledShots_){
-        window.draw(*shot);
+    for (auto shot : handledShots_) {
+        window->draw(*shot);
     }
 }
 
@@ -58,4 +65,8 @@ std::vector<Shot*> GameState::takeUnhandledShots() {
     std::vector<Shot*> tempVec {unhandledShots_};
     unhandledShots_.clear();
     return tempVec;
+}
+
+std::vector<Player*> GameState::getPlayers() {
+    return players_;
 }

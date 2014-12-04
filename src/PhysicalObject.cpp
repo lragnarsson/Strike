@@ -179,6 +179,9 @@ float PhysicalCircle::getRadius() const {
     return radius_;
 }
 
+void PhysicalCircle::setCenter(sf::Vector2f center) {
+    center_ = center;
+}
 
 /*
  * PHYSICAL_POLYGON

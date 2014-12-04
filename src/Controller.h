@@ -20,7 +20,7 @@ public:
     void setPlayerRotation(const sf::RenderWindow&);
     void updatePlayerInputVector();
 
-    void bindPlayer(Player*);
+    void bindPlayer(Player* player);
     Player* getPlayer();
     sf::View* getView();
     void bindView(sf::View*);
@@ -28,15 +28,13 @@ public:
     std::vector<Shot*> playerFire();
     void reloadWeapon();
     void isSprinting();
-protected:
 
 private:
     sf::Vector2f inputVector_;
     Player* player_;
     sf::View* view_;
     sf::Clock clock_;
-    float sqrt2{1.4142135};
-
+    float sqrt2 = 1.4142135;
 };
 
 #endif // CONTROLLER_H

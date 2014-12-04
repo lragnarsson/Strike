@@ -2,7 +2,7 @@
 # Makefile for Strike, GNU GCC (g++)
 #
 
-CCC = g++
+CCC = gccfilter -c -a g++
 
 SRC = src
 TINY = libraries/tinyxml
@@ -12,11 +12,11 @@ CCFLAGS = -I$(SRC) -std=c++11 -Wpedantic -Wall -Wextra #-fpermissive
 LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -ltinyxml
 
 # Objektkodsmoduler som ingår i den kompletta kalkylatorn.
-OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o Shot.o Team.o Weapon.o main.o
+OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o Shot.o Team.o Weapon.o Strike.o
 
 # Huvudmål - skapas med kommandot 'make' eller 'make kalkylator'.
-startClient: $(OBJECTS) makefile
-	$(CCC) $(CCFLAGS) -o startClient $(OBJECTS) $(LIBFLAGS)
+strike: $(OBJECTS) makefile
+	$(CCC) $(CCFLAGS) -o strike $(OBJECTS) $(LIBFLAGS)
 
 # Delmål (flaggan -c avbryter innan länkning, objektkodsfil erhålls)
 Client.o: $(SRC)/Client.h $(SRC)/Client.cpp
@@ -28,8 +28,8 @@ Controller.o: $(SRC)/Controller.h $(SRC)/Controller.cpp
 GameState.o: $(SRC)/GameState.h $(SRC)/GameState.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/GameState.cpp
 
-main.o: $(SRC)/main.cpp
-	$(CCC) $(CCFLAGS) -c $(SRC)/main.cpp
+Strike.o: $(SRC)/Strike.cpp
+	$(CCC) $(CCFLAGS) -c $(SRC)/Strike.cpp
 
 Map.o: $(SRC)/Map.h $(SRC)/Map.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/Map.cpp
