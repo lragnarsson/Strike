@@ -54,7 +54,7 @@ void Player::reloadWeapon() {
 
 std::vector<Shot*> Player::fire() {
   return weapon_->fire(clientID_,
-                       getPosition() + aimVector_ * (PhysicalCircle::getRadius() + 5.f),
+                       getPosition() + aimVector_ * (PhysicalCircle::getRadius() + 1.f),
                        aimVector_);
 }
 

@@ -164,7 +164,7 @@ bool PhysicalCircle::intersectCircle(float radius, LineSegment displacement, sf:
 	if (b >= 0) {
 		float d = a - sqrtf(b/dot(v, v));
 		if (d > 0.0f && d < 1.0f) {
-			centerAfterCollision = displacement.start + d*v;
+                  centerAfterCollision = displacement.start + (d - 0.1f)*v;
 			intersectionPoint = centerAfterCollision + radius*normalize(p - centerAfterCollision);
 			intersectionNormal = normalize(intersectionPoint - center_);
 
@@ -379,7 +379,7 @@ bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf
 				float d = length(t*shiftedLine.direction);
 				if (d < minD) {
 					minD = d;
-					closestCenterAfterCollision = displacement.start + t*shiftedLine.direction;
+					closestCenterAfterCollision = displacement.start + (t-0.1f)*shiftedLine.direction;
 					closestIntersectionPoint = shiftedLine.origin + t*shiftedLine.direction;
 					closestIntersectionNormal = normal;
 				}
@@ -396,7 +396,7 @@ bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf
 				float d = a - sqrtf(b/dot(v, v));
 				if (d > 0.0f && d < 1.0f && d < minD) {
 					minD = d;
-					closestCenterAfterCollision = displacement.start + d*v;
+					closestCenterAfterCollision = displacement.start + (d-0.1f)*v;
 					closestIntersectionPoint = p;
 					closestIntersectionNormal = closestCenterAfterCollision - p;
 				}
@@ -410,7 +410,7 @@ bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf
 				float d = a - sqrtf(b/dot(v, v));
 				if (d > 0.0f && d < 1.0f && d < minD) {
 					minD = d;
-					closestCenterAfterCollision = displacement.start + d*v;
+					closestCenterAfterCollision = displacement.start + (d-0.1f)*v;
 					closestIntersectionPoint = p;
 					closestIntersectionNormal = closestCenterAfterCollision - p;
 				}
@@ -635,13 +635,13 @@ bool PhysicalAABox::intersectCircle(float radius, LineSegment displacement, sf::
 
 	centerAfterCollision = displacement.start + u1*direction;
 	if ( equalf(centerAfterCollision.x, origin.x) )
-		intersectionNormal = sf::Vector2f(-1, 0);
+          intersectionNormal = sf::Vector2f(-1, 0);
 	else if ( equalf(centerAfterCollision.x, origin.x + width) )
-		intersectionNormal = sf::Vector2f(1, 0);
+          intersectionNormal = sf::Vector2f(1, 0);
 	else if ( equalf(centerAfterCollision.y, origin.y) )
-		intersectionNormal = sf::Vector2f(0, -1);
+          intersectionNormal = sf::Vector2f(0, -1);
 	else if ( equalf(centerAfterCollision.y, origin.y + height) )
-		intersectionNormal = sf::Vector2f(0, 1);
+          intersectionNormal = sf::Vector2f(0, 1);
 	intersectionPoint = centerAfterCollision - radius*intersectionNormal;
 
 	return true;

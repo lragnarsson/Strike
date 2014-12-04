@@ -45,7 +45,7 @@ void GameState::addHandledShots(std::vector<Shot*> newShots) {
 
 void GameState::removeOldShots() {
   int elapsed = gameTime_.getElapsedTime().asMilliseconds();
-  auto f = [elapsed](Shot* s){return (elapsed - s->getTimestamp().asMilliseconds() > 5000);};
+  auto f = [elapsed](Shot* s){return (elapsed - s->getTimestamp().asMilliseconds() > 100);};
   handledShots_.erase(std::remove_if(handledShots_.begin(),
                                        handledShots_.end(), f),
                         handledShots_.end());
