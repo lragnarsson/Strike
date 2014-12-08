@@ -15,3 +15,11 @@ Lage: Client 7h, Player 1.5h, Controller 1.5h, Weapon 0.5h, Strike 2h, GameState
 Jesper: PhysicalObject-hierarki 2h, Client 1h, Felsökning och integrering 4h
 Rasmus: Map (xml-parsning) 2h
 Isak: Player 2h
+
+v. 49
+Erik:
+Filip:
+Lage:
+Jesper: Map 1h
+Rasmus:
+Isak:

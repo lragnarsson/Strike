@@ -643,6 +643,7 @@ bool PhysicalAABox::intersectCircle(float radius, LineSegment displacement, sf::
 	else if ( equalf(centerAfterCollision.y, origin.y + height) )
           intersectionNormal = sf::Vector2f(0, 1);
 	intersectionPoint = centerAfterCollision - radius*intersectionNormal;
+	centerAfterCollision = displacement.start + (u1-0.1f)*direction;
 
 	return true;
 }

@@ -106,21 +106,40 @@ void Client::collideMoveVector(sf::Vector2f position,
     float maxDistance = length(moveVector);
     LineSegment ls = LineSegment(position, centerAfterCollision);
     for (auto player : gameState_.getPlayers()) {
-      if (player->intersectCircle(radius, ls, centerAfterCollision, dummy, intersectionNormal))
+        if (player->intersectCircle(radius, ls, centerAfterCollision, dummy, intersectionNormal))
             if (length(centerAfterCollision - position) < maxDistance) {
                 dummy = position + moveVector - centerAfterCollision;
                 tangentMoveVector = dummy - dot(dummy, intersectionNormal) * intersectionNormal;
-                moveVector = centerAfterCollision - position + tangentMoveVector;
-                maxDistance  = length(moveVector);
+                moveVector = centerAfterCollision - position;// + tangentMoveVector;
+                maxDistance = length(moveVector);
             }
     }
     for (auto physObj : gameState_.getPhysicalObjects()) {
-      if (physObj->intersectCircle(radius, ls, centerAfterCollision, dummy, intersectionNormal))
+        if (physObj->intersectCircle(radius, ls, centerAfterCollision, dummy, intersectionNormal))
             if (length(centerAfterCollision - position) < maxDistance) {
                 dummy = position + moveVector - centerAfterCollision;
                 tangentMoveVector = dummy - dot(dummy, intersectionNormal) * intersectionNormal;
-                moveVector = centerAfterCollision - position + tangentMoveVector;
-                maxDistance  = length(moveVector);
+                moveVector = centerAfterCollision - position;// + tangentMoveVector;
+                maxDistance = length(moveVector);
             }
     }
+
+    ls = LineSegment(centerAfterCollision, centerAfterCollision + tangentMoveVector);
+    maxDistance = length(tangentMoveVector);
+    for (auto player : gameState_.getPlayers()) {
+        if (player->intersectCircle(radius, ls, centerAfterCollision, dummy, intersectionNormal))
+            if (length(centerAfterCollision - ls.start) < maxDistance) {
+                tangentMoveVector = centerAfterCollision - ls.start;
+                maxDistance = length(tangentMoveVector);
+            }
+    }
+    for (auto physObj : gameState_.getPhysicalObjects()) {
+        if (physObj->intersectCircle(radius, ls, centerAfterCollision, dummy, intersectionNormal))
+            if (length(centerAfterCollision - ls.start) < maxDistance) {
+                tangentMoveVector = centerAfterCollision - ls.start;
+                maxDistance = length(tangentMoveVector);
+            }
+    }
+
+    moveVector += tangentMoveVector;
 }
