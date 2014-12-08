@@ -22,7 +22,7 @@ class Player: public sf::Sprite, public PhysicalCircle {
 public:
     explicit Player(int ClientID);
     Player() = delete;
-    ~Player() = default;
+    ~Player() noexcept {};
 
     int getClientID() const;
     void setWeapon(Weapon* weapon);

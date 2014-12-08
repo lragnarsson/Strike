@@ -14,7 +14,7 @@ sf::Packet ServerAcceptConnection::asPacket()
     return pkt;
 }
 
-AddPlayer::AddPlayer(sf::Packet packet) : Message(AddPlayer)
+AddPlayer::AddPlayer(sf::Packet packet) : Message(ADD_PLAYER)
 {
     packet >> playerID;
 }

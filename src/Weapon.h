@@ -38,7 +38,7 @@ private:
 class SemiAutomaticWeapon : public Weapon {
 public:
     SemiAutomaticWeapon() = default;
-    ~SemiAutomaticWeapon() = default;
+    ~SemiAutomaticWeapon() noexcept {}
     SemiAutomaticWeapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int reloadTime, int Damage);
     virtual std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) override;
 private:
@@ -48,7 +48,7 @@ private:
 class Shotgun : public SemiAutomaticWeapon {
 public:
     Shotgun() = default;
-    ~Shotgun() = default;
+    ~Shotgun() noexcept {}
     Shotgun(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize, int fireRate, int reloadTime, int Damage, int numberOfBullets);
     std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) override;
 private:

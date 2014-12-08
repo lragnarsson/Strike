@@ -37,26 +37,22 @@ std::vector<Message*> NetworkHandler::getNewMessages()
 }
 
 
-void NetworkHandler::recieveUDPPackets() //OUTDATED
+void NetworkHandler::recieveUDPPackets()
 {
     sf::Packet recievePacket;
     sf::IpAddress remoteIP;
     unsigned short remotePort;
 
-    std::string message;
-
     if (Usocket_.receive(recievePacket, remoteIP, remotePort) == sf::Socket::Done)
     {
-        recievePacket >> message;
-        std::cout << "Fick ett paket innehållande strängen: " << message << "från " << remoteIP.toString() << std::endl;
+        std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << std::endl;
+        messages_.push_back(unpackPacket(recievePacket));
     }
 }
 
 void NetworkHandler::recieveTCPPackets()
 {
     sf::Packet recievePacket;
-
-    std::string message;
 
     for (auto& client : clients_)
     {
