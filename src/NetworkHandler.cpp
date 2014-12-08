@@ -133,7 +133,7 @@ void NetworkHandler::checkForNewTcpConnections()
         newClient.TCPSocket->setBlocking(false);
 
         ServerAcceptConnection sac(newClient.ID);
-        sf::Packet packet = sac.asPacket();
+        sf::Packet packet {sac.asPacket()};
         newClient.TCPSocket->send(packet); //Send SERVER_ACCEPT_CONNECTION
 
         messages_.push_back(new AddPlayer(newClient.ID));
@@ -180,6 +180,10 @@ void NetworkHandler::initServer()
     Usocket_.bind(serverPort_);
 }
 
+void NetworkHandler::initClient()
+{
+    Usocket_.bind(sf::Socket::AnyPort);
+}
 Message* NetworkHandler::unpackPacket(sf::Packet packet)
 {
     int header;

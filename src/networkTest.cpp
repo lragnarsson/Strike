@@ -29,6 +29,12 @@ void client()
                 std::cout << message->header << std::endl;
                 std::cout << static_cast<ConsolePrintString*>(message)->str << std::endl;
             }
+            if (message->header == SERVER_ACCEPT_CONNECTION)
+            {
+                static_cast<ServerAcceptConnection*> (message);
+                ClientNotifyUDPPort cnudpp{message->playerID, nh.Usocket_.getLocalPort()};
+                nh.sendTCPPacket(cnudpp.asPacket(),0);
+            }
         }
 
         sf::sleep(sf::milliseconds(10));
@@ -63,8 +69,6 @@ void server()
         p >> i >> s;
         std::cout << i << " " << s << std::endl;
         nh.broadcastTCPPacket(cps.asPacket());
-
-
     }
 }
 

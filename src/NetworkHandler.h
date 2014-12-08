@@ -17,50 +17,50 @@ Erik Sk√∂ld
 
 class NetworkHandler
 {
-    public:
-        NetworkHandler();
-        NetworkHandler(NetworkHandler&) = delete;
-        ~NetworkHandler();
+public:
+    NetworkHandler();
+    NetworkHandler(NetworkHandler&) = delete;
+    ~NetworkHandler();
 
-        NetworkHandler& operator=(const NetworkHandler& rhs) = delete;
+    NetworkHandler& operator=(const NetworkHandler& rhs) = delete;
 
-        std::vector<Message*> getNewMessages();
-        void recieveUDPPackets();
-        void recieveTCPPackets();
-        void sendUDPPacket(sf::Packet, int);
-        void broadcastUDPPacket(sf::Packet);
-        void sendTCPPacket(sf::Packet, int);
-        void broadcastTCPPacket(sf::Packet);
+    std::vector<Message*> getNewMessages();
+    void recieveUDPPackets();
+    void recieveTCPPackets();
+    void sendUDPPacket(sf::Packet, int);
+    void broadcastUDPPacket(sf::Packet);
+    void sendTCPPacket(sf::Packet, int);
+    void broadcastTCPPacket(sf::Packet);
 
-        void checkForNewTcpConnections();
-        void connectToServer(sf::IpAddress);
-        void initServer();
+    void checkForNewTcpConnections();
+    void connectToServer(sf::IpAddress);
+    void initServer();
+    void initClient();
+    
+    
+    void processInternalMessages();
+    sf::UdpSocket Usocket_; // för test endast
+private:
+    unsigned short serverPort_ = 5060;
 
-        void processInternalMessages();
+    sf::TcpListener listener;
 
-    private:
-        unsigned short serverPort_ = 5060;
+    int clientIDcounter = 1;
 
-        sf::UdpSocket Usocket_;
-        sf::TcpListener listener;
+    struct client_
+    {
+        int ID = -1;
+        unsigned short UDPPort = -1;
+        sf::TcpSocket* TCPSocket;
+    };
 
-        int clientIDcounter = 1;
+    std::vector<client_> clients_;
+    std::vector<Message*> messages_;
+    std::vector<Message*> internalMessages_;
 
-        struct client_
-        {
-            int ID = -1;
-            unsigned short UDPPort = -1;
-            sf::TcpSocket* TCPSocket;
-        };
+    std::map<int, int> playerLatestUpdate_;
 
-        std::vector<client_> clients_;
-        std::vector<Message*> messages_;
-        std::vector<Message*> internalMessages_;
-
-        std::map<int, int> playerLatestUpdate_;
-
-        Message* unpackPacket(sf::Packet);
-
+    Message* unpackPacket(sf::Packet);
 };
 
 #endif // NETWORKHANDLER_H
