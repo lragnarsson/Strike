@@ -27,8 +27,10 @@ class NetworkHandler
         std::vector<Message*> getNewMessages();
         void recieveUDPPackets();
         void recieveTCPPackets();
-        void sendUDPPacket(sf::Packet);
-        void sendTCPPacket(sf::Packet);
+        void sendUDPPacket(sf::Packet, int);
+        void broadcastUDPPacket(sf::Packet);
+        void sendTCPPacket(sf::Packet, int);
+        void broadcastTCPPacket(sf::Packet);
 
         void checkForNewTcpConnections();
         void connectToServer(sf::IpAddress);

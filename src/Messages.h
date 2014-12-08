@@ -27,7 +27,7 @@ public:
 
     ServerAcceptConnection() : Message(SERVER_ACCEPT_CONNECTION) {}
     ServerAcceptConnection(sf::Packet);
-    ServerAcceptConnection(int pID) : Message(CONSOLE_PRINT_STRING), playerID(pID) {}
+    ServerAcceptConnection(int pID) : Message(SERVER_ACCEPT_CONNECTION), playerID(pID) {}
 
     sf::Packet asPacket();
 };

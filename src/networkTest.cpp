@@ -13,6 +13,7 @@ void client()
 {
     std::vector<sf::Packet> recievedPackets_;
     std::vector<Message*> recievedMessages_;
+    //sf::IpAddress addr("130.236.227.231");
     nh.connectToServer(sf::IpAddress::getLocalAddress());
     while(true)
     {
@@ -30,7 +31,7 @@ void client()
             }
         }
 
-        sf::sleep(sf::milliseconds(1000));
+        sf::sleep(sf::milliseconds(10));
 
     /*
         if (recievedMessages_.size() > 0)
@@ -61,7 +62,7 @@ void server()
         std::string s;
         p >> i >> s;
         std::cout << i << " " << s << std::endl;
-        nh.sendTCPPacket(cps.asPacket());
+        nh.broadcastTCPPacket(cps.asPacket());
 
 
     }
@@ -79,7 +80,7 @@ void testMessages()
 int main()
 {
     //testMessages();
-    //client();
-    server();
+    client();
+    //server();
 }
 

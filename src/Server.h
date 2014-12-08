@@ -17,27 +17,35 @@
 #include "Controller.h"
 #include "Team.h"
 #include "Weapon.h"
+#include "NetworkHandler.h"
 
 
 
-/*  Ã„rver frÃ¥n Game och skapas fÃ¶r att starta en server som klienter kan ansluta
- *  till. Server skiljer sig frÃ¥n Client dÃ¥ den till exempel inte behÃ¶ver rita
- *  nÃ¥gon spelgrafik. Interaktionen med NetworkHandler-objektet kommer ocksÃ¥ att
+/*  Ärver från Game och skapas för att starta en server som klienter kan ansluta
+ *  till. Server skiljer sig från Client då den till exempel inte behöver rita
+ *  någon spelgrafik. Interaktionen med NetworkHandler-objektet kommer också att
  *  vara lite annolunda.
  */
 
 class Server: public Game{
 public:
     Server() = default;
-    ~Server();
-    
+    ~Server() = default;
+
     Server(const Server&) = delete;         // borttagen kopieringskonstruktor
     Server& operator=(const Server&) = delete; // borttagen kopieringstilldelning
-    
+
     void run() override;
     void readNetwork() override;
     void writeNetwork() override;
     void handleGameLogic() override;
+    void handleCollisions() override;
+
+    void acceptConnections();
+
+private:
+    NetworkHandler nh_;
+    std::vector<Messages*> recievedMessages_;
 };
 
 #endif /* defined(__Strike__Server__) */

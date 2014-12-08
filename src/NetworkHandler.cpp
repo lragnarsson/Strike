@@ -59,18 +59,47 @@ void NetworkHandler::recieveTCPPackets()
         if (client.TCPSocket->receive(recievePacket) == sf::Socket::Done)
         {
             std::cout << "Recieved one TCP packet from: " << client.TCPSocket->getRemoteAddress().toString() << std::endl;
+            Message* m = unpackPacket(recievePacket);
+            //TODO sort internal
             messages_.push_back(unpackPacket(recievePacket));
         }
     }
 }
 
 
-void NetworkHandler::sendUDPPacket(sf::Packet packet)
+void NetworkHandler::sendUDPPacket(sf::Packet data, int clientID)
 {
+    for (auto& client : clients_)
+    {
+        if (client.ID == clientID)
+        {
+            Usocket_.send(data, client.TCPSocket->getRemoteAddress(), client.TCPSocket->getRemotePort());
+        }
 
+    }
 }
 
-void NetworkHandler::sendTCPPacket(sf::Packet data)
+void NetworkHandler::broadcastUDPPacket(sf::Packet data)
+{
+    for (auto& client : clients_)
+    {
+       Usocket_.send(data, client.TCPSocket->getRemoteAddress(), client.TCPSocket->getRemotePort());
+    }
+}
+
+void NetworkHandler::sendTCPPacket(sf::Packet data, int clientID)
+{
+    for (auto& client : clients_)
+    {
+        if (client.ID == clientID)
+        {
+            client.TCPSocket->send(data);
+        }
+
+    }
+}
+
+void NetworkHandler::broadcastTCPPacket(sf::Packet data)
 {
     for (auto& client : clients_)
     {
@@ -87,15 +116,18 @@ void NetworkHandler::checkForNewTcpConnections()
     }
     else
     {
-        //skicka accept m. playerID
-        //skicka "skapaspelareobjekt"
-        newConn->setBlocking(false);
-
         std::cout << "Ny klient ansluten! Ip: " << newConn->getRemoteAddress() << " Port: " << newConn->getRemotePort() << std::endl;
 
         client_ newClient;
         newClient.ID = clientIDcounter++;
         newClient.TCPSocket = newConn;
+
+        newClient.TCPSocket->setBlocking(false);
+
+        ServerAcceptConnection sac(newClient.ID);
+        newClient.TCPSocket->send(sac.asPacket(); //Send SERVER_ACCEPT_CONNECTION
+
+        messages_.push_back(new AddPlayer(newClient.ID));
 
         clients_.push_back(std::move(newClient));
 
