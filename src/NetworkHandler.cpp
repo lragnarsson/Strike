@@ -62,13 +62,15 @@ void NetworkHandler::recieveTCPPackets()
             std::cout << "Recieved one TCP packet from: " << client.TCPSocket->getRemoteAddress().toString() << std::endl;
 
             Message* m = unpackPacket(recievePacket);
-
+            std::cout << m->header << std::endl;
             if (m->header < INTERNAL_MESSAGE_LIMIT)
             {
+                std::cout << "was internal message" << std::endl;
                 internalMessages_.push_back(m);
             }
             else
             {
+                std::cout << "was normal message" << std::endl;
                 messages_.push_back(m);
             }
         }
@@ -116,7 +118,7 @@ void NetworkHandler::broadcastTCPPacket(sf::Packet data)
     }
 }
 
-void NetworkHandler::checkForNewTcpConnections()
+void NetworkHandler::checkForNewTcpConnections() //Server only
 {
     sf::TcpSocket*  newConn = new sf::TcpSocket();
     if (listener.accept(*newConn) != sf::Socket::Done)
@@ -185,6 +187,19 @@ void NetworkHandler::initClient()
 {
     Usocket_.bind(sf::Socket::AnyPort);
 }
+
+void NetworkHandler::initRemotePlayers() //Server only
+{
+    AddPlayer ap;
+
+    for (auto& client : clients_)
+        {
+            ap.playerID = client.ID;
+            broadcastTCPPacket(ap.asPacket());
+        }
+
+}
+
 Message* NetworkHandler::unpackPacket(sf::Packet packet)
 {
     int header;
@@ -226,12 +241,14 @@ void NetworkHandler::processInternalMessages()
             {
             case CLIENT_NOTIFY_UDP_PORT:
                 {
+                    std::cout << "Found CLIENT_NOTIFY_UDP_PORT message" << std::endl;
                     for (auto& client : clients_)
                     {
                         if (client.ID == static_cast<ClientNotifyUDPPort*>(internalMessage)->playerID)
                         {
                             std::cout << "Updated player " << static_cast<ClientNotifyUDPPort*>(internalMessage)->playerID <<
                                 ":s UDP port to " << static_cast<ClientNotifyUDPPort*>(internalMessage)->port << std::endl;
+
                             client.UDPPort = static_cast<ClientNotifyUDPPort*>(internalMessage)->port;
                             break;
                         }
@@ -242,6 +259,8 @@ void NetworkHandler::processInternalMessages()
             }
 
         }
+
+        internalMessages_.clear();
 }
 
 

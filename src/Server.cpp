@@ -18,7 +18,7 @@ void Server::run(){
 
     nh_.initServer();
     acceptConnections(); //Waits until user presses enter
-
+    nh_.initRemotePlayers();
 
     std::cout << "Startar server" << std::endl;
 }
