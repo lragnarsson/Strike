@@ -13,6 +13,7 @@ Erik Sköld
 
 #include <iostream>
 #include <string>
+#include <exception>
 
 NetworkHandler::NetworkHandler()
 {
@@ -210,6 +211,10 @@ Message* NetworkHandler::unpackPacket(sf::Packet packet)
                 return new ConsolePrintString{packet};
                 break;
             }
+        default:
+        {
+            throw std::exception();
+        }
     }
 }
 

@@ -13,8 +13,10 @@ void client()
 {
     std::vector<sf::Packet> recievedPackets_;
     std::vector<Message*> recievedMessages_;
-    //sf::IpAddress addr("130.236.227.231");
-    nh.connectToServer(sf::IpAddress::getLocalAddress());
+    sf::IpAddress addr("130.236.210.203");
+    nh.initClient();
+    nh.connectToServer(addr);
+    
     while(true)
     {
         nh.recieveTCPPackets();
@@ -31,9 +33,15 @@ void client()
             }
             if (message->header == SERVER_ACCEPT_CONNECTION)
             {
-                static_cast<ServerAcceptConnection*> (message);
-                ClientNotifyUDPPort cnudpp{message->playerID, nh.Usocket_.getLocalPort()};
-                nh.sendTCPPacket(cnudpp.asPacket(),0);
+                // här måste detta meddelandes playerID sparas till serverobjektet
+                ClientNotifyUDPPort cnudpp{static_cast<ServerAcceptConnection*>(message)->playerID, nh.Usocket_.getLocalPort()};
+                nh.sendTCPPacket(cnudpp.asPacket(), 0);
+                std::cout << "Recieved server_accept_connection and returned ClientNotifyUDPPort. \n"
+                << "playerID, localPort: " << static_cast<ServerAcceptConnection*>(message)->playerID << ", " << nh.Usocket_.getLocalPort() << std::endl;
+            }
+            if (message->header == ADD_PLAYER)
+            {
+                std::cout << "Add player with id: " << static_cast<AddPlayer*>(message)->playerID << "\n";
             }
         }
 
@@ -76,7 +84,7 @@ void testMessages()
 {
     ConsolePrintString* m1 = new ConsolePrintString();
     m1->str = "Test";
-    std::cout << "Paket av typ: " << m1->header << "med innehÂll: " << m1->str << std::endl;
+    std::cout << "Paket av typ: " << m1->header << "med innehåll: " << m1->str << std::endl;
     delete m1;
 }
 

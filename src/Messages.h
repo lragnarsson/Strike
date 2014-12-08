@@ -36,7 +36,6 @@ class AddPlayer : public Message
 {
 public:
     int playerID;
-
     AddPlayer() : Message(ADD_PLAYER) {}
     AddPlayer(sf::Packet);
     AddPlayer(int pID) : Message(ADD_PLAYER), playerID(pID) {}
@@ -52,7 +51,7 @@ public:
 
     ClientNotifyUDPPort() : Message(CLIENT_NOTIFY_UDP_PORT) {}
     ClientNotifyUDPPort(sf::Packet);
-    ClientNotifyUDPPort(int pID, unsigned short prt) : Message(CONSOLE_PRINT_STRING), playerID(pID), port(prt)  {}
+    ClientNotifyUDPPort(int pID, unsigned short prt) : Message(CLIENT_NOTIFY_UDP_PORT), playerID(pID), port(prt)  {}
 
     sf::Packet asPacket();
 };
