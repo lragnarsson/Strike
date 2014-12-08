@@ -36,10 +36,13 @@ public:
     void connectToServer(sf::IpAddress);
     void initServer();
     void initClient();
-    
-    
+
+    void initRemotePlayers();
+
     void processInternalMessages();
+
     sf::UdpSocket Usocket_; // fšr test endast
+
 private:
     unsigned short serverPort_ = 5060;
 
