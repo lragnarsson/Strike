@@ -1,8 +1,8 @@
 /***************************************
-NetworkHandler - Klass för att hålla koll på anslutna klienter och att skicka och ta emot data.
+NetworkHandler - Klass fÃ¶r att hÃ¥lla koll pÃ¥ anslutna klienter och att skicka och ta emot data.
 
 Skriven av:
-Erik Sköld
+Erik SkÃ¶ld
 ***************************************/
 
 #include <SFML/Network.hpp>
@@ -59,9 +59,17 @@ void NetworkHandler::recieveTCPPackets()
         if (client.TCPSocket->receive(recievePacket) == sf::Socket::Done)
         {
             std::cout << "Recieved one TCP packet from: " << client.TCPSocket->getRemoteAddress().toString() << std::endl;
+
             Message* m = unpackPacket(recievePacket);
-            //TODO sort internal
-            messages_.push_back(unpackPacket(recievePacket));
+
+            if (m->header < INTERNAL_MESSAGE_LIMIT)
+            {
+                internalMessages_.push_back(m);
+            }
+            else
+            {
+                messages_.push_back(m);
+            }
         }
     }
 }
@@ -125,7 +133,8 @@ void NetworkHandler::checkForNewTcpConnections()
         newClient.TCPSocket->setBlocking(false);
 
         ServerAcceptConnection sac(newClient.ID);
-        newClient.TCPSocket->send(sac.asPacket(); //Send SERVER_ACCEPT_CONNECTION
+        sf::Packet packet = sac.asPacket();
+        newClient.TCPSocket->send(packet); //Send SERVER_ACCEPT_CONNECTION
 
         messages_.push_back(new AddPlayer(newClient.ID));
 
@@ -178,26 +187,52 @@ Message* NetworkHandler::unpackPacket(sf::Packet packet)
     switch(header)
     {
         case CLIENT_NOTIFY_UDP_PORT:
-        {
-            return new ClientNotifyUDPPort(packet);
-            break;
-        }
+            {
+                return new ClientNotifyUDPPort(packet);
+                break;
+            }
         case SERVER_ACCEPT_CONNECTION:
-        {
-            return new ServerAcceptConnection(packet);
-            break;
-        }
+            {
+                return new ServerAcceptConnection(packet);
+                break;
+            }
         case ADD_PLAYER:
-        {
-            return new AddPlayer(packet);
-            break;
-        }
+            {
+                return new AddPlayer(packet);
+                break;
+            }
         case CONSOLE_PRINT_STRING:
-        {
-            return new ConsolePrintString{packet};
-            break;
-        }
+            {
+                return new ConsolePrintString{packet};
+                break;
+            }
     }
+}
+
+void NetworkHandler::processInternalMessages()
+{
+    for (Message* internalMessage : internalMessages_)
+        {
+            switch(internalMessage->header)
+            {
+            case CLIENT_NOTIFY_UDP_PORT:
+                {
+                    for (auto& client : clients_)
+                    {
+                        if (client.ID == static_cast<ClientNotifyUDPPort*>(internalMessage)->playerID)
+                        {
+                            std::cout << "Updated player " << static_cast<ClientNotifyUDPPort*>(internalMessage)->playerID <<
+                                ":s UDP port to " << static_cast<ClientNotifyUDPPort*>(internalMessage)->port << std::endl;
+                            client.UDPPort = static_cast<ClientNotifyUDPPort*>(internalMessage)->port;
+                            break;
+                        }
+                    }
+
+                break;
+                }
+            }
+
+        }
 }
 
 

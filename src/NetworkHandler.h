@@ -1,8 +1,8 @@
 /***************************************
-NetworkHandler - Klass för att hålla koll på anslutna klienter och att skicka och ta emot data.
+NetworkHandler - Klass fÃ¶r att hÃ¥lla koll pÃ¥ anslutna klienter och att skicka och ta emot data.
 
 Skriven av:
-Erik Sköld
+Erik SkÃ¶ld
 ***************************************/
 
 #ifndef NETWORKHANDLER_H
@@ -36,6 +36,8 @@ class NetworkHandler
         void connectToServer(sf::IpAddress);
         void initServer();
 
+        void processInternalMessages();
+
     private:
         unsigned short serverPort_ = 5060;
 
@@ -58,6 +60,7 @@ class NetworkHandler
         std::map<int, int> playerLatestUpdate_;
 
         Message* unpackPacket(sf::Packet);
+
 };
 
 #endif // NETWORKHANDLER_H

@@ -24,15 +24,15 @@ void Server::run(){
 }
 
 void Server::readNetwork(){
-    // ingen ˆverraskning direkt att det va tomt h‰r med.
+    // ingen √∂verraskning direkt att det va tomt h√§r med.
 }
 
 void Server::writeNetwork(){
-    // Men ‰ndÂ r‰tt chill att Isak gjorde skalet iaf.
+    // Men √§nd√• r√§tt chill att Isak gjorde skalet iaf.
 }
 
 void Server::handleGameLogic(){
-    // fan Isak ‰r ju b‰st typ.
+    // fan Isak √§r ju b√§st typ.
 }
 
 void Server::handleCollisions(){
@@ -45,6 +45,7 @@ void Server::acceptConnections(){
     {
         nh_.checkForNewTcpConnections();
         nh_.recieveTCPPackets();
+        nh_.processInternalMessages();
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
             break;
