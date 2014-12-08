@@ -10,8 +10,8 @@ Isak: Player 3h, Controller 2h, GameState 1h, Team 0.5h, Shot 2h
 
 v. 49
 Erik: NetworkHandler (och dylikt) 7h
-Filip: Player 2h
-Lage: Client 7h, Player 1,5h, Controller 1,5h, Weapon 0,5h, Strike 2h, GameState 1,5h
-Jesper: PhysicalObject-hierarki 1h
+Filip: Player 2h, Weapon 3h, Felsökning och integrering 4h, Bomb 1h
+Lage: Client 7h, Player 1.5h, Controller 1.5h, Weapon 0.5h, Strike 2h, GameState 1.5h
+Jesper: PhysicalObject-hierarki 2h, Client 1h, Felsökning och integrering 4h
 Rasmus: Map (xml-parsning) 2h
 Isak: Player 2h
