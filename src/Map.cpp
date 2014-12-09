@@ -80,8 +80,10 @@ void Map::load(std::string filename){
         }
         else if(elemName == "objectgroup"){
             std::string whatobject = elem->Attribute("name");
+            std::cout << whatobject << std::endl;
 
-            if(whatobject == "Collison"){
+            if(whatobject == "Collision"){
+                std::cout << "collisionsobjekt finns!" << std::endl;
                 for (TiXmlElement* elem1 = elem->FirstChildElement(); elem1 != nullptr; elem1 = elem1->NextSiblingElement()){
                     std::string elemName1 = elem1->Value();
                     if (TiXmlElement* objTest = elem1->FirstChildElement()){ ///Polygon or circle
