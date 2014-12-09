@@ -12,7 +12,7 @@ CCFLAGS = -I$(SRC) -std=c++11 -Wpedantic -Wall -Wextra #-fpermissive
 LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -ltinyxml
 
 # Objektkodsmoduler som ingår i den kompletta kalkylatorn.
-OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o Shot.o Team.o Weapon.o Decal.o Strike.o
+OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o NetworkHandler.o Messages.o Shot.o Team.o Weapon.o Decal.o Strike.o
 
 # Huvudmål - skapas med kommandot 'make' eller 'make kalkylator'.
 strike: $(OBJECTS) makefile
@@ -42,6 +42,12 @@ ResourcePath.o: $(SRC)/ResourcePath.h $(SRC)/ResourcePath.cpp
 
 Server.o: $(SRC)/Server.h $(SRC)/Server.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/Server.cpp
+
+NetworkHandler.o: $(SRC)/NetworkHandler.h $(SRC)/NetworkHandler.cpp
+	$(CCC) $(CCFLAGS) -c $(SRC)/NetworkHandler.cpp
+
+Messages.o: $(SRC)/Messages.h $(SRC)/Messages.cpp
+	$(CCC) $(CCFLAGS) -c $(SRC)/Messages.cpp
 
 Shot.o: $(SRC)/Shot.h $(SRC)/Shot.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/Shot.cpp
