@@ -5,13 +5,13 @@
 #include <string>
 #include "./GeomUtils.h"
 
-Client::Client() : Game(),
-                   renderWindow_(sf::VideoMode(1280, 720), "Strike") {
+Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     renderWindow_.setFramerateLimit(120);
     renderWindow_.setMouseCursorVisible(false);
-    Player* player = new Player(1);
-    player->setWeapon(new Shotgun(30, 180, 30, 50, 500, 70, 8));
+    Player* player = new Player(clientID_);
+    player->setWeapon(new Weapon(30, 180, 30, 50, 500, 70, 100.f));
     gameState_.addPlayer(player);
+    gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
 
     Player* p2 = new Player(2);
@@ -96,7 +96,7 @@ void Client::handleShots() {
                     }
                 }
             for (auto player : gameState_.getPlayers()) {
-                if (player->intersectRay(shot->getRay(), centerAfterCollision))
+                if (player->getClientID() != clientID_ && player->intersectRay(shot->getRay(), centerAfterCollision))
                     if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
                         shot->setEndPoint(centerAfterCollision);
                         maxDistance = length(centerAfterCollision - shot->getOrigin());

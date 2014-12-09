@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "Shot.h"
 #include "PhysicalObject.h"
+#include "./Decal.h"
 #include <vector>
 #include "Map.h"
 
@@ -29,6 +30,10 @@ public:
     std::vector<Shot*> takeUnhandledShots();
     void removeOldShots();
     std::vector<Player*> getPlayers();
+    void addHUDElement(sf::Drawable* HUD);
+    void addDecal(Decal decal);
+    void addAnimatedDecal(AnimatedDecal decal);
+    void handleDecals();
 
 private:
     std::vector<Player*> players_;
@@ -39,6 +44,11 @@ private:
     std::vector<Shot*> unhandledShots_;
     std::vector<Shot*> handledShots_;  // shots here have both timestamp and endpoint.
     sf::Clock gameTime_;
+    std::vector<sf::Drawable*> HUDElements_;
+    std::vector<Decal> unhandledDecals_;
+    std::vector<AnimatedDecal> animatedDecals_;
+    sf::Texture boomtexture;
+        
 };
 
 #endif /* defined(__Strike__GameState__) */

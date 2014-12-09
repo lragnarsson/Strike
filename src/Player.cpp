@@ -15,15 +15,18 @@ int sgn(float x) {
 }
 
 Player::Player(int ClientID)
-    : PhysicalCircle(getPosition(), 32.0f), clientID_(ClientID) {
+    : PhysicalCircle(getPosition(), 25.0f), clientID_(ClientID), crosshair_(1.f) {
     if (!texture_.loadFromFile(resourcePath("res/images/") + "cage.png"))
         throw std::exception();
-
     // texture for playerSprite
     texture_.setSmooth(true);
     setTexture(texture_);
     setScale(sf::Vector2f(0.1f, 0.1f));
     setOrigin(177.f, 245.f);
+    crosshair_.setFillColor(sf::Color::White);
+    crosshair_.setOrigin(sf::Vector2f(2.5f, 2.5f));
+    crosshair_.setOutlineThickness(0.5f);
+    crosshair_.setOutlineColor(sf::Color::Black);
 }
 
 void Player::setWeapon(Weapon* newWeapon) {
@@ -91,9 +94,10 @@ void Player::calculateMoveVector(const sf::Vector2f& inputVector,
 
 void Player::handleRotation(const sf::Vector2f& aimVector) {
     aimVector_ = aimVector;
-    float angle = (aimVector_.y > 0) ? radConversion_ * acos(aimVector_.x)
-          : 360 - radConversion_ * acos(aimVector_.x);
+    float angle = (aimVector_.y > 0) ? radConversion_ * acosf(aimVector_.x)
+          : 360 - radConversion_ * acosf(aimVector_.x);
     setRotation(angle);
+    crosshair_.setPosition(getPosition() + aimVector_ * weapon_->getCHDistance());
 }
 
 void Player::move() {
@@ -101,3 +105,6 @@ void Player::move() {
     PhysicalCircle::setCenter(getPosition());
 }
 
+sf::CircleShape* Player::getCrosshair() {
+    return &crosshair_;
+}

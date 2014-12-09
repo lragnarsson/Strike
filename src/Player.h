@@ -36,8 +36,11 @@ public:
     void reloadWeapon();
     void setSpeedMultiplier(float speed);
     void hasNotFired();
+
     void lastSeenNow();
     int getLastSeen();
+
+    sf::CircleShape* getCrosshair();
 
 private:
     unsigned int health_ = 100;
@@ -52,7 +55,8 @@ private:
     sf::Vector2f moveVector_;
     sf::Vector2f curSpeed_;
     sf::Vector2f aimVector_;
-    float radConversion_ = 57.295779f;
+    float radConversion_ = 57.29577951308232f;
+    sf::CircleShape crosshair_;
 };
 
 #endif /* defined(__Strike__Player__) */

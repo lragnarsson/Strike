@@ -77,11 +77,8 @@ void Controller::playerMove() {
 void Controller::setPlayerRotation(const sf::RenderWindow& window) {
     auto aimVector = window.mapPixelToCoords(sf::Mouse::getPosition()) -
                      player_->getPosition();
-    aimVector /= (sqrtf(pow(aimVector.x, 2) + pow(aimVector.y, 2)));
+    aimVector = normalize(aimVector);
     player_->handleRotation(aimVector);
-    auto mousePos = window.mapCoordsToPixel(aimVector * 75.f +
-                                            player_->getPosition());
-    sf::Mouse::setPosition(mousePos);
 }
 
 void Controller::updateView() {

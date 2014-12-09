@@ -41,7 +41,13 @@ void GameState::addHandledShots(std::vector<Shot*> newShots) {
 
 void GameState::removeOldShots() {
   int elapsed = gameTime_.getElapsedTime().asMilliseconds();
-  auto f = [elapsed](Shot* s){return (elapsed - s->getTimestamp().asMilliseconds() > 100);};
+  auto f = [elapsed](Shot* s) {
+      bool tooOld = (elapsed - s->getTimestamp().asMilliseconds() > 10000);
+      if (tooOld)
+          delete s;
+      return tooOld;
+  };
+
   handledShots_.erase(std::remove_if(handledShots_.begin(),
                                        handledShots_.end(), f),
                         handledShots_.end());
@@ -59,6 +65,14 @@ void GameState::draw(sf::RenderWindow* window) {
     for (auto shot : handledShots_) {
         window->draw(*shot);
     }
+    for (auto decal : animatedDecals_) {
+        decal.animate();
+        window->draw(decal);
+    }
+    for (auto HUDElement : HUDElements_) {
+        window->draw(*HUDElement);
+    }
+    handleDecals();
 }
 
 std::vector<PhysicalObject*> GameState::getPhysicalObjects() {
@@ -74,3 +88,26 @@ std::vector<Shot*> GameState::takeUnhandledShots() {
 std::vector<Player*> GameState::getPlayers() {
     return players_;
 }
+
+void GameState::addHUDElement(sf::Drawable* HUD) {
+    HUDElements_.push_back(HUD);
+}
+
+void GameState::addDecal(Decal decal) {
+    unhandledDecals_.push_back(decal);
+}
+
+void GameState::addAnimatedDecal(AnimatedDecal decal) {
+    animatedDecals_.push_back(decal);
+}
+
+void GameState::handleDecals() {
+  for (auto decal : animatedDecals_) {
+      if (decal.animationComplete())
+          unhandledDecals_.push_back(decal);
+  }
+  for (auto decal : unhandledDecals_) {
+    //map_.getRenderTexture->draw(decal);
+  }
+}
+

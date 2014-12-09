@@ -2,7 +2,7 @@
 # Makefile for Strike, GNU GCC (g++)
 #
 
-CCC = g++
+CCC = gccfilter -c -a g++
 
 SRC = src
 TINY = libraries/tinyxml
@@ -12,7 +12,7 @@ CCFLAGS = -I$(SRC) -std=c++11 -Wpedantic -Wall -Wextra #-fpermissive
 LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -ltinyxml
 
 # Objektkodsmoduler som ingår i den kompletta kalkylatorn.
-OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o Shot.o Team.o Weapon.o Strike.o
+OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o Shot.o Team.o Weapon.o Decal.o Strike.o
 
 # Huvudmål - skapas med kommandot 'make' eller 'make kalkylator'.
 strike: $(OBJECTS) makefile
@@ -55,5 +55,7 @@ Weapon.o: $(SRC)/Weapon.h $(SRC)/Weapon.cpp
 PhysicalObject.o: $(SRC)/PhysicalObject.h $(SRC)/PhysicalObject.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/PhysicalObject.cpp
 
+Decal.o: $(SRC)/Decal.h $(SRC)/Decal.cpp
+	$(CCC) $(CCFLAGS) -c $(SRC)/Decal.cpp
 clean:
 	@ \rm -rf *.o *.gch core

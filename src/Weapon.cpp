@@ -11,10 +11,10 @@
 
 Weapon::Weapon(unsigned int newAmmo, unsigned int newAdditionalAmmo,
                unsigned int newMagazineSize, int newFireRate,
-               int newReloadTime, int newDamage)
+               int newReloadTime, int newDamage, float newCHDistance)
     : ammo_(newAmmo), additionalAmmo_(newAdditionalAmmo),
       magazineSize_(newMagazineSize), fireRate_(newFireRate),
-      reloadTime_(newReloadTime), damage_(newDamage) {}
+      reloadTime_(newReloadTime), damage_(newDamage), CHDistance_(newCHDistance) {}
 
 void Weapon::reloadWeapon() {
     if (ammo_ != magazineSize_) {
@@ -60,10 +60,14 @@ void Weapon::hasNotFired() {
     hasFired_ = false;
 }
 
+float Weapon::getCHDistance() {
+    return CHDistance_;
+}
+
 SemiAutomaticWeapon::SemiAutomaticWeapon(unsigned int ammo, unsigned int additionalAmmo,
                                          unsigned int magazineSize, int fireRate,
-                                         int reloadTime, int Damage)
-    : Weapon{ammo, additionalAmmo, magazineSize, fireRate, reloadTime, Damage} {}
+                                         int reloadTime, int Damage, float CHDistance)
+    : Weapon{ammo, additionalAmmo, magazineSize, fireRate, reloadTime, Damage, CHDistance} {}
 
 std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& pos,
                                              const sf::Vector2f& dir) {
@@ -87,8 +91,8 @@ std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& p
 }
 
 Shotgun::Shotgun(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
-                 int fireRate, int reloadTime, int Damage, int numberOfBullets)
-    : SemiAutomaticWeapon{ammo, additionalAmmo, magazineSize, fireRate, reloadTime, Damage},numberOfBullets_{numberOfBullets} {}
+                 int fireRate, int reloadTime, int Damage, int numberOfBullets, float CHDistance)
+    : SemiAutomaticWeapon{ammo, additionalAmmo, magazineSize, fireRate, reloadTime, Damage, CHDistance},numberOfBullets_{numberOfBullets} {}
 
 std::vector<Shot*> Shotgun::fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) {
     std::vector<Shot*> shotVector;
