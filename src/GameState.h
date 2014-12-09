@@ -14,7 +14,7 @@
 #include "Shot.h"
 #include "PhysicalObject.h"
 #include <vector>
-//#include "Map.h"
+#include "Map.h"
 
 class GameState{
 public:
@@ -34,7 +34,7 @@ private:
     std::vector<Player*> players_;
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
-    //Map map_;
+    Map map_;
     std::vector<PhysicalObject*> physicalObjects_;
     std::vector<Shot*> unhandledShots_;
     std::vector<Shot*> handledShots_;  // shots here have both timestamp and endpoint.

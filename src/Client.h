@@ -51,7 +51,6 @@ private:
                            float radius);
     void handleShots();
 
-    GameState gameState_;
     int clientID_;
     std::string clientName_;
     sf::RenderWindow renderWindow_;

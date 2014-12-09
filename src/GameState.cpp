@@ -14,12 +14,7 @@
 
 
 GameState::GameState()  {
-    //Map map_;
-    //map_.load(resourcePath("res/maps/") + "map_test1.xml");
-    if (!mapTexture_.loadFromFile(resourcePath("res/images/") + "boat_lvl.bmp"))
-        throw std::exception();
-    mapSprite_.setTexture(mapTexture_);
-    physicalObjects_.push_back(new PhysicalAABox(sf::Vector2f(200.f, 50.f), 50.f, 300.f));
+    map_.load("map_test1.tmx");
 }
 
 void GameState::addPlayer(Player* playerP) {
@@ -54,7 +49,7 @@ void GameState::removeOldShots() {
 
 void GameState::draw(sf::RenderWindow* window) {
     window->draw(mapSprite_);
-    //map_.draw(window);
+    map_.draw(window);
     for (auto player : players_) {
         if (player->getLastSeen() < 500) {
             player->setColor(sf::Color(255, 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 500, player->getLastSeen()))));
@@ -67,8 +62,7 @@ void GameState::draw(sf::RenderWindow* window) {
 }
 
 std::vector<PhysicalObject*> GameState::getPhysicalObjects() {
-    return physicalObjects_;
-    //return map_.getPhysicalObjects();
+    return map_.getPhysicalObjects();
 }
 
 std::vector<Shot*> GameState::takeUnhandledShots() {

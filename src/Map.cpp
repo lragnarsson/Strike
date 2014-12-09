@@ -14,6 +14,7 @@
 #include <cstring>
 #include <vector>
 #include "ResourcePath.h"
+#include <sstream>
 
 Map::~Map(){
     for(auto pObj : physicalObjects_)
@@ -26,53 +27,33 @@ std::vector<PhysicalObject*> Map::getPhysicalObjects() const {
 std::vector<sf::Vector2f> Map::makePolygonVector(std::string rawVector, float xpos, float ypos){
     std::vector<sf::Vector2f> pointPairVector;
 
-    int tempNum = xpos; /// first iterate will be x-position
+    float tempNum{0};
+    float x{0};
+    float y{0};
+    char c;
+	std::stringstream ss(rawVector);
 
-    for(int i=0; i < rawVector.length(); ++i){
-            char c = rawVector.at(i);
+    while (!ss.eof()){
+		ss >> tempNum; //is now xpos' origin
+		x = xpos + tempNum;
+		ss >> c; //throw away the ","
+		ss >> tempNum; //is now ypos' origin
+		y = ypos + tempNum;
 
-            int x{0};
-            int y{0};
+		sf::Vector2f newPair{x,y};
+        pointPairVector.push_back(newPair);
 
-            if (isdigit(c)){
-
-                int counter;
-                char c1 = c;
-
-                for(counter=0; (!ispunct(c1) && !isspace(c1) && ((counter + i + 1)<rawVector.length())); ++counter){
-                    c1 = rawVector.at(i + counter + 1);
-                }
-                for(int j = 0; j < counter; ++j){
-                    c1 = rawVector.at(i + j);
-                    tempNum += (pow(10, (counter - j - 1))) * (c1 - '0');
-                }
-                if (!(counter == 0))
-                    i += counter - 1;
-            }
-            if (ispunct(c)){
-                x = tempNum;    /// x-point is done
-                tempNum = ypos; /// after a comma it's y-position
-            }
-
-            if ((isspace(c)) || (i == (rawVector.length() - 1)) ){
-                y = tempNum;    ///y-point is done
-                tempNum = xpos;
-            }
-            if (!(x==0) && !(y==0)){
-                sf::Vector2f newPair{static_cast<float>(x),static_cast<float>(y)};
-                pointPairVector.push_back(newPair);
-                x = 0;
-                y = 0;
-            }
-    }
-    return pointPairVector;
+        x = 0;
+        y = 0;
+	}
+	return pointPairVector;
 }
 
 void Map::load(std::string filename){
 
     TiXmlDocument doc;
 
-    if(!doc.LoadFile(filename.c_str())) {
+    if(!doc.LoadFile( (resourcePath("res/maps/") + filename).c_str() )) {
         std::cerr << doc.ErrorDesc() << std::endl;
     }
 
@@ -87,39 +68,46 @@ void Map::load(std::string filename){
     for(TiXmlElement* elem = root->FirstChildElement(); elem != nullptr; elem = elem->NextSiblingElement()){
         std::string elemName = elem->Value();
 
-        if(elemName == "background"){
-            std::string mapfile = elem->Attribute("src");
-            if (!mapTexture_.loadFromFile(resourcePath("res/maps/") + mapfile))
-                std::cerr << "Failed to load background file.";
+        if(elemName == "properties"){
+            TiXmlElement* property = elem->FirstChildElement();
+            std::string mapfile;
+            std::string propertyName = property->Attribute("name");
+            if (propertyName == "background")
+                mapfile = property->Attribute("value");
+            if (!mapTexture_.loadFromFile(resourcePath("res/maps/") + mapfile.c_str()))
+                std::cerr << "Failed to load background file ";
             mapSprite_.setTexture(mapTexture_);
         }
-        else if(elemName == "objectgroup")
-        {
-            for (TiXmlElement* elem1 = elem->FirstChildElement(); elem1 != nullptr; elem1 = elem1->NextSiblingElement()){
-                std::string elemName1 = elem1->Value();
-                if (TiXmlElement* objTest = elem1->FirstChildElement()){ //Polygon or circle
+        else if(elemName == "objectgroup"){
+            std::string whatobject = elem->Attribute("name");
 
-                    std::string polCircle = objTest->Value();
+            if(whatobject == "Collison"){
+                for (TiXmlElement* elem1 = elem->FirstChildElement(); elem1 != nullptr; elem1 = elem1->NextSiblingElement()){
+                    std::string elemName1 = elem1->Value();
+                    if (TiXmlElement* objTest = elem1->FirstChildElement()){ ///Polygon or circle
 
-                    if (polCircle == "ellipse"){ ///in this case it's a circle
-                        std::string xCoord = elem1->Attribute("x");
-                        std::string yCoord = elem1->Attribute("y");
-                        std::string radius = elem1->Attribute("width");
-                        float xCoordf = stof(xCoord);
-                        float yCoordf = stof(yCoord);
-                        float radiusf = stof(radius) / 2.0f;
-                        physicalObjects_.push_back (new PhysicalCircle(sf::Vector2f(xCoordf, yCoordf), radiusf));
+                        std::string polCircle = objTest->Value();
+
+                        if (polCircle == "ellipse"){ ///in this case it's a circle
+                            std::string xCoord = elem1->Attribute("x");
+                            std::string yCoord = elem1->Attribute("y");
+                            std::string radius = elem1->Attribute("width");
+                            float radiusf = stof(radius) / 2.0f;
+                            float xCoordf = stof(xCoord) + radiusf;
+                            float yCoordf = stof(yCoord) + radiusf;
+
+                            physicalObjects_.push_back (new PhysicalCircle(sf::Vector2f(xCoordf, yCoordf), radiusf));
+                        }
+                        else if ( (polCircle == "polygon") || (polCircle == "polyline")){
+                            std::string originX = elem1->Attribute("x");
+                            std::string originY = elem1->Attribute("y");
+                            float originXf = stof(originX);
+                            float originYf = stof(originY);
+                            std::string rawVector = objTest->Attribute("points");
+                            physicalObjects_.push_back (new PhysicalPolygon(makePolygonVector(rawVector, originXf, originYf)));
+                        }
                     }
-                    else if (polCircle == "polygon"){
-                        std::string originX = elem1->Attribute("x");
-                        std::string originY = elem1->Attribute("y");
-                        float originXf = stof(originX);
-                        float originYf = stof(originY);
-                        std::string rawVector = objTest->Attribute("points");
-                        makePolygonVector(rawVector, originXf, originYf);
-                        physicalObjects_.push_back (new PhysicalPolygon(makePolygonVector(rawVector, originXf, originYf)));
-                    }
-                    else{ ///now it must be a box
+                    else{ ///it must now be a box
                         std::string originX = elem1->Attribute("x");
                         std::string originY = elem1->Attribute("y");
                         std::string width   = elem1->Attribute("width");
@@ -139,4 +127,3 @@ void Map::load(std::string filename){
 void Map::draw(sf::RenderWindow* window){
     window->draw(mapSprite_);
 }
-
