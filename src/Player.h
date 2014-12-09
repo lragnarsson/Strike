@@ -36,6 +36,8 @@ public:
     void reloadWeapon();
     void setSpeedMultiplier(float speed);
     void hasNotFired();
+    void lastSeenNow();
+    int getLastSeen();
 
 private:
     unsigned int health_ = 100;
@@ -44,6 +46,7 @@ private:
     float speedMultiplier_ = 1.0f;
     float maxSpeed_ = 100.0f;  // pixels per second
     float acceleration_ = 400.0f;  // pixels per second^2
+    sf::Clock lastSeen;
 
     Weapon* weapon_;
     sf::Vector2f moveVector_;

@@ -45,7 +45,7 @@ public:
 
 private:
     NetworkHandler nh_;
-    std::vector<Messages*> recievedMessages_;
+    std::vector<Message*> recievedMessages_;
 };
 
 #endif /* defined(__Strike__Server__) */

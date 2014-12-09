@@ -52,6 +52,14 @@ void Player::reloadWeapon() {
     weapon_->reloadWeapon();
 }
 
+void Player::lastSeenNow() {
+    lastSeen.restart();
+}
+
+int Player::getLastSeen() {
+   return lastSeen.getElapsedTime().asMilliseconds();
+}
+
 std::vector<Shot*> Player::fire() {
   return weapon_->fire(clientID_,
                        getPosition() + aimVector_ * (PhysicalCircle::getRadius() + 1.f),

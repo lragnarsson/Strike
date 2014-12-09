@@ -31,6 +31,10 @@ inline bool equalf(float a, float b) {
 	return fabs(a - b) < EPSILON;
 }
 
+inline float smoothstep(float a, float b, float f) {
+    return ( f < a ? 0 : ( f > b ? 1 : f/(b-a) ) );
+}
+
 struct Line {
 	Line(sf::Vector2f _origin, sf::Vector2f _direction) {
 		origin = _origin;

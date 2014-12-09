@@ -10,6 +10,7 @@
 #include "./GameState.h"
 #include "./Player.h"
 #include "./Team.h"
+#include "./GeomUtils.h"
 
 
 GameState::GameState()  {
@@ -55,7 +56,10 @@ void GameState::draw(sf::RenderWindow* window) {
     window->draw(mapSprite_);
     //map_.draw(window);
     for (auto player : players_) {
-        window->draw(*player);
+        if (player->getLastSeen() < 500) {
+            player->setColor(sf::Color(255, 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 500, player->getLastSeen()))));
+            window->draw(*player);
+        }
     }
     for (auto shot : handledShots_) {
         window->draw(*shot);

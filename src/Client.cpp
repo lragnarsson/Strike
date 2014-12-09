@@ -53,7 +53,17 @@ void Client::handleCollisions() {
 }
 
 void Client::handleGameLogic() {
-    return;
+    // check player visibility
+    for (auto player : gameState_.getPlayers()) {
+        if (player == controller_.getPlayer())
+            player->lastSeenNow();
+        else
+            for (auto obj : gameState_.getPhysicalObjects()) {
+                if ( !obj->intersectLineSegment( LineSegment(controller_.getPlayer()->getPosition(), player->getPosition()) ) ) {
+                    player->lastSeenNow();
+                }
+            }
+    }
 }
 
 void Client::handleInput() {
