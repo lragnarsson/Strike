@@ -31,6 +31,10 @@ inline bool equalf(float a, float b) {
 	return fabs(a - b) < EPSILON;
 }
 
+inline int sgn(float x) {
+    return (x > 0) - (x < 0);
+}
+
 inline float smoothstep(float a, float b, float f) {
     return ( f < a ? 0 : ( f > b ? 1 : f/(b-a) ) );
 }

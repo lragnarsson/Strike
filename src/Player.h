@@ -20,7 +20,7 @@
 
 class Player: public sf::Sprite, public PhysicalCircle {
 public:
-    explicit Player(int ClientID);
+  explicit Player(int ClientID, sf::Texture* spriteSheet);
     Player() = delete;
     ~Player() noexcept {};
 
@@ -41,6 +41,7 @@ public:
     int getLastSeen();
 
     sf::CircleShape* getCrosshair();
+    void animate();
 
 private:
     unsigned int health_ = 100;
@@ -57,6 +58,20 @@ private:
     sf::Vector2f aimVector_;
     float radConversion_ = 57.29577951308232f;
     sf::CircleShape crosshair_;
+
+    unsigned int frameTime_{50};
+    unsigned int numberOfFrames_{60};
+    unsigned int currentFrame_{0};
+    unsigned int currentRow_{0};
+    unsigned int frameWidth_{160};
+    unsigned int frameHeight_{160};
+    unsigned int columns_{10};
+    sf::IntRect frameRect_;
+    sf::Clock animClock_;
+    sf::Texture spriteSheet_;
+
+    void initCrosshair();
+    void initAnimation(sf::Texture* texture);
 };
 
 #endif /* defined(__Strike__Player__) */

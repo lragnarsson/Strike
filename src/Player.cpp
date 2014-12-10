@@ -10,24 +10,29 @@
 #include <math.h>
 #include <vector>
 
-int sgn(float x) {
-    return (x > 0) - (x < 0);
+Player::Player(int ClientID, sf::Texture* spriteSheet)
+    : PhysicalCircle(getPosition(), 64.0f), clientID_(ClientID), crosshair_(5.f) {
+
+    initCrosshair();
+    initAnimation(spriteSheet);
 }
 
-Player::Player(int ClientID)
-    : PhysicalCircle(getPosition(), 64.0f), clientID_(ClientID), crosshair_(5.f) {
-    if (!texture_.loadFromFile(resourcePath("res/images/") + "cage2.png"))
-        throw std::exception();
-    // texture for playerSprite
-    texture_.setSmooth(true);
-    setTexture(texture_);
-    setScale(sf::Vector2f(0.4f, 0.4f));
-    setOrigin(160.f, 160.f);
+void Player::initCrosshair() {
     crosshair_.setFillColor(sf::Color::White);
     crosshair_.setOrigin(sf::Vector2f(3.f, 3.f));
     crosshair_.setOutlineThickness(2.f);
     crosshair_.setOutlineColor(sf::Color::Black);
     setPosition(600, 450);
+}
+
+void Player::initAnimation(sf::Texture* spriteSheet) {
+    frameRect_ = sf::IntRect(0, 0, frameWidth_, frameHeight_);
+    
+    texture_.setSmooth(true);
+    setTexture(*spriteSheet);
+    setTextureRect(frameRect_);
+    setScale(sf::Vector2f(0.8f, 0.8f));
+    setOrigin(80.f, 80.f);
 }
 
 void Player::setWeapon(Weapon* newWeapon) {
@@ -114,4 +119,25 @@ void Player::move() {
 
 sf::CircleShape* Player::getCrosshair() {
     return &crosshair_;
+}
+
+void Player::animate() {
+      if (animClock_.getElapsedTime().asMilliseconds() >= frameTime_) {
+        if (length(curSpeed_) > 400)
+          currentRow_ = 4;
+        else if (length(curSpeed_) > 0)
+          currentRow_ = 2;
+        else
+          currentRow_ = 0;
+        if (false)
+          currentRow_++;
+        setTextureRect(sf::IntRect(frameWidth_ * (currentFrame_ % columns_),
+                                 frameHeight_ * currentRow_,
+                                 frameWidth_, frameHeight_));
+        if (currentFrame_ == 59)
+          currentFrame_ = 0;
+        else
+          currentFrame_++;
+        animClock_.restart();
+      }
 }
