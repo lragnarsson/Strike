@@ -27,6 +27,7 @@ Player::Player(int ClientID)
     crosshair_.setOrigin(sf::Vector2f(3.f, 3.f));
     crosshair_.setOutlineThickness(2.f);
     crosshair_.setOutlineColor(sf::Color::Black);
+    setPosition(600, 450);
 }
 
 void Player::setWeapon(Weapon* newWeapon) {

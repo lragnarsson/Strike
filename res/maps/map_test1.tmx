@@ -92,7 +92,7 @@
    <polygon points="0,0 4,14 12,20 19,27 27,29 33,29 42,22 46,21 52,20 57,13 60,6 61,0 54,-3 40,0 23,-3 17,-3 6,-3"/>
   </object>
   <object x="2113" y="482">
-   <polygon points="0,0 -1,61 160,60 158,-2 1,0"/>
+   <polygon points="0,0 -1,61 160,60 158,-2"/>
   </object>
  </objectgroup>
  <objectgroup name="Spawnpoint">

@@ -39,7 +39,7 @@ void GameState::addHandledShots(std::vector<Shot*> newShots) {
     }
 }
 
-void GameState::removeOldShots() {
+void GameState::removeOldShots(bool ignoreTime) {
   int elapsed = gameTime_.getElapsedTime().asMilliseconds();
   auto f = [elapsed](Shot* s) {
       bool tooOld = (elapsed - s->getTimestamp().asMilliseconds() > 10000);
@@ -49,8 +49,8 @@ void GameState::removeOldShots() {
   };
 
   handledShots_.erase(std::remove_if(handledShots_.begin(),
-                                       handledShots_.end(), f),
-                        handledShots_.end());
+                                        handledShots_.end(), f),
+                                        handledShots_.end());
 }
 
 void GameState::draw(sf::RenderWindow* window) {
@@ -80,8 +80,9 @@ std::vector<PhysicalObject*> GameState::getPhysicalObjects() {
 }
 
 std::vector<Shot*> GameState::takeUnhandledShots() {
-    std::vector<Shot*> tempVec {unhandledShots_};
-    unhandledShots_.clear();
+    std::vector<Shot*> tempVec;// {unhandledShots_};
+    tempVec.swap(unhandledShots_);
+    //unhandledShots_.clear();
     return tempVec;
 }
 
@@ -103,7 +104,7 @@ void GameState::addAnimatedDecal(AnimatedDecal* decal) {
 
 void GameState::handleDecals() {
   for (auto decal : animatedDecals_) {
-      if (decal->animationComplete() && decal->isPermanent()) 
+      if (decal->animationComplete() && decal->isPermanent())
           unhandledDecals_.push_back(decal);
   }
   for (auto decal : unhandledDecals_) {

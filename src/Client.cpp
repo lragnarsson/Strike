@@ -58,14 +58,16 @@ void Client::handleCollisions() {
 void Client::handleGameLogic() {
     // check player visibility
     for (auto player : gameState_.getPlayers()) {
+		bool blocked = false;
+
         if (player == controller_.getPlayer())
             player->lastSeenNow();
         else
-            for (auto obj : gameState_.getPhysicalObjects()) {
-                if ( !obj->intersectLineSegment( LineSegment(controller_.getPlayer()->getPosition(), player->getPosition()) ) ) {
-                    player->lastSeenNow();
-                }
-            }
+            for (auto obj : gameState_.getPhysicalObjects())
+				blocked |= obj->intersectLineSegment( LineSegment(controller_.getPlayer()->getPosition(), player->getPosition()) );
+
+		if (!blocked)
+			player->lastSeenNow();
     }
 }
 
@@ -104,16 +106,21 @@ void Client::loadTextures() {
 
 void Client::handleShots() {
     std::vector<Shot*> shots {gameState_.takeUnhandledShots()};
-    if (!shots.empty()) {
-        for (auto shot : shots) {
-            float maxDistance = 100000.f;
-            sf::Vector2f centerAfterCollision = {shot->getEndPoint()};
-            for (auto physObj : gameState_.getPhysicalObjects()) {
-                if (physObj->intersectRay(shot->getRay(), centerAfterCollision))
-                    if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
-                        shot->setEndPoint(centerAfterCollision);
-                        maxDistance = length(centerAfterCollision - shot->getOrigin());
-                    }
+    for (auto shot : shots) {
+        float maxDistance = 100000.f;
+        sf::Vector2f centerAfterCollision = {shot->getEndPoint()};
+        for (auto physObj : gameState_.getPhysicalObjects()) {
+            if (physObj->intersectRay(shot->getRay(), centerAfterCollision))
+                if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
+                    shot->setEndPoint(centerAfterCollision);
+                    maxDistance = length(centerAfterCollision - shot->getOrigin());
+                }
+        }
+        for (auto player : gameState_.getPlayers()) {
+            if (player->intersectRay(shot->getRay(), centerAfterCollision))
+                if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
+                    shot->setEndPoint(centerAfterCollision);
+                    maxDistance = length(centerAfterCollision - shot->getOrigin());
                 }
             for (auto player : gameState_.getPlayers()) {
                 if (player->getClientID() != clientID_ && player->intersectRay(shot->getRay(), centerAfterCollision))
@@ -171,7 +178,7 @@ void Client::collideMoveVector(sf::Vector2f position,
                 maxDistance = length(moveVector);
             }
     }
-
+	// Tangent
     ls = LineSegment(centerAfterCollision, centerAfterCollision + tangentMoveVector);
     maxDistance = length(tangentMoveVector);
     for (auto player : gameState_.getPlayers()) {

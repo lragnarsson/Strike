@@ -28,7 +28,7 @@ public:
     void addHandledShots(std::vector<Shot*>);
     std::vector<PhysicalObject*> getPhysicalObjects();
     std::vector<Shot*> takeUnhandledShots();
-    void removeOldShots();
+    void removeOldShots(bool ignoreTime = false);
     std::vector<Player*> getPlayers();
     void addHUDElement(sf::Drawable* HUD);
     void addDecal(Decal* decal);

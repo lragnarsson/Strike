@@ -13,7 +13,7 @@
 /* Implementation av Server
  */
 
-void Server::run(){
+void Server::run() {
     sf::sleep(sf::milliseconds(1000));
 
     nh_.initServer();
@@ -23,23 +23,43 @@ void Server::run(){
     std::cout << "Startar server" << std::endl;
 }
 
-void Server::readNetwork(){
+void Server::readNetwork() {
     // ingen överraskning direkt att det va tomt här med.
 }
 
-void Server::writeNetwork(){
+void Server::writeNetwork() {
     // Men ändå rätt chill att Isak gjorde skalet iaf.
 }
 
-void Server::handleGameLogic(){
+void Server::handleGameLogic() {
     // fan Isak är ju bäst typ.
 }
 
-void Server::handleCollisions(){
-    //tomt
+void Server::handleCollisions() {
+    std::vector<Shot*> shots{gameState_.takeUnhandledShots()};
+    for (auto shot : shots) {
+        float maxDistance = 100000.f;
+        sf::Vector2f centerAfterCollision = {shot->getEndPoint()};
+        for (auto physObj : gameState_.getPhysicalObjects()) {
+            if (physObj->intersectRay(shot->getRay(), centerAfterCollision))
+                if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
+                    shot->setEndPoint(centerAfterCollision);
+                    maxDistance = length(centerAfterCollision - shot->getOrigin());
+                }
+        }
+        for (auto player : gameState_.getPlayers()) {
+            if (player->intersectRay(shot->getRay(), centerAfterCollision))
+                if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
+                    shot->setEndPoint(centerAfterCollision);
+                    maxDistance = length(centerAfterCollision - shot->getOrigin());
+                }
+        }
+    }
+    gameState_.removeOldShots(true);
+    gameState_.addHandledShots(shots);
 }
 
-void Server::acceptConnections(){
+void Server::acceptConnections() {
 
     while(true)
     {

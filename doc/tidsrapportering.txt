@@ -20,6 +20,6 @@ v. 49
 Erik:
 Filip:
 Lage:
-Jesper: Map 1h
+Jesper: Map 2h, Client 3h, GameState 1h
 Rasmus:
 Isak:
