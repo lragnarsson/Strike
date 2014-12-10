@@ -89,10 +89,8 @@ void Map::load(std::string filename){
         }
         else if(elemName == "objectgroup"){
             std::string whatobject = elem->Attribute("name");
-            std::cout << whatobject << std::endl;
 
             if(whatobject == "Collision"){
-                std::cout << "collisionsobjekt finns!" << std::endl;
                 for (TiXmlElement* elem1 = elem->FirstChildElement(); elem1 != nullptr; elem1 = elem1->NextSiblingElement()){
                     std::string elemName1 = elem1->Value();
                     if (TiXmlElement* objTest = elem1->FirstChildElement()){ ///Polygon or circle
@@ -131,12 +129,36 @@ void Map::load(std::string filename){
                     }
                 }
             }
+            else if(whatobject == "Spawnpoint"){
+                for(TiXmlElement* elem1 = elem->FirstChildElement(); elem1 != nullptr; elem1 = elem1->NextSiblingElement()){
+                    std::string TorCT = elem1->Attribute("name");
+                    std::string spawnX = elem1->Attribute("x");
+                    std::string spawnY = elem1->Attribute("y");
+                    float spawnXf = stof(spawnX);
+                    float spawnYf = stof(spawnY);
+                    sf::Vector2f points{spawnXf,spawnYf};
+                    if(TorCT == "Tspawn")
+                        Tspawnpoints_.push_back (points);
+                    else if(TorCT == "CTspawn")
+                        CTspawnpoints_.push_back (points);
+                    else
+                        std::cerr << "can't find: " << TorCT << std::endl;
+                }
+            }
         }
     }
 }
 
 void Map::draw(sf::RenderWindow* window){
     window->draw(mapSprite_);
+}
+
+std::vector<sf::Vector2f> Map::getTspawnpoints() const {
+    return Tspawnpoints_;
+}
+
+std::vector<sf::Vector2f> Map::getCTspawnpoints() const {
+    return CTspawnpoints_;
 }
 
 void Map::drawToMap(const sf::Drawable& drawable) {

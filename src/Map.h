@@ -23,6 +23,8 @@ public:
     Map(const Map&);
 
     std::vector<PhysicalObject*> getPhysicalObjects() const;
+    std::vector<sf::Vector2f> getTspawnpoints() const;
+    std::vector<sf::Vector2f> getCTspawnpoints() const;
     void load(std::string filename);
     void draw(sf::RenderWindow* window);
     void drawToMap(const sf::Drawable& drawable);
@@ -30,6 +32,8 @@ public:
 private:
     std::vector<sf::Vector2f> makePolygonVector(std::string rawVector, float xpos, float ypos);
     std::vector<PhysicalObject*> physicalObjects_;
+    std::vector<sf::Vector2f> Tspawnpoints_;
+    std::vector<sf::Vector2f> CTspawnpoints_;
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
     sf::RenderTexture renderTexture_;

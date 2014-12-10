@@ -16,9 +16,14 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.addPlayer(player);
     gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
+    Team blueTeam;
+    blueTeam.addPlayer(player);
+    gameState_.addTeam(&blueTeam);
+    gameState_.setplayerSpawnPoints();
+
 
     Player* p2 = new Player(2);
-    p2->setPosition(sf::Vector2f(300.f, 100.f));
+    p2->setPosition(sf::Vector2f(500.f, 100.f));
     p2->move();
     gameState_.addPlayer(p2);
 }

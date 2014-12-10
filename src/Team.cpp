@@ -16,6 +16,10 @@ void Team::addPlayer(Player* newPlayer){
     players_.push_back(newPlayer);
 }
 
+std::string Team::getTeamID() const {
+    return teamID_;
+}
+
 int Team::getScore() const{
     return score_;
 }

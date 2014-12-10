@@ -16,6 +16,7 @@
 #include "./Decal.h"
 #include <vector>
 #include "Map.h"
+#include "Team.h"
 
 class GameState{
 public:
@@ -26,7 +27,10 @@ public:
     void draw(sf::RenderWindow* window);
     void addUnhandledShots(std::vector<Shot*>);
     void addHandledShots(std::vector<Shot*>);
-    std::vector<PhysicalObject*> getPhysicalObjects();
+    std::vector<PhysicalObject*> getPhysicalObjects() const;
+    std::vector<sf::Vector2f> getTspawnpoints() const;
+    std::vector<sf::Vector2f> getCTspawnpoints() const;
+    void setplayerSpawnPoints();
     std::vector<Shot*> takeUnhandledShots();
     void removeOldShots(bool ignoreTime = false);
     std::vector<Player*> getPlayers();
@@ -34,8 +38,11 @@ public:
     void addDecal(Decal* decal);
     void addAnimatedDecal(AnimatedDecal* decal);
     void handleDecals();
+    void addTeam(Team* team);
+
 
 private:
+    std::vector<Team*> teams_;
     std::vector<Player*> players_;
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;

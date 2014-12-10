@@ -18,21 +18,20 @@ class Team
 public:
     Team() = default;
     ~Team() = default;
-    
+
     std::vector<Player*> getPlayers() const;
     void addPlayer(Player*);
     void removePlayer(int playerID); // ska denna vara med?
-
+    std::string getTeamID() const;
     int getScore() const;
     void setScore(int);
-    
+
 private:
-    std::string teamID_;
-    
-    
+    std::string teamID_{"T"};
+
     std::vector<Player*> players_;
     int score_;
-    
+
 };
 
 #endif /* defined(__Strike__Team__) */

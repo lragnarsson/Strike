@@ -6,15 +6,22 @@
 //  Copyright (c) 2014 Isak Wiberg. All rights reserved.
 //
 
+#include <vector>
 #include "./ResourcePath.h"
 #include "./GameState.h"
 #include "./Player.h"
 #include "./Team.h"
 #include "./GeomUtils.h"
+#include "./map.h"
 
 
 GameState::GameState()  {
     map_.load("map_test1.tmx");
+}
+
+
+void GameState::addTeam(Team* team){
+    teams_.push_back(team);
 }
 
 void GameState::addPlayer(Player* playerP) {
@@ -75,8 +82,36 @@ void GameState::draw(sf::RenderWindow* window) {
     handleDecals();
 }
 
-std::vector<PhysicalObject*> GameState::getPhysicalObjects() {
+std::vector<PhysicalObject*> GameState::getPhysicalObjects() const {
     return map_.getPhysicalObjects();
+}
+
+std::vector<sf::Vector2f> GameState::getTspawnpoints() const {
+    return map_.getTspawnpoints();
+}
+
+std::vector<sf::Vector2f> GameState::getCTspawnpoints() const {
+    return map_.getCTspawnpoints();
+}
+
+
+void GameState::setplayerSpawnPoints(){
+    std::vector<sf::Vector2f> Tspawns = getTspawnpoints();
+    std::vector<sf::Vector2f> CTspawns = getCTspawnpoints();
+    for(auto team : teams_){
+        int i{0};
+        for(auto player : team->getPlayers()){
+            if(team->getTeamID() == "T"){
+                sf::Vector2f spawn = Tspawns.at(i);
+                player->setPosition(spawn.x,spawn.y);
+            }
+            if(team->getTeamID() == "CT"){
+                sf::Vector2f spawn = CTspawns.at(i);
+                player->setPosition(spawn.x,spawn.y);
+            }
+            i += 1;
+        }
+    }
 }
 
 std::vector<Shot*> GameState::takeUnhandledShots() {
@@ -117,4 +152,5 @@ void GameState::handleDecals() {
                                        [](AnimatedDecal* d) { return d->animationComplete(); }),
                         animatedDecals_.end());
 }
+
 

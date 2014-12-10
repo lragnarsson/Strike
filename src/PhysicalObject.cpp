@@ -387,6 +387,7 @@ bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf
 				}
 			}
 		}
+<<<<<<< HEAD
 	}
 
 	for (auto pVertex = vertices_.begin(); pVertex != vertices_.end(); pVertex++) {
@@ -406,6 +407,37 @@ bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf
 				closestCenterAfterCollision = displacement.start + d*v;
 				closestIntersectionPoint = p;
 				closestIntersectionNormal = closestCenterAfterCollision - p;
+=======
+		if (!segmentIntersected) {
+			sf::Vector2f v = displacement.end - displacement.start;
+
+			sf::Vector2f p = *(pVertex-1);
+			sf::Vector2f w = p - displacement.start;
+			float a = dot(w, v)/dot(v, v);
+			float b = radius * radius - dot(w - a*v, w - a*v);
+			if (b >= 0) {
+				float d = a - sqrtf(b/dot(v, v));
+				if (d > 0.0f && d < 1.0f && d < minD) {
+					minD = d;
+					closestCenterAfterCollision = displacement.start + (d-0.0f)*v;
+					closestIntersectionPoint = p;
+					closestIntersectionNormal = closestCenterAfterCollision - p;
+				}
+			}
+
+			p = *pVertex;
+			w = p - displacement.start;
+			a = dot(w, v)/dot(v, v);
+			b = radius * radius - dot(w - a*v, w - a*v);
+			if (b >= 0) {
+				float d = a - sqrtf(b/dot(v, v));
+				if (d > 0.0f && d < 1.0f && d < minD) {
+					minD = d;
+					closestCenterAfterCollision = displacement.start + (d-0.0f)*v;
+					closestIntersectionPoint = p;
+					closestIntersectionNormal = closestCenterAfterCollision - p;
+				}
+>>>>>>> Spawnpoints
 			}
 		}
 	}
