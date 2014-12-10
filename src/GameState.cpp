@@ -12,7 +12,7 @@
 #include "./Player.h"
 #include "./Team.h"
 #include "./GeomUtils.h"
-#include "./map.h"
+#include "./Map.h"
 
 
 GameState::GameState()  {

@@ -1,4 +1,4 @@
-#include "../lib/dirent.h"
+#include <dirent.h>
 #include <string>
 #include <vector>
 
