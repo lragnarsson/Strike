@@ -58,15 +58,15 @@ void Client::handleCollisions() {
 void Client::handleGameLogic() {
     // check player visibility
     for (auto player : gameState_.getPlayers()) {
-		bool blocked = false;
+        bool blocked = false;
 
         if (player == controller_.getPlayer())
             player->lastSeenNow();
         else
             for (auto obj : gameState_.getPhysicalObjects())
-				blocked |= obj->intersectLineSegment( LineSegment(controller_.getPlayer()->getPosition(), player->getPosition()) );
+                blocked |= obj->intersectLineSegment( LineSegment(controller_.getPlayer()->getPosition(), player->getPosition()) );
 
-		if (!blocked)
+        if (!blocked)
 			player->lastSeenNow();
     }
 }
@@ -121,15 +121,8 @@ void Client::handleShots() {
                 if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
                     shot->setEndPoint(centerAfterCollision);
                     maxDistance = length(centerAfterCollision - shot->getOrigin());
+                    shot->setTargetID(player->getClientID());
                 }
-            for (auto player : gameState_.getPlayers()) {
-                if (player->getClientID() != clientID_ && player->intersectRay(shot->getRay(), centerAfterCollision))
-                    if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
-                        shot->setEndPoint(centerAfterCollision);
-                        maxDistance = length(centerAfterCollision - shot->getOrigin());
-                        shot->setTargetID(player->getClientID());
-                    }
-            }
         }
     }
     for (auto shot : shots) {
