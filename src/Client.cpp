@@ -2,14 +2,17 @@
 //  Strike
 
 #include "./Client.h"
-#include <string>
 #include "./GeomUtils.h"
+#include "./SysUtils.h"
 
 Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     renderWindow_.setFramerateLimit(120);
     renderWindow_.setMouseCursorVisible(false);
+
+    loadTextures();
+
     Player* player = new Player(clientID_);
-    player->setWeapon(new Weapon(30, 180, 30, 50, 500, 70, 100.f));
+    player->setWeapon(new Weapon(30, 180, 30, 50, 500, 70, 500.f));
     gameState_.addPlayer(player);
     gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
@@ -82,6 +85,23 @@ void Client::draw() {
     renderWindow_.display();
 }
 
+void Client::loadTextures() {
+    auto fileNames = listDir(resourcePath("res/images/"));
+    try {
+        for (auto fileName : fileNames) {
+            if (fileName.length() > 3) {
+                textures_[fileName] = new sf::Texture();
+                textures_[fileName]->loadFromFile(resourcePath("res/images/") + fileName);
+                textures_[fileName]->setRepeated(false);
+                std::cout << "Loaded file: " << fileName << std::endl;
+            }
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what();
+    }
+}
+
 void Client::handleShots() {
     std::vector<Shot*> shots {gameState_.takeUnhandledShots()};
     if (!shots.empty()) {
@@ -100,9 +120,27 @@ void Client::handleShots() {
                     if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
                         shot->setEndPoint(centerAfterCollision);
                         maxDistance = length(centerAfterCollision - shot->getOrigin());
+                        shot->setTargetID(player->getClientID());
                     }
             }
         }
+    }
+    for (auto shot : shots) {
+      if (shot->getTargetID() != -1) {
+          gameState_.addAnimatedDecal(
+              new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
+                                textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
+                                20, 16, false, 4));
+          gameState_.addAnimatedDecal(
+              new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
+                                sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
+                                sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
+      }
+      else
+          gameState_.addAnimatedDecal(
+              new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
+                                textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                20, 25, false, 25));
     }
     gameState_.removeOldShots();
     gameState_.addHandledShots(shots);

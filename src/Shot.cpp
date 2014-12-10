@@ -39,6 +39,14 @@ sf::Time Shot::getTimestamp() const {
     return sf::Time {sf::milliseconds(timestamp_)};
 }
 
+int Shot::getTargetID() {
+    return targetID_;
+}
+
+void Shot::setTargetID(int id) {
+    targetID_ = id;
+}
+
 void Shot::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     sf::Vertex line[] =
     {
@@ -46,5 +54,7 @@ void Shot::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         sf::Vertex(endPoint_)
     };
 
-    target.draw(line, 2, sf::Lines); // makes use of the alternative draw function in RenderTarget
+    line[0].color = sf::Color::Green;
+    line[1].color = sf::Color::Green;
+    target.draw(line, 2, sf::Lines);
 }

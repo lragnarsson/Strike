@@ -50,11 +50,13 @@ private:
                            sf::Vector2f& moveVector,
                            float radius);
     void handleShots();
+    void loadTextures();
 
-    int clientID_;
+    int clientID_{1337};
     std::string clientName_;
     sf::RenderWindow renderWindow_;
     Controller controller_;
+    std::map<std::string, sf::Texture*> textures_;
 };
 
 #endif /* defined(__Strike__Client__) */

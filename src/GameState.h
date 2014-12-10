@@ -31,8 +31,8 @@ public:
     void removeOldShots();
     std::vector<Player*> getPlayers();
     void addHUDElement(sf::Drawable* HUD);
-    void addDecal(Decal decal);
-    void addAnimatedDecal(AnimatedDecal decal);
+    void addDecal(Decal* decal);
+    void addAnimatedDecal(AnimatedDecal* decal);
     void handleDecals();
 
 private:
@@ -45,10 +45,9 @@ private:
     std::vector<Shot*> handledShots_;  // shots here have both timestamp and endpoint.
     sf::Clock gameTime_;
     std::vector<sf::Drawable*> HUDElements_;
-    std::vector<Decal> unhandledDecals_;
-    std::vector<AnimatedDecal> animatedDecals_;
+    std::vector<Decal*> unhandledDecals_;
+    std::vector<AnimatedDecal*> animatedDecals_;
     sf::Texture boomtexture;
-        
 };
 
 #endif /* defined(__Strike__GameState__) */

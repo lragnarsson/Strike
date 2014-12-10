@@ -15,17 +15,17 @@ int sgn(float x) {
 }
 
 Player::Player(int ClientID)
-    : PhysicalCircle(getPosition(), 25.0f), clientID_(ClientID), crosshair_(1.f) {
-    if (!texture_.loadFromFile(resourcePath("res/images/") + "cage.png"))
+    : PhysicalCircle(getPosition(), 64.0f), clientID_(ClientID), crosshair_(5.f) {
+    if (!texture_.loadFromFile(resourcePath("res/images/") + "cage2.png"))
         throw std::exception();
     // texture for playerSprite
     texture_.setSmooth(true);
     setTexture(texture_);
-    setScale(sf::Vector2f(0.1f, 0.1f));
-    setOrigin(177.f, 245.f);
+    setScale(sf::Vector2f(0.4f, 0.4f));
+    setOrigin(160.f, 160.f);
     crosshair_.setFillColor(sf::Color::White);
-    crosshair_.setOrigin(sf::Vector2f(2.5f, 2.5f));
-    crosshair_.setOutlineThickness(0.5f);
+    crosshair_.setOrigin(sf::Vector2f(3.f, 3.f));
+    crosshair_.setOutlineThickness(2.f);
     crosshair_.setOutlineColor(sf::Color::Black);
 }
 

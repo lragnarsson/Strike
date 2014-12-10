@@ -31,6 +31,8 @@ public:
     sf::Vector2f getOrigin() const;
     sf::Vector2f getDirection() const;
     Ray getRay() const;
+    int getTargetID();
+    void setTargetID(int id);
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 private:
@@ -42,6 +44,7 @@ private:
     sf::Vector2f direction_;
     sf::Vector2f endPoint_;
     int damage_;
+    int targetID_{-1};
 };
 
 #endif // SHOT_H

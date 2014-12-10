@@ -17,7 +17,7 @@
 
 class Map {
 public:
-    Map() = default; // farligt att använda sprite osv om inte load körs.
+    Map();
     ~Map();
     Map(std::string filename); // skapa utifrån kartfil
     Map(const Map&);
@@ -25,12 +25,14 @@ public:
     std::vector<PhysicalObject*> getPhysicalObjects() const;
     void load(std::string filename);
     void draw(sf::RenderWindow* window);
+    void drawToMap(const sf::Drawable& drawable);
 
 private:
     std::vector<sf::Vector2f> makePolygonVector(std::string rawVector, float xpos, float ypos);
     std::vector<PhysicalObject*> physicalObjects_;
-	sf::Texture mapTexture_;
+    sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
+    sf::RenderTexture renderTexture_;
 };
 
 

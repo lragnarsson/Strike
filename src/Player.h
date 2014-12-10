@@ -47,8 +47,8 @@ private:
     sf::Texture texture_;
     int clientID_;
     float speedMultiplier_ = 1.0f;
-    float maxSpeed_ = 100.0f;  // pixels per second
-    float acceleration_ = 400.0f;  // pixels per second^2
+    float maxSpeed_ = 400.0f;  // pixels per second
+    float acceleration_ = 3000.0f;  // pixels per second^2
     sf::Clock lastSeen;
 
     Weapon* weapon_;

@@ -16,6 +16,12 @@
 #include "ResourcePath.h"
 #include <sstream>
 
+Map::Map() {
+    renderTexture_.create(3200, 3200);
+    renderTexture_.clear();
+    renderTexture_.display();
+}
+
 Map::~Map(){
     for(auto pObj : physicalObjects_)
         delete pObj;
@@ -77,6 +83,9 @@ void Map::load(std::string filename){
             if (!mapTexture_.loadFromFile(resourcePath("res/maps/") + mapfile.c_str()))
                 std::cerr << "Failed to load background file ";
             mapSprite_.setTexture(mapTexture_);
+            renderTexture_.draw(mapSprite_);
+            renderTexture_.display();
+            mapSprite_.setTexture(renderTexture_.getTexture());
         }
         else if(elemName == "objectgroup"){
             std::string whatobject = elem->Attribute("name");
@@ -128,4 +137,10 @@ void Map::load(std::string filename){
 
 void Map::draw(sf::RenderWindow* window){
     window->draw(mapSprite_);
+}
+
+void Map::drawToMap(const sf::Drawable& drawable) {
+    renderTexture_.draw(drawable);
+    renderTexture_.display();
+    mapSprite_.setTexture(renderTexture_.getTexture());
 }

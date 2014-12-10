@@ -58,7 +58,7 @@ void GameState::draw(sf::RenderWindow* window) {
     map_.draw(window);
     for (auto player : players_) {
         if (player->getLastSeen() < 500) {
-            player->setColor(sf::Color(255, 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 500, player->getLastSeen()))));
+            player->setColor(sf::Color(255, 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 100, player->getLastSeen()))));
             window->draw(*player);
         }
     }
@@ -66,8 +66,8 @@ void GameState::draw(sf::RenderWindow* window) {
         window->draw(*shot);
     }
     for (auto decal : animatedDecals_) {
-        decal.animate();
-        window->draw(decal);
+        decal->animate();
+        window->draw(*decal);
     }
     for (auto HUDElement : HUDElements_) {
         window->draw(*HUDElement);
@@ -93,21 +93,27 @@ void GameState::addHUDElement(sf::Drawable* HUD) {
     HUDElements_.push_back(HUD);
 }
 
-void GameState::addDecal(Decal decal) {
+void GameState::addDecal(Decal* decal) {
     unhandledDecals_.push_back(decal);
 }
 
-void GameState::addAnimatedDecal(AnimatedDecal decal) {
+void GameState::addAnimatedDecal(AnimatedDecal* decal) {
     animatedDecals_.push_back(decal);
 }
 
 void GameState::handleDecals() {
   for (auto decal : animatedDecals_) {
-      if (decal.animationComplete())
+      if (decal->animationComplete() && decal->isPermanent()) 
           unhandledDecals_.push_back(decal);
   }
   for (auto decal : unhandledDecals_) {
-    //map_.getRenderTexture->draw(decal);
+      map_.drawToMap(*decal);
+      delete decal;
   }
+  unhandledDecals_.clear();
+  animatedDecals_.erase(std::remove_if(animatedDecals_.begin(),
+                                       animatedDecals_.end(),
+                                       [](AnimatedDecal* d) { return d->animationComplete(); }),
+                        animatedDecals_.end());
 }
 

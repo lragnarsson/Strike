@@ -3,7 +3,7 @@
 #include <vector>
 
 Controller::Controller() {
-  view_ = new sf::View(sf::FloatRect(0, 0, 500, 300));
+  view_ = new sf::View(sf::FloatRect(0, 0, 2560, 1440));
 }
 
 std::vector<Shot*> Controller::playerFire() {
