@@ -94,7 +94,8 @@ void NetworkHandler::broadcastUDPPacket(sf::Packet data)
 {
     for (auto& client : clients_)
     {
-       Usocket_.send(data, client.TCPSocket->getRemoteAddress(), client.TCPSocket->getRemotePort());
+        std::cout << "Skickar udp till klient " << client.ID << "på port " << client.UDPPort << std::endl;
+        Usocket_.send(data, client.TCPSocket->getRemoteAddress(), client.UDPPort);
     }
 }
 
