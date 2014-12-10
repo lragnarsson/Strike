@@ -126,6 +126,7 @@ void NetworkHandler::checkForNewTcpConnections()
 
         ServerAcceptConnection sac(newClient.ID);
         sf::Packet packet = sac.asPacket();
+
         newClient.TCPSocket->send(packet); //Send SERVER_ACCEPT_CONNECTION
 
         messages_.push_back(new AddPlayer(newClient.ID));

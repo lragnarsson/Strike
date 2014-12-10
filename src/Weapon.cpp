@@ -26,7 +26,8 @@ void Weapon::reloadWeapon() {
                 ammo_ = magazineSize_;
                 additionalAmmo_ = allAmmo_ - magazineSize_;
                 std::cout << "Ammo: " << ammo_ << " AdditionalAmmo: " << additionalAmmo_ << std::endl;
-            } else {
+            } 
+            else {
               ammo_ = allAmmo_;
               additionalAmmo_ = 0;
               std::cout << "Ammo: " << ammo_ << " AdditionalAmmo: " << additionalAmmo_ << std::endl;
@@ -46,10 +47,20 @@ std::vector<Shot*> Weapon::fire(int clientID, const sf::Vector2f& pos,
     }
     if (ammo_ > 0 && clock_.getElapsedTime().asMilliseconds() >= fireRate_) {
         ammo_ -= 1;
+        if(clock_.getElapsedTime().asMilliseconds() >= 100 * fireRate_) {
+        	sprayMultiplier_ = 0.0f;
+        }
+        else {
+            sprayMultiplier_ = ((float)fireRate_ / (float)clock_.getElapsedTime().asMilliseconds()) * sprayMultiplier_;
+        }
         clock_.restart();
         hasFired_ = true;
+        sf::Vector2f randomVector;
+        randomVector.x = (-20 + (std::rand() % 41) + dir.x*100) * sprayMultiplier_;
+        randomVector.y = (-20 + (std::rand() % 41) + dir.y*100) * sprayMultiplier_;
         std::cout << "Ammo: " << ammo_ << " AdditionalAmmo: " << additionalAmmo_ << std::endl;
-        shotVector.push_back(new Shot{clientID, pos, dir, pos + dir * 10000.f, damage_});
+        shotVector.push_back(new Shot{clientID, pos, dir + randomVector, pos + dir * 10000.f + randomVector, damage_});
+        sprayMultiplier_ += 20.0f;
         return shotVector;
     } else {
       return shotVector;

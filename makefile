@@ -2,7 +2,7 @@
 # Makefile for Strike, GNU GCC (g++)
 #
 
-CCC = gccfilter -c -a g++
+CCC = g++
 
 SRC = src
 TINY = libraries/tinyxml
@@ -13,6 +13,7 @@ LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-aud
 
 # Objektkodsmoduler som ingår i den kompletta kalkylatorn.
 OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o NetworkHandler.o Messages.o Shot.o Team.o Weapon.o Decal.o Strike.o
+
 
 # Huvudmål - skapas med kommandot 'make' eller 'make kalkylator'.
 strike: $(OBJECTS) makefile

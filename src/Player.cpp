@@ -64,9 +64,15 @@ int Player::getLastSeen() {
 }
 
 std::vector<Shot*> Player::fire() {
-  return weapon_->fire(clientID_,
+  if(speedMultiplier_ <= 1.0f) {
+    return weapon_->fire(clientID_,
                        getPosition() + aimVector_ * (PhysicalCircle::getRadius() + 1.f),
                        aimVector_);
+  }
+  else {
+    std::vector<Shot*> shotVector;
+    return shotVector;
+  }
 }
 
 int Player::getClientID() const {

@@ -23,8 +23,8 @@ void startClient(std::string name, unsigned int team, std::string ip) {
 
 void startServer(unsigned int maxPlayers, std::string mapName) {
     std::cout << maxPlayers << "  " << mapName << std::endl;
-    Server server;
-    server.run();
+   // Server server;
+    //server.run();
 }
 
 bool validCommand() {

@@ -25,6 +25,7 @@ private:
     unsigned int ammo_;
     unsigned int additionalAmmo_;
     unsigned int magazineSize_;
+    float sprayMultiplier_ = 0.0f;
     int fireRate_;
     int lastFired_;
     int damage_;

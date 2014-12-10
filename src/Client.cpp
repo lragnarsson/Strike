@@ -12,7 +12,7 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     loadTextures();
 
     Player* player = new Player(clientID_);
-    player->setWeapon(new Weapon(30, 180, 30, 50, 500, 70, 500.f));
+    player->setWeapon(new Weapon(1000, 2000, 1000, 50, 500, 70, 500.f));
     gameState_.addPlayer(player);
     gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
