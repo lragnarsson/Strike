@@ -185,6 +185,7 @@ void NetworkHandler::initServer()
 
 void NetworkHandler::initClient()
 {
+    Usocket_.setBlocking(false);
     Usocket_.bind(sf::Socket::AnyPort);
 }
 

@@ -13,16 +13,23 @@ void client()
 {
     std::vector<sf::Packet> recievedPackets_;
     std::vector<Message*> recievedMessages_;
-    sf::IpAddress addr("130.236.210.203");
+    sf::IpAddress addr("130.236.210.102");
     nh.initClient();
     nh.connectToServer(addr);
     
     while(true)
     {
         nh.recieveTCPPackets();
+        for (int i = 0; i < 5; i++)
+        {
+            nh.recieveUDPPackets();
+            sf::sleep(sf::milliseconds(1000));
+        }
+        
+        
         recievedMessages_ = nh.getNewMessages();
         //std::cout << "recievedMessages_ innehåller " << recievedMessages_.size() << " element" << std::endl;
-
+        
 
         for (Message* message : recievedMessages_)
         {
@@ -45,7 +52,7 @@ void client()
             }
         }
 
-        sf::sleep(sf::milliseconds(10));
+        sf::sleep(sf::milliseconds(100));
 
     /*
         if (recievedMessages_.size() > 0)
