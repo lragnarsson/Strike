@@ -62,6 +62,11 @@ int Player::getClientID() const {
     return clientID_;
 }
 
+
+void Player::setClientName(std::string newName) {
+    clientName_ = newName;
+}
+
 sf::Vector2f& Player::getMoveVector() {
     return moveVector_;
 }
