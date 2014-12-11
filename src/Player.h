@@ -59,8 +59,7 @@ private:
     float radConversion_ = 57.29577951308232f;
     sf::CircleShape crosshair_;
 
-    unsigned int frameTime_{50};
-    unsigned int numberOfFrames_{60};
+    unsigned int frameTime_{10};
     unsigned int currentFrame_{0};
     unsigned int currentRow_{0};
     unsigned int frameWidth_{160};

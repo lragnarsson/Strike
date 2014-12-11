@@ -21,6 +21,8 @@ public:
     virtual std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir);
     void hasNotFired();
     float getCHDistance();
+    bool isAnimating();
+
 private:
     unsigned int ammo_;
     unsigned int additionalAmmo_;
@@ -32,8 +34,10 @@ private:
     int reloadTime_;
     bool isReloading_;
     sf::Clock clock_;
+    sf::Clock animTimer_;
     bool hasFired_;
     float CHDistance_;
+    int fireAnimationTime_{100};
     friend class SemiAutomaticWeapon;
     friend class Shotgun;
 };

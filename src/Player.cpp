@@ -27,7 +27,6 @@ void Player::initCrosshair() {
 
 void Player::initAnimation(sf::Texture* spriteSheet) {
     frameRect_ = sf::IntRect(0, 0, frameWidth_, frameHeight_);
-    
     texture_.setSmooth(true);
     setTexture(*spriteSheet);
     setTextureRect(frameRect_);
@@ -129,12 +128,12 @@ void Player::animate() {
           currentRow_ = 2;
         else
           currentRow_ = 0;
-        if (false)
+        if (weapon_->isAnimating())
           currentRow_++;
-        setTextureRect(sf::IntRect(frameWidth_ * (currentFrame_ % columns_),
-                                 frameHeight_ * currentRow_,
-                                 frameWidth_, frameHeight_));
-        if (currentFrame_ == 59)
+        setTextureRect(sf::IntRect(frameWidth_ * currentFrame_,
+                                   frameHeight_ * currentRow_,
+                                   frameWidth_, frameHeight_));
+        if (currentFrame_ == columns_ - 1)
           currentFrame_ = 0;
         else
           currentFrame_++;
