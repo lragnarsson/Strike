@@ -13,8 +13,8 @@ Erik: NetworkHandler (och dylikt) 7h
 Filip: Player 2h, Weapon 3h, Felsökning och integrering 4h, Bomb 1h
 Lage: Client 7h, Player 1.5h, Controller 1.5h, Weapon 0.5h, Strike 2h, GameState 1.5h
 Jesper: PhysicalObject-hierarki 2h, Client 1h, Felsökning och integrering 4h
-Rasmus: Map (xml-parsning) 2h
-Isak: Player 2h
+Rasmus: Map (xml-parsning)  
+Isak: Player 2h, NetworkHandler 2h, Client 3h
 
 v. 49
 Erik:
@@ -22,4 +22,4 @@ Filip:
 Lage:
 Jesper: Map 2h, Client 3h, GameState 1h
 Rasmus:
-Isak:
+Isak: NetworkHandler 6h, Server 2h
