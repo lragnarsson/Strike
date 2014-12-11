@@ -18,17 +18,17 @@ class Team
 public:
     Team() = default;
     ~Team() = default;
-
+    Team(std::string teamname) : teamID_{teamname} {};
     std::vector<Player*> getPlayers() const;
     void addPlayer(Player*);
-    void removePlayer(int playerID); // ska denna vara med?
+    void removePlayer(int playerID);
     std::string getTeamID() const;
     int getScore() const;
     void setScore(int);
+    void setTeamID(std::string);
 
 private:
-    std::string teamID_{"T"};
-
+    std::string teamID_;
     std::vector<Player*> players_;
     int score_;
 

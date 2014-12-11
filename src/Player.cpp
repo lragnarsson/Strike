@@ -45,11 +45,15 @@ void Player::setSpeedMultiplier(float speed) {
         speedMultiplier_ = speed;
 }
 
-void Player::setHealth(unsigned int amount) {
+void Player::setHealth(int amount) {
     if (amount >= health_)
         health_ = 0;
     else
         health_ -= amount;
+}
+
+int Player::getHealth() { //För testning!
+  return health_;
 }
 
 void Player::hasNotFired() {
@@ -127,7 +131,7 @@ void Player::animate() {
         else if (length(curSpeed_) > 0)
           currentRow_ = 2;
         else
-          currentRow_ = 0;
+          currentRow_ = 2;
         if (weapon_->isAnimating())
           currentRow_++;
         setTextureRect(sf::IntRect(frameWidth_ * currentFrame_,

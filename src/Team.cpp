@@ -28,6 +28,10 @@ void Team::setScore(int newScore){
     score_ = newScore;
 }
 
+void Team::setTeamID(std::string teamName) {
+	teamID_ = teamName;
+}
+
 void Team::removePlayer(int clientID){
     for (std::vector<Player*>::iterator it = players_.begin(); it != players_.end(); ++it){
         if((*it)->getClientID() == clientID)

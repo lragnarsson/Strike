@@ -31,6 +31,10 @@ Ray Shot::getRay() const {
     return ray_;
 }
 
+int Shot::getDamage() {
+    return damage_;
+}
+
 void Shot::setTimestamp(sf::Time newTimeStamp) {
     timestamp_ = newTimeStamp.asMilliseconds();
 }

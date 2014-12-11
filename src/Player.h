@@ -28,7 +28,7 @@ public:
     void setWeapon(Weapon* weapon);
     std::vector<Shot*> fire();
     sf::Vector2f& getMoveVector();
-    void setHealth(unsigned int amount);
+    void setHealth(int amount);
     void calculateMoveVector(const sf::Vector2f& moveVector,
                              float elapsedSeconds);
     void handleRotation(const sf::Vector2f& aimVector);
@@ -42,9 +42,9 @@ public:
 
     sf::CircleShape* getCrosshair();
     void animate();
-
+    int getHealth(); //För testning!
 private:
-    unsigned int health_ = 100;
+    int health_ = 100;
     sf::Texture texture_;
     int clientID_;
     float speedMultiplier_ = 1.0f;

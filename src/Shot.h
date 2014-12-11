@@ -23,7 +23,7 @@ public:
     virtual ~Shot() = default;
 
     // Funktioner
-
+    int getDamage();
     void setEndPoint(sf::Vector2f);
     sf::Vector2f getEndPoint();
     void setTimestamp(sf::Time);
