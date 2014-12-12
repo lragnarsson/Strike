@@ -11,6 +11,7 @@ Erik Sk√∂ld
 #include <SFML/Network.hpp>
 
 #include "Messages.h"
+#include "SecureVector.h"
 
 #include <vector>
 #include <map>
@@ -44,6 +45,7 @@ public:
     sf::UdpSocket Usocket_; // för test endast
 
 private:
+    
     unsigned short serverPort_ = 5060;
 
     sf::TcpListener listener;
@@ -58,9 +60,12 @@ private:
     };
 
     std::vector<client_> clients_;
-    std::vector<Message*> messages_;
+    
+    // the message-vectors are guarded by mutexlock
+    SecureVector incomingMessages_;
+    SecureVector outboundMessages_;
     std::vector<Message*> internalMessages_;
-
+    
     std::map<int, int> playerLatestUpdate_;
 
     Message* unpackPacket(sf::Packet);

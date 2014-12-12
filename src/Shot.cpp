@@ -11,7 +11,7 @@
 Shot::Shot(int newClientID, sf::Vector2f newOrigin, sf::Vector2f newDirection,
            sf::Vector2f newEnd, int newDamage)
     : clientID_(newClientID), origin_(newOrigin), direction_(newDirection),
-      endPoint_(newEnd), damage_(newDamage), ray_(Ray(newOrigin, newDirection)) {}
+      endPoint_(newEnd), damage_(newDamage) {}
 
 void Shot::setEndPoint(sf::Vector2f newEndPoint) {
     endPoint_ = newEndPoint;
@@ -28,7 +28,7 @@ sf::Vector2f Shot::getDirection() const {
 }
 
 Ray Shot::getRay() const {
-    return ray_;
+    return Ray {origin_,direction_};
 }
 
 void Shot::setTimestamp(sf::Time newTimeStamp) {

@@ -20,5 +20,8 @@ const int ADD_PLAYER = 2001;
 const int CONSOLE_PRINT_STRING = 2002;
 
 const int PLAYER_UPDATE = 3000;
+const int ADD_SHOT = 3001;
+const int ROUND_RESTART = 3002;
+
 
 #endif // MESSAGECODES_H

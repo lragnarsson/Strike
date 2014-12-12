@@ -37,7 +37,6 @@ private:
     // Datamedlemmar
     int timestamp_;  // in milliseconds
     int clientID_;
-    Ray ray_;
     sf::Vector2f origin_;
     sf::Vector2f direction_;
     sf::Vector2f endPoint_;

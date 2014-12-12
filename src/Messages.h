@@ -6,6 +6,7 @@
 #include <string>
 
 #include "MessageCodes.h"
+#include "./GeomUtils.h"
 
 class Message
 {
@@ -36,6 +37,8 @@ class AddPlayer : public Message
 {
 public:
     int playerID;
+    int teamID;
+    
     AddPlayer() : Message(ADD_PLAYER) {}
     AddPlayer(sf::Packet);
     AddPlayer(int pID) : Message(ADD_PLAYER), playerID(pID) {}
@@ -73,25 +76,47 @@ class PlayerUpdate : public Message
 public:
 
     PlayerUpdate() : Message(PLAYER_UPDATE) {}
+    int playerID;
     float xCoord;
     float yCoord;
     float rotation;
     int health;
 
+    PlayerUpdate(sf::Packet);
+    sf::Packet asPacket();
     PlayerUpdate(float x, float y, float r, int h) : Message(PLAYER_UPDATE),
         xCoord(x), yCoord(y), rotation(r), health(h) {}
 
-    PlayerUpdate& operator<<(sf::Packet& packet)
-    {
-        packet >> xCoord >> yCoord >> rotation >> health;
-        return *this;
-    }
-
-    void operator>>(sf::Packet& packet)
-    {
-        packet << header << xCoord << yCoord << rotation << health;
-    }
-
 };
 
+class AddShot : public Message
+{
+public:
+    AddShot(): Message(ADD_SHOT) {};
+    
+    int clientID;
+    float originXPos;
+    float originYPos;
+    float directionXPos;
+    float directionYPos;
+    float endPointXPos;
+    float endPointYPos;
+    int damage;
+    
+    AddShot(sf::Packet);
+    sf::Packet asPacket();
+};
+
+class RoundRestart : public Message
+{
+public:
+    RoundRestart(): Message(ROUND_RESTART) {};
+    
+    int tTeamScore;
+    int ctTeamScore;
+    int spawnpointIndex;
+    
+    RoundRestart(sf::Packet);
+    sf::Packet asPacket();
+};
 #endif

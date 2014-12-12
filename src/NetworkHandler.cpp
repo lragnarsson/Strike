@@ -14,10 +14,12 @@ Erik Sköld
 #include <iostream>
 #include <string>
 #include <exception>
+#include <thread>
+
 
 NetworkHandler::NetworkHandler()
 {
-
+    
 }
 
 
@@ -32,9 +34,7 @@ NetworkHandler::~NetworkHandler()
 
 std::vector<Message*> NetworkHandler::getNewMessages()
 {
-    std::vector<Message*> tmp;
-    tmp.swap(messages_);
-    return tmp;
+    return incomingMessages_.stealNewMessages();
 }
 
 
@@ -47,7 +47,7 @@ void NetworkHandler::recieveUDPPackets()
     if (Usocket_.receive(recievePacket, remoteIP, remotePort) == sf::Socket::Done)
     {
         std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << std::endl;
-        messages_.push_back(unpackPacket(recievePacket));
+        incomingMessages_.push_back(unpackPacket(recievePacket));
     }
 }
 
@@ -71,7 +71,7 @@ void NetworkHandler::recieveTCPPackets()
             else
             {
                 std::cout << "was normal message" << std::endl;
-                messages_.push_back(m);
+                incomingMessages_.push_back(m);
             }
         }
     }
@@ -139,7 +139,7 @@ void NetworkHandler::checkForNewTcpConnections() //Server only
         sf::Packet packet {sac.asPacket()};
         newClient.TCPSocket->send(packet); //Send SERVER_ACCEPT_CONNECTION
 
-        messages_.push_back(new AddPlayer(newClient.ID));
+        incomingMessages_.push_back(new AddPlayer(newClient.ID));
 
         clients_.push_back(std::move(newClient));
 
@@ -198,7 +198,6 @@ void NetworkHandler::initRemotePlayers() //Server only
             ap.playerID = client.ID;
             broadcastTCPPacket(ap.asPacket());
         }
-
 }
 
 Message* NetworkHandler::unpackPacket(sf::Packet packet)
