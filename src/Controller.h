@@ -8,6 +8,7 @@
 #include <iostream>
 #include "./Player.h"
 #include "./Shot.h"
+#include "./GameObject.h"
 
 class Controller{
 public:
@@ -26,6 +27,7 @@ public:
     void bindView(sf::View*);
     void updateView();
     std::vector<Shot*> playerFire();
+    GameObject* playerThrow();
     void reloadWeapon();
     void isSprinting();
 

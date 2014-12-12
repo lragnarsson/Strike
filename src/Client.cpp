@@ -122,6 +122,7 @@ void Client::handleCollisions() {
         controller_.playerMove();
         handleShots();
         handleVision();
+        handleGameObjects();
     }
 }
 
@@ -136,6 +137,7 @@ void Client::handleInput() {
         controller_.updatePlayerInputVector();
         controller_.setPlayerRotation(renderWindow_);
         gameState_.addUnhandledShots(controller_.playerFire());
+        gameState_.addMovingGameObject(controller_.playerThrow());
     }
 }
 
@@ -163,6 +165,10 @@ void Client::loadTextures() {
     catch (const std::exception& e) {
         std::cerr << e.what();
     }
+}
+
+sf::Texture* getTexturePtr(std::string name) {
+    return textures_[name];
 }
 
 void Client::handleShots() {
@@ -274,4 +280,22 @@ void Client::handleVision() {
         if (!blocked)
             player->lastSeenNow();
     }
+
+void Client::handleGameObjects() {
+  for (auto gameObject : gameState_.getMovingGameObjects()) {
+      if (Grenade* grenade = dynamic_cast<Grenade*>(gameObject)) {
+          if (grenade->endOfFuse()) {
+              gameState_.addUnhandledShots(grenade->explode());
+              gameState_.addAnimatedDecal(
+                  new AnimatedDecal(gameObject->getPosition(), sf::Vector2f(0.8f,0.8f),
+                                    textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                    20, 25, false, 25));
+          }
+      } else {
+        collideMoveVector(gameObject->getPosition(),
+                          gameObject->getMoveVector(),
+                          gameObject->getRadius());
+      }
+  }
+  gameState_.movingToStationaryObjects();
 }

@@ -2,9 +2,6 @@
 //  Client.h
 //  Strike
 //
-//  Created by Isak Wiberg on 2014-11-25.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
 
 #ifndef __Strike__Client__
 #define __Strike__Client__
@@ -33,7 +30,9 @@ public:
 
     bool connectToServer(std::string name, int team, sf::IpAddress ip);
     void run() override;
-
+    static sf::Texture* getTexturePtr(std::string name);
+    static void loadTextures();
+    static std::map<std::string, sf::Texture*> textures_;
 private:
     void readFromNetwork() override;
     void writeToNetwork() override;
@@ -49,6 +48,7 @@ private:
     void handleVision();
     void createDecals();
     void roundRestart();
+    void handleGameObjects();
 
     int clientID_ = 1337;
     NetworkHandler nh_;
@@ -56,7 +56,6 @@ private:
     std::string clientName_;
     sf::RenderWindow renderWindow_;
     Controller controller_;
-    std::map<std::string, sf::Texture*> textures_;
 };
 
 #endif /* defined(__Strike__Client__) */

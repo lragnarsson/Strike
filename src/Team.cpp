@@ -2,13 +2,9 @@
 //  Team.cpp
 //  Strike
 //
-//  Created by Isak Wiberg on 2014-11-19.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
 
 #include "Team.h"
 #include "Player.h"
-
 
 int Team::getTeamID() const {
     return teamID_;
@@ -24,4 +20,3 @@ int Team::getScore() const{
 
 void Team::setScore(int score){
     score_ = score;
-}

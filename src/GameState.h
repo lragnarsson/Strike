@@ -2,21 +2,19 @@
 //  GameState.h
 //  Strike
 //
-//  Created by Isak Wiberg on 2014-11-16.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
 
 #ifndef __Strike__GameState__
 #define __Strike__GameState__
 
 #include <stdio.h>
-#include "Player.h"
-#include "Shot.h"
-#include "PhysicalObject.h"
-#include "./Decal.h"
 #include <vector>
-#include "Map.h"
-#include "Team.h"
+#include "./Player.h"
+#include "./Shot.h"
+#include "./PhysicalObject.h"
+#include "./Decal.h"
+#include "./Map.h"
+#include "./Team.h"
+#include "./GameObject.h"
 
 class GameState{
 public:
@@ -42,6 +40,11 @@ public:
     void addAnimatedDecal(AnimatedDecal* decal);
     void handleDecals();
     void migrateShots();
+    void addTeam(Team* team);
+    void addMovingGameObject(GameObject* gameObject);
+    void addStationaryGameObject(GameObject* gameObject);
+    void movingToStationaryObjects();
+    std::vector<GameObject*>& getMovingGameObjects();
 
 private:
     Team ctTeam_{T_TEAM};
@@ -57,7 +60,8 @@ private:
     std::vector<sf::Drawable*> HUDElements_;
     std::vector<Decal*> unhandledDecals_;
     std::vector<AnimatedDecal*> animatedDecals_;
-    sf::Texture boomtexture;
+    std::vector<GameObject*> movingGameObjects_;
+    std::vector<GameObject*> stationaryGameObjects_;
 };
 
 #endif /* defined(__Strike__GameState__) */

@@ -2,16 +2,12 @@
 //  Shot.h
 //  Strike
 //
-//  Created by Rasmus Vilhelmsson on 2014-11-20.
-//  Copycopy (c) 2014 Rasmus Vilhelmsson. Alla rätter serverade.
-//
 
 #ifndef SHOT_H
 #define SHOT_H
 
 #include <SFML/Graphics.hpp>
 #include "./GeomUtils.h"
-
 
 class Shot: public sf::Drawable {
 public:
