@@ -7,13 +7,20 @@ Controller::Controller() {
 }
 
 std::vector<Shot*> Controller::playerFire() {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        return player_->fire();
-    } else {
-        std::vector<Shot*> shotVector;
-        player_->hasNotFired();
+    std::vector<Shot*> shotVector;
+    if (!player_->holdingFirearm())
         return shotVector;
-    }
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        return player_->fire();
+    player_->hasNotFired();
+    return shotVector;
+}
+
+GameObject* Controller::playerThrow() {
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && !player_->emptyInventory())
+      return player_->throwEquipped();
+  else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && player_->holdingGrenade())
+      return player_->throwGrenade();
 }
 
 Controller::~Controller() {

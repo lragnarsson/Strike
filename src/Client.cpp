@@ -12,7 +12,7 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     loadTextures();
 
     Player* player = new Player(clientID_, textures_["cage3.png"]);
-    player->setWeapon(new Weapon(1000, 2000, 1000, 300, 500, 10, 500.f));
+    //player->setWeapon(new Weapon(1000, 2000, 1000, 300, 500, 10, 500.f));
     gameState_.addPlayer(player);
     gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
@@ -57,6 +57,7 @@ void Client::handleCollisions() {
                       controller_.getPlayer()->getRadius());
     controller_.playerMove();
     handleShots();
+    handleGameObjects();
 }
 
 void Client::handleGameLogic() {
@@ -81,6 +82,7 @@ void Client::handleInput() {
     controller_.updatePlayerInputVector();
     controller_.setPlayerRotation(renderWindow_);
     gameState_.addUnhandledShots(controller_.playerFire());
+    gameState_.addMovingGameObject(controller_.playerThrow());
 }
 
 void Client::draw() {
@@ -98,7 +100,6 @@ void Client::loadTextures() {
             if (fileName.length() > 3) {
                 textures_[fileName] = new sf::Texture();
                 textures_[fileName]->loadFromFile(resourcePath("res/images/") + fileName);
-                textures_[fileName]->setRepeated(false);
                 std::cout << "Loaded file: " << fileName << std::endl;
             }
         }
@@ -106,6 +107,10 @@ void Client::loadTextures() {
     catch (const std::exception& e) {
         std::cerr << e.what();
     }
+}
+
+sf::Texture* getTexturePtr(std::string name) {
+    return textures_[name];
 }
 
 void Client::handleShots() {
@@ -196,4 +201,23 @@ void Client::collideMoveVector(sf::Vector2f position,
     }
 
     moveVector += tangentMoveVector;
+}
+
+void Client::handleGameObjects() {
+  for (auto gameObject : gameState_.getMovingGameObjects()) {
+      if (Grenade* grenade = dynamic_cast<Grenade*>(gameObject)) {
+          if (grenade->endOfFuse()) {
+              gameState_.addUnhandledShots(grenade->explode());
+              gameState_.addAnimatedDecal(
+                  new AnimatedDecal(gameObject->getPosition(), sf::Vector2f(0.8f,0.8f),
+                                    textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                    20, 25, false, 25));
+          }
+      } else {
+        collideMoveVector(gameObject->getPosition(),
+                          gameObject->getMoveVector(),
+                          gameObject->getRadius());
+      }
+  }
+  gameState_.movingToStationaryObjects();
 }

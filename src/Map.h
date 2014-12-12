@@ -2,9 +2,6 @@
 //  Map.h
 //  Strike
 //
-//  Created by Isak Wiberg on 2014-11-24.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
 
 #ifndef __Strike__Map__
 #define __Strike__Map__

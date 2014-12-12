@@ -2,9 +2,6 @@
 //  GameState.cpp
 //  Strike
 //
-//  Created by Isak Wiberg on 2014-11-16.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
 
 #include <vector>
 #include "./ResourcePath.h"
@@ -13,12 +10,13 @@
 #include "./Team.h"
 #include "./GeomUtils.h"
 #include "./Map.h"
-
+#include "./WeaponFactory.h"
 
 GameState::GameState()  {
     map_.load("map_test1.tmx");
+    WeaponFactory w;
+    addStationaryGameObject(w.createAK47());
 }
-
 
 void GameState::addTeam(Team* team){
     teams_.push_back(team);
@@ -63,6 +61,12 @@ void GameState::removeOldShots(bool ignoreTime) {
 void GameState::draw(sf::RenderWindow* window) {
     window->draw(mapSprite_);
     map_.draw(window);
+    for (auto gameObject : movingGameObjects_) {
+        window->draw(*gameObject);
+    }
+    for (auto gameObject : stationaryGameObjects_) {
+        window->draw(*gameObject);
+    }
     for (auto player : players_) {
         if (player->getLastSeen() < 500) {
             player->setColor(sf::Color(255, 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 100, player->getLastSeen()))));
@@ -153,4 +157,25 @@ void GameState::handleDecals() {
                         animatedDecals_.end());
 }
 
+void GameState::addMovingGameObject(GameObject* gameObject) {
+    movingGameObjects_.push_back(gameObject);
+}
 
+void GameState::addStationaryGameObject(GameObject* gameObject) {
+    stationaryGameObjects_.push_back(gameObject);
+}
+
+void GameState::movingToStationaryObjects() {
+  for (auto gameObject : movingGameObjects_) {
+      if (gameObject->isStationary())
+          stationaryGameObjects_.push_back(gameObject);
+  }
+  movingGameObjects_.erase(std::remove_if(movingGameObjects_.begin(),
+                                          movingGameObjects_.end(),
+                                          [](GameObject* go) { return go->isStationary(); }),
+                           movingGameObjects_.end());
+}
+
+std::vector<GameObject*>& GameState::getMovingGameObjects() {
+    return movingGameObjects_;
+}
