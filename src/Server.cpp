@@ -21,6 +21,13 @@ void Server::run(){
     nh_.initRemotePlayers();
 
     std::cout << "Startar server" << std::endl;
+
+    while (true)
+        {
+            ConsolePrintString cps{"Servern säger hej!"};
+            nh_.broadcastUDPPacket(cps.asPacket());
+            sf::sleep(sf::milliseconds(1000));
+        }
 }
 
 void Server::readNetwork(){
