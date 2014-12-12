@@ -24,6 +24,7 @@ protected:
 class ServerAcceptConnection : public Message
 {
 public:
+
     int playerID;
 
     ServerAcceptConnection() : Message(SERVER_ACCEPT_CONNECTION) {}
@@ -36,9 +37,10 @@ public:
 class AddPlayer : public Message
 {
 public:
+
     int playerID;
     int teamID;
-    
+
     AddPlayer() : Message(ADD_PLAYER) {}
     AddPlayer(sf::Packet);
     AddPlayer(int pID) : Message(ADD_PLAYER), playerID(pID) {}
@@ -49,6 +51,7 @@ public:
 class ClientNotifyUDPPort : public Message
 {
 public:
+
     int playerID;
     unsigned short port;
 
@@ -62,6 +65,7 @@ public:
 class ConsolePrintString : public Message
 {
 public:
+
     std::string str;
 
     ConsolePrintString() : Message(CONSOLE_PRINT_STRING) {}
@@ -75,25 +79,24 @@ class PlayerUpdate : public Message
 {
 public:
 
-    PlayerUpdate() : Message(PLAYER_UPDATE) {}
     int playerID;
     float xCoord;
     float yCoord;
     float rotation;
     int health;
 
+    PlayerUpdate() : Message(PLAYER_UPDATE) {}
     PlayerUpdate(sf::Packet);
-    sf::Packet asPacket();
     PlayerUpdate(float x, float y, float r, int h) : Message(PLAYER_UPDATE),
         xCoord(x), yCoord(y), rotation(r), health(h) {}
 
+    sf::Packet asPacket();
 };
 
 class AddShot : public Message
 {
 public:
-    AddShot(): Message(ADD_SHOT) {};
-    
+
     int clientID;
     float originXPos;
     float originYPos;
@@ -102,21 +105,28 @@ public:
     float endPointXPos;
     float endPointYPos;
     int damage;
-    
+
+    AddShot() : Message(ADD_SHOT) {};
     AddShot(sf::Packet);
+    AddShot(int cID, float origXP, float origYP, float dirXP, float dirYP, float endPXP, float endPYP, int dmg) :
+        Message(ADD_SHOT), clientID(cID), originXPos(origXP), originYPos(origYP), directionXPos(dirXP),
+            directionYPos(dirYP), endPointXPos(endPXP), endPointYPos(endPYP), damage(dmg) {}
+
     sf::Packet asPacket();
 };
 
 class RoundRestart : public Message
 {
 public:
-    RoundRestart(): Message(ROUND_RESTART) {};
-    
+
     int tTeamScore;
     int ctTeamScore;
     int spawnpointIndex;
-    
+
+    RoundRestart() : Message(ROUND_RESTART) {};
     RoundRestart(sf::Packet);
+    RoundRestart(int tTS, int ctTS, int spawnPInd) : Message(ROUND_RESTART), tTeamScore(tTS), ctTeamScore(ctTS), spawnpointIndex(spanPInd) {}
+
     sf::Packet asPacket();
 };
 #endif
