@@ -118,15 +118,19 @@ void GameState::setplayerSpawnPoints(){
     }
 }
 
-std::vector<Shot*> GameState::takeUnhandledShots() {
-    std::vector<Shot*> tempVec;// {unhandledShots_};
-    tempVec.swap(unhandledShots_);
-    //unhandledShots_.clear();
-    return tempVec;
+std::vector<Shot*> GameState::getUnhandledShots() const {
+    return unhandledShots_;
 }
 
 std::vector<Player*> GameState::getPlayers() {
     return players_;
+}
+
+void migrateShots() {
+    handledShots_.insert(handledShots_.end(),
+                         unhandledShots_.begin(),
+                         unhandledShots_.end());
+    unhandledShots_.clear();
 }
 
 void GameState::addHUDElement(sf::Drawable* HUD) {
