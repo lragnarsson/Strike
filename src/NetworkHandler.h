@@ -34,9 +34,9 @@ public:
     void broadcastTCPPacket(sf::Packet);
 
     void checkForNewTcpConnections();
-    void connectToServer(sf::IpAddress);
+    bool connectToServer(std::string name, int teamID, sf::IpAddress);
     void initServer();
-    void initClient();
+    void initClient(sf::IpAddress serverAdress);
 
     void initRemotePlayers();
 
@@ -46,6 +46,7 @@ public:
 
 private:
     
+    sf::IpAddress serverAdress_;
     unsigned short serverPort_ = 5060;
 
     sf::TcpListener listener;

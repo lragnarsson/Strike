@@ -152,7 +152,7 @@ void NetworkHandler::checkForNewTcpConnections() //Server only
 
 }
 
-void NetworkHandler::connectToServer(sf::IpAddress ip)
+bool NetworkHandler::connectToServer(std::string name, int teamID, sf::IpAddress ip)
 {
 
     sf::TcpSocket* conn = new sf::TcpSocket();
@@ -160,21 +160,26 @@ void NetworkHandler::connectToServer(sf::IpAddress ip)
     {
         std::cout << "Kunde inte ansluta till servern" << std::endl;
         delete conn;
+        return false;
     }
     else
     {
         std::cout << "Ansluten!" << std::endl;
+    
+
+        conn->setBlocking(false);
+
+        client_ serverClient;
+
+        serverClient.ID = 0;
+        serverClient.UDPPort = serverPort_;
+        serverClient.TCPSocket = conn;
+
+        clients_.push_back(serverClient);
+        
+        
+        return true;
     }
-
-    conn->setBlocking(false);
-
-    client_ serverClient;
-
-    serverClient.ID = 0;
-    serverClient.UDPPort = serverPort_;
-    serverClient.TCPSocket = conn;
-
-    clients_.push_back(serverClient);
 }
 
 void NetworkHandler::initServer()
@@ -184,8 +189,9 @@ void NetworkHandler::initServer()
     Usocket_.bind(serverPort_);
 }
 
-void NetworkHandler::initClient()
+void NetworkHandler::initClient(sf::IpAddress serverAdress)
 {
+    serverAdress_ = serverAdress;
     Usocket_.setBlocking(false);
     Usocket_.bind(sf::Socket::AnyPort);
 }

@@ -75,6 +75,21 @@ public:
     sf::Packet asPacket();
 };
 
+class InitialInformationFromClient : public Message
+{
+    
+    std::string name;
+    int teamID;
+    
+    InitialInformationFromClient() : Message(INITIAL_INFORMATION_FROM_CLIENT) {}
+    InitialInformationFromClient(sf::Packet);
+    InitialInformationFromClient(std::string name, int teamID)
+    :  Message(INITIAL_INFORMATION_FROM_CLIENT), name(name), teamID(teamID) {}
+    
+    sf::Packet asPacket();
+    
+};
+
 class PlayerUpdate : public Message
 {
 public:
