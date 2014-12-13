@@ -39,6 +39,10 @@ inline float smoothstep(float a, float b, float f) {
     return ( f < a ? 0 : ( f > b ? 1 : f/(b-a) ) );
 }
 
+inline float lengthsq(sf::Vector2f v) {
+    return dot(v, v);
+}
+
 struct Line {
 	Line(sf::Vector2f _origin, sf::Vector2f _direction) {
 		origin = _origin;

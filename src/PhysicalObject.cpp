@@ -51,8 +51,8 @@ bool PhysicalCircle::intersectLine(Line line, sf::Vector2f& intersectionPoint, s
 	float t1, t2;
 	if (lineIntersect(line, t1, t2)) {
 		float t = (abs(t1) < abs(t2)) ? t1 : t2;
-		intersectionPoint = sf::Vector2f(line.origin + t*line.direction);
-		intersectionNormal = sf::Vector2f(normalize(intersectionPoint - center_));
+		intersectionPoint = line.origin + t*line.direction;
+		intersectionNormal = normalize(intersectionPoint - center_);
 	}
 	else
 		return false;
@@ -75,7 +75,6 @@ bool PhysicalCircle::intersectLineSegment(LineSegment lineSegment, sf::Vector2f&
 
 bool PhysicalCircle::intersectLineSegment(LineSegment lineSegment, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
 	float t1, t2;
-	//std::cout << "lineSegment: " << lineSegment.start.x << " " << lineSegment.start.y << " " << lineSegment.end.x << " " << lineSegment.end.y << std::endl;
 	if (lineIntersect(Line(lineSegment.start, lineSegment.end - lineSegment.start), t1, t2)) {
 		float t;
 		if (t1 >= 0.0f && t1 <= 1.0f)
@@ -89,7 +88,7 @@ bool PhysicalCircle::intersectLineSegment(LineSegment lineSegment, sf::Vector2f&
 			return false;
 
  		intersectionPoint = lineSegment.start + t*(lineSegment.end - lineSegment.start);
-		intersectionNormal = sf::Vector2f(normalize(intersectionPoint - center_));
+		intersectionNormal = normalize(intersectionPoint - center_);
 	}
 	else
 		return false;
@@ -124,8 +123,8 @@ bool PhysicalCircle::intersectRay(Ray ray, sf::Vector2f& intersectionPoint, sf::
 		else
 			return false;
 
- 		intersectionPoint = sf::Vector2f(ray.origin + t*ray.direction);
-		intersectionNormal = sf::Vector2f(normalize(intersectionPoint - center_));
+ 		intersectionPoint = ray.origin + t*ray.direction;
+		intersectionNormal = normalize(intersectionPoint - center_);
 	}
 	else
 		return false;
@@ -164,11 +163,11 @@ bool PhysicalCircle::intersectCircle(float radius, LineSegment displacement, sf:
 	if (b >= 0) {
 		float d = a - sqrtf(b/dot(v, v));
 		if (d > 0.0f && d < 1.0f) {
-                  centerAfterCollision = displacement.start + (d - 0.1f)*v;
-			intersectionPoint = centerAfterCollision + radius*normalize(p - centerAfterCollision);
-			intersectionNormal = normalize(intersectionPoint - center_);
+            centerAfterCollision = displacement.start + (d - 0.1f)*v;
+            intersectionPoint = centerAfterCollision + radius*normalize(p - centerAfterCollision);
+            intersectionNormal = normalize(intersectionPoint - center_);
 
-			return true;
+            return true;
 		}
 	}
 
@@ -194,7 +193,7 @@ bool PhysicalPolygon::lineIntersect(Line line, LineSegment lineSegment, float& t
 
 	float rxs = cross(r, s);
 
-	if (rxs == 0.0f)
+	if (equalf(rxs, 0.0f))
 		return false;
 
 	float CmPxr = cross(CmP, r);
@@ -225,7 +224,10 @@ bool PhysicalPolygon::intersectLine(Line line, sf::Vector2f& intersectionPoint) 
 }
 
 bool PhysicalPolygon::intersectLine(Line line, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
-	float minD{MAX_FLOAT};
+    if (vertices_.size() < 2)
+        return false;
+
+	float minDsq{MAX_FLOAT};
 	sf::Vector2f closestIntersectionPoint;
 	sf::Vector2f closestIntersectionNormal;
 
@@ -233,17 +235,18 @@ bool PhysicalPolygon::intersectLine(Line line, sf::Vector2f& intersectionPoint, 
 		float t, u;
 		if (lineIntersect(line, LineSegment(*pVertex, *(pVertex-1)), t, u)) {
 			if (u >= 0.0f && u <= 1.0f) {
-				float d = length(t*line.direction);
-				if (d < minD) {
-					minD = d;
+				float dsq = lengthsq(t*line.direction);
+				if (dsq < minDsq) {
+					minDsq = dsq;
 					closestIntersectionPoint = line.origin + t*line.direction;
-					closestIntersectionNormal = normalize(sf::Vector2f(-(*(pVertex-1)-*pVertex).x, (*(pVertex-1)-*pVertex).y));
+					sf::Vector2f normal(-(*(pVertex-1)-*pVertex).y, (*(pVertex-1)-*pVertex).x);
+		            closestIntersectionNormal = normalize( (dot(line.origin - *pVertex, normal) > 0) ? normal : -normal );
 				}
 			}
 		}
 	}
 
-	if (minD == MAX_FLOAT)
+	if (minDsq == MAX_FLOAT)
 		return false;
 	else {
 		intersectionPoint = closestIntersectionPoint;
@@ -267,7 +270,10 @@ bool PhysicalPolygon::intersectLineSegment(LineSegment lineSegment, sf::Vector2f
 }
 
 bool PhysicalPolygon::intersectLineSegment(LineSegment lineSegment, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
-	float minD{MAX_FLOAT};
+    if (vertices_.size() < 2)
+        return false;
+
+	float minDsq{MAX_FLOAT};
 	sf::Vector2f closestIntersectionPoint;
 	sf::Vector2f closestIntersectionNormal;
 
@@ -277,17 +283,18 @@ bool PhysicalPolygon::intersectLineSegment(LineSegment lineSegment, sf::Vector2f
 		float t, u;
 		if (lineIntersect(line, LineSegment(*(pVertex - 1), *pVertex), t, u)) {
 			if (t >= 0.0f && t <= 1.0f && u >= 0.0f && u <= 1.0f) {
-				float d = length(t*line.direction);
-				if (d < minD) {
-					minD = d;
+				float dsq = lengthsq(t*line.direction);
+				if (dsq < minDsq) {
+					minDsq = dsq;
 					closestIntersectionPoint = line.origin + t*line.direction;
-					closestIntersectionNormal = normalize(sf::Vector2f(-(*(pVertex-1)-*pVertex).x, (*(pVertex-1)-*pVertex).y));
+					sf::Vector2f normal(-(*(pVertex-1)-*pVertex).y, (*(pVertex-1)-*pVertex).x);
+		            closestIntersectionNormal = normalize( (dot(line.origin - *pVertex, normal) > 0) ? normal : -normal );
 				}
 			}
 		}
 	}
 
-	if (minD == MAX_FLOAT)
+	if (minDsq == MAX_FLOAT)
 		return false;
 	else {
 		intersectionPoint = closestIntersectionPoint;
@@ -311,7 +318,10 @@ bool PhysicalPolygon::intersectRay(Ray ray, sf::Vector2f& intersectionPoint) con
 }
 
 bool PhysicalPolygon::intersectRay(Ray ray, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
-	float minD{MAX_FLOAT};
+    if (vertices_.size() < 2)
+        return false;
+
+	float minDsq{MAX_FLOAT};
 	sf::Vector2f closestIntersectionPoint;
 	sf::Vector2f closestIntersectionNormal;
 
@@ -319,17 +329,18 @@ bool PhysicalPolygon::intersectRay(Ray ray, sf::Vector2f& intersectionPoint, sf:
 		float t, u;
 		if (lineIntersect(Line(ray.origin, ray.direction), LineSegment(*pVertex, *(pVertex-1)), t, u)) {
 			if (t >= 0.0f && u >= 0.0f && u <= 1.0f) {
-				float d = length(t*ray.direction);
-				if (d < minD) {
-					minD = d;
+				float dsq = lengthsq(t*ray.direction);
+				if (dsq < minDsq) {
+					minDsq = dsq;
 					closestIntersectionPoint = ray.origin + t*ray.direction;
-					closestIntersectionNormal = normalize(sf::Vector2f(-(*(pVertex-1)-*pVertex).x, (*(pVertex-1)-*pVertex).y));
+					sf::Vector2f normal(-(*(pVertex-1)-*pVertex).y, (*(pVertex-1)-*pVertex).x);
+		            closestIntersectionNormal = normalize( (dot(ray.origin - *pVertex, normal) > 0) ? normal : -normal );
 				}
 			}
 		}
 	}
 
-	if (minD == MAX_FLOAT)
+	if (minDsq == MAX_FLOAT)
 		return false;
 	else {
 		intersectionPoint = closestIntersectionPoint;
@@ -361,12 +372,12 @@ bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf
 }
 
 bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
-	float minD{MAX_FLOAT};
+	float minDsq{MAX_FLOAT};
 	sf::Vector2f closestCenterAfterCollision;
 	sf::Vector2f closestIntersectionPoint;
 	sf::Vector2f closestIntersectionNormal;
-	auto p1 = vertices_.end();
-	auto p2 = vertices_.end();
+	sf::Vector2f p1;
+	sf::Vector2f p2;
 
 	for (auto pVertex = vertices_.begin() + 1; pVertex != vertices_.end(); pVertex++) {
 		sf::Vector2f normal(-(*(pVertex-1)-*pVertex).y, (*(pVertex-1)-*pVertex).x);
@@ -376,33 +387,33 @@ bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf
 		float t, u;
 		if (lineIntersect(shiftedLine, LineSegment(*(pVertex - 1), *pVertex), t, u)) {
 			if (t >= 0.0f && t <= 1.0f && u >= 0.0f && u <= 1.0f) {
-				float d = length(t*shiftedLine.direction);
-				if (d < minD) {
-					minD = d;
+				float dsq = lengthsq(t*shiftedLine.direction);
+				if (dsq < minDsq) {
+					minDsq = dsq;
 					closestCenterAfterCollision = displacement.start + t*shiftedLine.direction;
 					closestIntersectionPoint = shiftedLine.origin + t*shiftedLine.direction;
 					closestIntersectionNormal = normal;
-					p1 = pVertex-1;
-					p2 = pVertex;
+					p1 = *(pVertex-1); // end points to exclude
+					p2 = *pVertex;
 				}
 			}
 		}
 	}
 
 	for (auto pVertex = vertices_.begin(); pVertex != vertices_.end(); pVertex++) {
-		if (pVertex == p1 || pVertex == p2)
+		if (*pVertex == p1 || *pVertex == p2)
 			continue;
 
 		sf::Vector2f v = displacement.end - displacement.start;
 
 		sf::Vector2f p = *pVertex;
 		sf::Vector2f w = p - displacement.start;
-		float a = dot(w, v)/dot(v, v);
-		float b = radius * radius - dot(w - a*v, w - a*v);
+		float a = dot(w, v)/lengthsq(v);
+		float b = radius * radius - lengthsq(w - a*v);
 		if (b >= 0) {
 			float d = a - sqrtf(b/dot(v, v));
-			if (d > 0.0f && d < 1.0f && d < minD) {
-				minD = d;
+			if (d > 0.0f && d < 1.0f && d < sqrtf(minDsq)) {
+				minDsq = d*d;
 				closestCenterAfterCollision = displacement.start + d*v;
 				closestIntersectionPoint = p;
 				closestIntersectionNormal = closestCenterAfterCollision - p;
@@ -411,7 +422,7 @@ bool PhysicalPolygon::intersectCircle(float radius, LineSegment displacement, sf
 	}
 
 
-	if (minD == MAX_FLOAT)
+	if (minDsq == MAX_FLOAT)
 		return false;
 	else {
 		centerAfterCollision = closestCenterAfterCollision - 0.1f*normalize(displacement.end - displacement.start);
@@ -447,36 +458,6 @@ bool PhysicalAABox::intersectLine(Line line, sf::Vector2f& intersectionPoint) co
 bool PhysicalAABox::intersectLine(Line line, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
 	// fulhaxx för jeppan vet inte hur u:sarna ska kollas
 	return intersectLineSegment(LineSegment(line.origin - 10000.0f*line.direction, line.origin + 10000.0f*line.direction), intersectionPoint, intersectionNormal);
-
-	/*
-	float p[4] = { -line.direction.x, line.direction.x, -line.direction.y, line.direction.y };
-	float q[4] = { (line.origin.x - origin_.x), (origin_.x + width_ - line.origin.x), (line.origin.y - origin_.y), (origin_.y + height_ - line.origin.y) };
-	float u1 = MIN_FLOAT;
-	float u2 = MAX_FLOAT;
-
-	for (int i = 0; i < 4; i++) {
-		if (p[i] == 0.0f) {
-			if (q[i] < 0.0f)
-				return false;
-		}
-		else {
-			float t = q[i] / p[i];
-			if (p[i] < 0.0f && u1 < t)
-				u1 = t;
-			else if (p[i] > 0.0f && u2 > t)
-				u2 = t;
-		}
-	}
-
-	std::cout << "u1: " << u1 << " u2: " << u2 << std::endl;
-
-	if (u1 < -10000000.0f && u2 > 10000000.0f)
-		return false;
-
-	intersectionPoint = line.origin + u1*line.direction;
-
-	return true;
-	*/
 }
 
 bool PhysicalAABox::intersectLineSegment(LineSegment lineSegment) const {
@@ -545,36 +526,6 @@ bool PhysicalAABox::intersectRay(Ray ray, sf::Vector2f& intersectionPoint) const
 bool PhysicalAABox::intersectRay(Ray ray, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
 	// fulhaxx för jeppan vet inte hur u:sarna ska kollas
 	return intersectLineSegment(LineSegment(ray.origin, ray.origin + 10000.0f*ray.direction), intersectionPoint, intersectionNormal);
-
-	/*
-	float p[4] = { -ray.direction.x, ray.direction.x, -ray.direction.y, ray.direction.y };
-	float q[4] = { (ray.origin.x - origin_.x), (origin_.x + width_ - ray.origin.x), (ray.origin.y - origin_.y), (origin_.y + height_ - ray.origin.y) };
-	float u1 = MIN_FLOAT;
-	float u2 = MAX_FLOAT;
-
-	for (int i = 0; i < 4; i++) {
-		if (p[i] == 0.0f) {
-			if (q[i] < 0.0f)
-				return false;
-		}
-		else {
-			float t = q[i] / p[i];
-			if (p[i] < 0.0f && u1 < t)
-				u1 = t;
-			else if (p[i] > 0.0f && u2 > t)
-				u2 = t;
-		}
-	}
-
-	std::cout << "u1: " << u1 << " u2: " << u2 << std::endl;
-
-	if (u1 < 0.0f)
-		return false;
-
-	intersectionPoint = ray.origin + u1*ray.direction;
-
-	return true;
-	*/
 }
 
 bool PhysicalAABox::intersectCircle(float radius, LineSegment displacement) const {
@@ -599,6 +550,7 @@ bool PhysicalAABox::intersectCircle(float radius, LineSegment displacement, sf::
 }
 
 bool PhysicalAABox::intersectCircle(float radius, LineSegment displacement, sf::Vector2f& centerAfterCollision, sf::Vector2f& intersectionPoint, sf::Vector2f& intersectionNormal) const {
+    // Fast solution that doesn't work well with corners..
 	sf::Vector2f direction = displacement.end - displacement.start;
 	sf::Vector2f origin = origin_ - sf::Vector2f(radius, radius);
 	float width = width_ + radius + radius;

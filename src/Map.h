@@ -30,7 +30,7 @@ public:
     void drawToMap(const sf::Drawable& drawable);
 
 private:
-    std::vector<sf::Vector2f> makePolygonVector(std::string rawVector, float xpos, float ypos);
+    std::vector<sf::Vector2f> makePolygonVector(std::string rawVector, float xpos, float ypos, bool forceClosedShape = false);
     std::vector<PhysicalObject*> physicalObjects_;
     std::vector<sf::Vector2f> Tspawnpoints_;
     std::vector<sf::Vector2f> CTspawnpoints_;

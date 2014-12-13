@@ -30,7 +30,7 @@ std::vector<PhysicalObject*> Map::getPhysicalObjects() const {
     return physicalObjects_;
 }
 
-std::vector<sf::Vector2f> Map::makePolygonVector(std::string rawVector, float xpos, float ypos){
+std::vector<sf::Vector2f> Map::makePolygonVector(std::string rawVector, float xpos, float ypos, bool forceClosedShape){
     std::vector<sf::Vector2f> pointPairVector;
 
     float tempNum{0};
@@ -52,6 +52,10 @@ std::vector<sf::Vector2f> Map::makePolygonVector(std::string rawVector, float xp
         x = 0;
         y = 0;
 	}
+
+	if (forceClosedShape)
+	    pointPairVector.push_back(pointPairVector.front());
+
 	return pointPairVector;
 }
 
@@ -113,7 +117,7 @@ void Map::load(std::string filename){
                             float originXf = stof(originX);
                             float originYf = stof(originY);
                             std::string rawVector = objTest->Attribute("points");
-                            physicalObjects_.push_back (new PhysicalPolygon(makePolygonVector(rawVector, originXf, originYf)));
+                            physicalObjects_.push_back (new PhysicalPolygon(makePolygonVector(rawVector, originXf, originYf, true)));
                         }
                     }
                     else{ ///it must now be a box

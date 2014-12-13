@@ -12,17 +12,14 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     loadTextures();
 
     Player* player = new Player(clientID_, textures_["cage3.png"]);
-    player->setWeapon(new Weapon(1000, 2000, 1000, 300, 500, 10, 500.f));
+    player->setWeapon(new Weapon(1000, 2000, 1000, 20, 500, 10, 500.f));
     gameState_.addPlayer(player);
     gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
-    Team blueTeam("T"); //For correct spawnpoints, initilize team with T or CT
-    blueTeam.addPlayer(player);
-    gameState_.addTeam(&blueTeam);
     gameState_.setplayerSpawnPoints();
 
     Player* p2 = new Player(2, textures_["cage3.png"]);
-    p2->setPosition(sf::Vector2f(300.f, 100.f));
+    p2->setPosition(sf::Vector2f(500.f, 100.f));
     p2->move();
     gameState_.addPlayer(p2);
 }
@@ -60,7 +57,7 @@ void Client::handleCollisions() {
 }
 
 void Client::handleGameLogic() {
-    // check player visibility
+    // Check player visibility
     for (auto player : gameState_.getPlayers()) {
         bool blocked = false;
 
@@ -112,7 +109,8 @@ void Client::handleShots() {
     std::vector<Shot*> shots {gameState_.takeUnhandledShots()};
     for (auto shot : shots) {
         float maxDistance = 100000.f;
-        sf::Vector2f centerAfterCollision = {shot->getEndPoint()};
+        sf::Vector2f centerAfterCollision = shot->getEndPoint();
+
         for (auto physObj : gameState_.getPhysicalObjects()) {
             if (physObj->intersectRay(shot->getRay(), centerAfterCollision))
                 if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
@@ -120,6 +118,7 @@ void Client::handleShots() {
                     maxDistance = length(centerAfterCollision - shot->getOrigin());
                 }
         }
+
         for (auto player : gameState_.getPlayers()) {
             if (player->intersectRay(shot->getRay(), centerAfterCollision))
                 if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
@@ -131,6 +130,7 @@ void Client::handleShots() {
                 }
         }
     }
+
     for (auto shot : shots) {
       if (shot->getTargetID() != -1) {
           gameState_.addAnimatedDecal(
@@ -148,6 +148,7 @@ void Client::handleShots() {
                                 textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
                                 20, 25, false, 25));
     }
+
     gameState_.removeOldShots();
     gameState_.addHandledShots(shots);
 }
@@ -159,24 +160,27 @@ void Client::collideMoveVector(sf::Vector2f position,
     sf::Vector2f intersectionNormal, tangentMoveVector, dummy;
     float maxDistance = length(moveVector);
     LineSegment ls = LineSegment(position, centerAfterCollision);
+
     for (auto player : gameState_.getPlayers()) {
         if (player->intersectCircle(radius, ls, centerAfterCollision, dummy, intersectionNormal))
             if (length(centerAfterCollision - position) < maxDistance) {
                 dummy = position + moveVector - centerAfterCollision;
                 tangentMoveVector = dummy - dot(dummy, intersectionNormal) * intersectionNormal;
-                moveVector = centerAfterCollision - position;// + tangentMoveVector;
+                moveVector = centerAfterCollision - position;
                 maxDistance = length(moveVector);
             }
     }
+
     for (auto physObj : gameState_.getPhysicalObjects()) {
         if (physObj->intersectCircle(radius, ls, centerAfterCollision, dummy, intersectionNormal))
             if (length(centerAfterCollision - position) < maxDistance) {
                 dummy = position + moveVector - centerAfterCollision;
                 tangentMoveVector = dummy - dot(dummy, intersectionNormal) * intersectionNormal;
-                moveVector = centerAfterCollision - position;// + tangentMoveVector;
+                moveVector = centerAfterCollision - position;
                 maxDistance = length(moveVector);
             }
     }
+
 	// Tangent
     ls = LineSegment(centerAfterCollision, centerAfterCollision + tangentMoveVector);
     maxDistance = length(tangentMoveVector);
@@ -187,6 +191,7 @@ void Client::collideMoveVector(sf::Vector2f position,
                 maxDistance = length(tangentMoveVector);
             }
     }
+
     for (auto physObj : gameState_.getPhysicalObjects()) {
         if (physObj->intersectCircle(radius, ls, centerAfterCollision, dummy, intersectionNormal))
             if (length(centerAfterCollision - ls.start) < maxDistance) {
