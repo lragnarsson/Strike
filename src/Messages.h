@@ -6,6 +6,7 @@
 #include <string>
 
 #include "MessageCodes.h"
+#include "./GeomUtils.h"
 
 class Message
 {
@@ -23,6 +24,7 @@ protected:
 class ServerAcceptConnection : public Message
 {
 public:
+
     int playerID;
 
     ServerAcceptConnection() : Message(SERVER_ACCEPT_CONNECTION) {}
@@ -35,7 +37,9 @@ public:
 class AddPlayer : public Message
 {
 public:
+
     int playerID;
+    int teamID;
 
     AddPlayer() : Message(ADD_PLAYER) {}
     AddPlayer(sf::Packet);
@@ -47,12 +51,13 @@ public:
 class ClientNotifyUDPPort : public Message
 {
 public:
+
     int playerID;
     unsigned short port;
 
     ClientNotifyUDPPort() : Message(CLIENT_NOTIFY_UDP_PORT) {}
     ClientNotifyUDPPort(sf::Packet);
-    ClientNotifyUDPPort(int pID, unsigned short prt) : Message(CONSOLE_PRINT_STRING), playerID(pID), port(prt)  {}
+    ClientNotifyUDPPort(int pID, unsigned short prt) : Message(CLIENT_NOTIFY_UDP_PORT), playerID(pID), port(prt)  {}
 
     sf::Packet asPacket();
 };
@@ -60,6 +65,7 @@ public:
 class ConsolePrintString : public Message
 {
 public:
+
     std::string str;
 
     ConsolePrintString() : Message(CONSOLE_PRINT_STRING) {}
@@ -69,30 +75,73 @@ public:
     sf::Packet asPacket();
 };
 
+class InitialInformationFromClient : public Message
+{
+    
+    std::string name;
+    int teamID;
+    
+    InitialInformationFromClient() : Message(INITIAL_INFORMATION_FROM_CLIENT) {}
+    InitialInformationFromClient(sf::Packet);
+    InitialInformationFromClient(std::string name, int teamID)
+    :  Message(INITIAL_INFORMATION_FROM_CLIENT), name(name), teamID(teamID) {}
+    
+    sf::Packet asPacket();
+    
+};
+
 class PlayerUpdate : public Message
 {
 public:
 
-    PlayerUpdate() : Message(PLAYER_UPDATE) {}
+    int playerID;
     float xCoord;
     float yCoord;
     float rotation;
     int health;
 
+    PlayerUpdate() : Message(PLAYER_UPDATE) {}
+    PlayerUpdate(sf::Packet);
     PlayerUpdate(float x, float y, float r, int h) : Message(PLAYER_UPDATE),
         xCoord(x), yCoord(y), rotation(r), health(h) {}
 
-    PlayerUpdate& operator<<(sf::Packet& packet)
-    {
-        packet >> xCoord >> yCoord >> rotation >> health;
-        return *this;
-    }
-
-    void operator>>(sf::Packet& packet)
-    {
-        packet << header << xCoord << yCoord << rotation << health;
-    }
-
+    sf::Packet asPacket();
 };
 
+class AddShot : public Message
+{
+public:
+
+    int clientID;
+    float originXPos;
+    float originYPos;
+    float directionXPos;
+    float directionYPos;
+    float endPointXPos;
+    float endPointYPos;
+    int damage;
+
+    AddShot() : Message(ADD_SHOT) {};
+    AddShot(sf::Packet);
+    AddShot(int cID, float origXP, float origYP, float dirXP, float dirYP, float endPXP, float endPYP, int dmg) :
+        Message(ADD_SHOT), clientID(cID), originXPos(origXP), originYPos(origYP), directionXPos(dirXP),
+            directionYPos(dirYP), endPointXPos(endPXP), endPointYPos(endPYP), damage(dmg) {}
+
+    sf::Packet asPacket();
+};
+
+class RoundRestart : public Message
+{
+public:
+
+    int tTeamScore;
+    int ctTeamScore;
+    int spawnpointIndex;
+
+    RoundRestart() : Message(ROUND_RESTART) {};
+    RoundRestart(sf::Packet);
+    RoundRestart(int tTS, int ctTS, int spawnPInd) : Message(ROUND_RESTART), tTeamScore(tTS), ctTeamScore(ctTS), spawnpointIndex(spawnPInd) {}
+
+    sf::Packet asPacket();
+};
 #endif

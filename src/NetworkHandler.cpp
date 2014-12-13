@@ -1,8 +1,8 @@
 /***************************************
-NetworkHandler - Klass för att hålla koll på anslutna klienter och att skicka och ta emot data.
+NetworkHandler - Klass fÃ¶r att hÃ¥lla koll pÃ¥ anslutna klienter och att skicka och ta emot data.
 
 Skriven av:
-Erik Sköld
+Erik SkÃ¶ld
 ***************************************/
 
 #include <SFML/Network.hpp>
@@ -13,10 +13,13 @@ Erik Sköld
 
 #include <iostream>
 #include <string>
+#include <exception>
+#include <thread>
+
 
 NetworkHandler::NetworkHandler()
 {
-
+    
 }
 
 
@@ -31,9 +34,7 @@ NetworkHandler::~NetworkHandler()
 
 std::vector<Message*> NetworkHandler::getNewMessages()
 {
-    std::vector<Message*> tmp;
-    tmp.swap(messages_);
-    return tmp;
+    return incomingMessages_.stealNewMessages();
 }
 
 
@@ -46,7 +47,7 @@ void NetworkHandler::recieveUDPPackets()
     if (Usocket_.receive(recievePacket, remoteIP, remotePort) == sf::Socket::Done)
     {
         std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << std::endl;
-        messages_.push_back(unpackPacket(recievePacket));
+        incomingMessages_.push_back(unpackPacket(recievePacket));
     }
 }
 
@@ -59,9 +60,19 @@ void NetworkHandler::recieveTCPPackets()
         if (client.TCPSocket->receive(recievePacket) == sf::Socket::Done)
         {
             std::cout << "Recieved one TCP packet from: " << client.TCPSocket->getRemoteAddress().toString() << std::endl;
+
             Message* m = unpackPacket(recievePacket);
-            //TODO sort internal
-            messages_.push_back(unpackPacket(recievePacket));
+            std::cout << m->header << std::endl;
+            if (m->header < INTERNAL_MESSAGE_LIMIT)
+            {
+                std::cout << "was internal message" << std::endl;
+                internalMessages_.push_back(m);
+            }
+            else
+            {
+                std::cout << "was normal message" << std::endl;
+                incomingMessages_.push_back(m);
+            }
         }
     }
 }
@@ -83,7 +94,8 @@ void NetworkHandler::broadcastUDPPacket(sf::Packet data)
 {
     for (auto& client : clients_)
     {
-       Usocket_.send(data, client.TCPSocket->getRemoteAddress(), client.TCPSocket->getRemotePort());
+        std::cout << "Skickar udp till klient " << client.ID << "pÃ¥ port " << client.UDPPort << std::endl;
+        Usocket_.send(data, client.TCPSocket->getRemoteAddress(), client.UDPPort);
     }
 }
 
@@ -107,7 +119,7 @@ void NetworkHandler::broadcastTCPPacket(sf::Packet data)
     }
 }
 
-void NetworkHandler::checkForNewTcpConnections()
+void NetworkHandler::checkForNewTcpConnections() //Server only
 {
     sf::TcpSocket*  newConn = new sf::TcpSocket();
     if (listener.accept(*newConn) != sf::Socket::Done)
@@ -126,10 +138,9 @@ void NetworkHandler::checkForNewTcpConnections()
 
         ServerAcceptConnection sac(newClient.ID);
         sf::Packet packet = sac.asPacket();
-
         newClient.TCPSocket->send(packet); //Send SERVER_ACCEPT_CONNECTION
 
-        messages_.push_back(new AddPlayer(newClient.ID));
+        incomingMessages_.push_back(new AddPlayer(newClient.ID));
 
         clients_.push_back(std::move(newClient));
 
@@ -141,7 +152,7 @@ void NetworkHandler::checkForNewTcpConnections()
 
 }
 
-void NetworkHandler::connectToServer(sf::IpAddress ip)
+bool NetworkHandler::connectToServer(std::string name, int teamID, sf::IpAddress ip)
 {
 
     sf::TcpSocket* conn = new sf::TcpSocket();
@@ -149,21 +160,26 @@ void NetworkHandler::connectToServer(sf::IpAddress ip)
     {
         std::cout << "Kunde inte ansluta till servern" << std::endl;
         delete conn;
+        return false;
     }
     else
     {
         std::cout << "Ansluten!" << std::endl;
+    
+
+        conn->setBlocking(false);
+
+        client_ serverClient;
+
+        serverClient.ID = 0;
+        serverClient.UDPPort = serverPort_;
+        serverClient.TCPSocket = conn;
+
+        clients_.push_back(serverClient);
+        
+        
+        return true;
     }
-
-    conn->setBlocking(false);
-
-    client_ serverClient;
-
-    serverClient.ID = 0;
-    serverClient.UDPPort = serverPort_;
-    serverClient.TCPSocket = conn;
-
-    clients_.push_back(serverClient);
 }
 
 void NetworkHandler::initServer()
@@ -173,33 +189,100 @@ void NetworkHandler::initServer()
     Usocket_.bind(serverPort_);
 }
 
+void NetworkHandler::initClient(sf::IpAddress serverAdress)
+{
+    serverAdress_ = serverAdress;
+    Usocket_.setBlocking(false);
+    Usocket_.bind(sf::Socket::AnyPort);
+}
+
+void NetworkHandler::initRemotePlayers() //Server only
+{
+    AddPlayer ap;
+
+    for (auto& client : clients_)
+        {
+            ap.playerID = client.ID;
+            broadcastTCPPacket(ap.asPacket());
+        }
+}
+
 Message* NetworkHandler::unpackPacket(sf::Packet packet)
 {
     int header;
     packet >> header;
     switch(header)
     {
+        case PLAYER_UPDATE:
+        {
+            return new PlayerUpdate(packet);
+            break;
+        }
+        case ADD_SHOT:
+        {
+            return new AddShot(packet);
+            break;
+        }
+        case ROUND_RESTART:
+        {
+            return new RoundRestart(packet);
+            break;
+        }
         case CLIENT_NOTIFY_UDP_PORT:
-        {
-            return new ClientNotifyUDPPort(packet);
-            break;
-        }
+            {
+                return new ClientNotifyUDPPort(packet);
+                break;
+            }
         case SERVER_ACCEPT_CONNECTION:
-        {
-            return new ServerAcceptConnection(packet);
-            break;
-        }
+            {
+                return new ServerAcceptConnection(packet);
+                break;
+            }
         case ADD_PLAYER:
-        {
-            return new AddPlayer(packet);
-            break;
-        }
+            {
+                return new AddPlayer(packet);
+                break;
+            }
         case CONSOLE_PRINT_STRING:
+            {
+                return new ConsolePrintString{packet};
+                break;
+            }
+        default:
         {
-            return new ConsolePrintString{packet};
-            break;
+            throw std::exception();
         }
     }
+}
+
+void NetworkHandler::processInternalMessages()
+{
+    for (Message* internalMessage : internalMessages_)
+        {
+            switch(internalMessage->header)
+            {
+            case CLIENT_NOTIFY_UDP_PORT:
+                {
+                    std::cout << "Found CLIENT_NOTIFY_UDP_PORT message" << std::endl;
+                    for (auto& client : clients_)
+                    {
+                        if (client.ID == static_cast<ClientNotifyUDPPort*>(internalMessage)->playerID)
+                        {
+                            std::cout << "Updated player " << static_cast<ClientNotifyUDPPort*>(internalMessage)->playerID <<
+                                ":s UDP port to " << static_cast<ClientNotifyUDPPort*>(internalMessage)->port << std::endl;
+
+                            client.UDPPort = static_cast<ClientNotifyUDPPort*>(internalMessage)->port;
+                            break;
+                        }
+                    }
+
+                break;
+                }
+            }
+
+        }
+
+        internalMessages_.clear();
 }
 
 

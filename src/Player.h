@@ -25,6 +25,8 @@ public:
     ~Player() noexcept {};
 
     int getClientID() const;
+    std::string getClientName() const;
+    void setClientName(std::string newName);
     void setWeapon(Weapon* weapon);
     std::vector<Shot*> fire();
     sf::Vector2f& getMoveVector();
@@ -47,6 +49,7 @@ private:
     int health_ = 100;
     sf::Texture texture_;
     int clientID_;
+    std::string clientName_;
     float speedMultiplier_ = 1.0f;
     float maxSpeed_ = 400.0f;  // pixels per second
     float acceleration_ = 3000.0f;  // pixels per second^2

@@ -21,12 +21,7 @@
 #include "./Controller.h"
 #include "./Team.h"
 #include "./Weapon.h"
-
-/*  Client är en subklass till Game som skapas hos användaren när denne startar
- *  spelet. Här finns bland annat information för att unikt identifiera en klient
- *  och ett Controller-objekt som hanterar användarens input. Logik för utritning
- *  finns i Client.
- */
+#include "./NetworkHandler.h"
 
 class Client: public Game {
 public:
@@ -53,6 +48,9 @@ private:
     void loadTextures();
 
     int clientID_{1337};
+    NetworkHandler nh_;
+    GameState gameState_;
+    int clientID_;
     std::string clientName_;
     sf::RenderWindow renderWindow_;
     Controller controller_;

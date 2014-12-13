@@ -1,8 +1,8 @@
 /***************************************
-NetworkHandler - Klass för att hålla koll på anslutna klienter och att skicka och ta emot data.
+NetworkHandler - Klass fÃ¶r att hÃ¥lla koll pÃ¥ anslutna klienter och att skicka och ta emot data.
 
 Skriven av:
-Erik Sköld
+Erik SkÃ¶ld
 ***************************************/
 
 #ifndef NETWORKHANDLER_H
@@ -11,53 +11,65 @@ Erik Sköld
 #include <SFML/Network.hpp>
 
 #include "Messages.h"
+#include "SecureVector.h"
 
 #include <vector>
 #include <map>
 
 class NetworkHandler
 {
-    public:
-        NetworkHandler();
-        NetworkHandler(NetworkHandler&) = delete;
-        ~NetworkHandler();
+public:
+    NetworkHandler();
+    NetworkHandler(NetworkHandler&) = delete;
+    ~NetworkHandler();
 
-        NetworkHandler& operator=(const NetworkHandler& rhs) = delete;
+    NetworkHandler& operator=(const NetworkHandler& rhs) = delete;
 
-        std::vector<Message*> getNewMessages();
-        void recieveUDPPackets();
-        void recieveTCPPackets();
-        void sendUDPPacket(sf::Packet, int);
-        void broadcastUDPPacket(sf::Packet);
-        void sendTCPPacket(sf::Packet, int);
-        void broadcastTCPPacket(sf::Packet);
+    std::vector<Message*> getNewMessages();
+    void recieveUDPPackets();
+    void recieveTCPPackets();
+    void sendUDPPacket(sf::Packet, int);
+    void broadcastUDPPacket(sf::Packet);
+    void sendTCPPacket(sf::Packet, int);
+    void broadcastTCPPacket(sf::Packet);
 
-        void checkForNewTcpConnections();
-        void connectToServer(sf::IpAddress);
-        void initServer();
+    void checkForNewTcpConnections();
+    bool connectToServer(std::string name, int teamID, sf::IpAddress);
+    void initServer();
+    void initClient(sf::IpAddress serverAdress);
 
-    private:
-        unsigned short serverPort_ = 5060;
+    void initRemotePlayers();
 
-        sf::UdpSocket Usocket_;
-        sf::TcpListener listener;
+    void processInternalMessages();
 
-        int clientIDcounter = 1;
+    sf::UdpSocket Usocket_; // fšr test endast
 
-        struct client_
-        {
-            int ID = -1;
-            unsigned short UDPPort = -1;
-            sf::TcpSocket* TCPSocket;
-        };
+private:
 
-        std::vector<client_> clients_;
-        std::vector<Message*> messages_;
-        std::vector<Message*> internalMessages_;
+    sf::IpAddress serverAdress_;
+    unsigned short serverPort_ = 5060;
 
-        std::map<int, int> playerLatestUpdate_;
+    sf::TcpListener listener;
 
-        Message* unpackPacket(sf::Packet);
+    int clientIDcounter = 1;
+
+    struct client_
+    {
+        int ID = -1;
+        unsigned short UDPPort = -1;
+        sf::TcpSocket* TCPSocket;
+    };
+
+    std::vector<client_> clients_;
+
+    // the message-vectors are guarded by mutexlock
+    SecureVector incomingMessages_;
+    SecureVector outgoingMessages_;
+    std::vector<Message*> internalMessages_;
+
+    std::map<int, int> playerLatestUpdate_;
+
+    Message* unpackPacket(sf::Packet);
 };
 
 #endif // NETWORKHANDLER_H

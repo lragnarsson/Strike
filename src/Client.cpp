@@ -38,7 +38,7 @@ void Client::run() {
 bool Client::connectToServer(std::string name,
                              unsigned int team,
                              sf::IpAddress ip) {
-    return true;
+    return nh_.connectToServer(name, team, ip);
 }
 void Client::readNetwork() {
     return;

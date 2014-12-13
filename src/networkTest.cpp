@@ -13,14 +13,23 @@ void client()
 {
     std::vector<sf::Packet> recievedPackets_;
     std::vector<Message*> recievedMessages_;
-    //sf::IpAddress addr("130.236.227.231");
-    nh.connectToServer(sf::IpAddress::getLocalAddress());
+    sf::IpAddress addr("130.236.210.102");
+    nh.initClient();
+    nh.connectToServer(addr);
+    
     while(true)
     {
         nh.recieveTCPPackets();
+        for (int i = 0; i < 5; i++)
+        {
+            nh.recieveUDPPackets();
+            sf::sleep(sf::milliseconds(1000));
+        }
+        
+        
         recievedMessages_ = nh.getNewMessages();
         //std::cout << "recievedMessages_ innehÂller " << recievedMessages_.size() << " element" << std::endl;
-
+        
 
         for (Message* message : recievedMessages_)
         {
@@ -29,9 +38,21 @@ void client()
                 std::cout << message->header << std::endl;
                 std::cout << static_cast<ConsolePrintString*>(message)->str << std::endl;
             }
+            if (message->header == SERVER_ACCEPT_CONNECTION)
+            {
+                // här måste detta meddelandes playerID sparas till serverobjektet
+                ClientNotifyUDPPort cnudpp{static_cast<ServerAcceptConnection*>(message)->playerID, nh.Usocket_.getLocalPort()};
+                nh.sendTCPPacket(cnudpp.asPacket(), 0);
+                std::cout << "Recieved server_accept_connection and returned ClientNotifyUDPPort. \n"
+                << "playerID, localPort: " << static_cast<ServerAcceptConnection*>(message)->playerID << ", " << nh.Usocket_.getLocalPort() << std::endl;
+            }
+            if (message->header == ADD_PLAYER)
+            {
+                std::cout << "Add player with id: " << static_cast<AddPlayer*>(message)->playerID << "\n";
+            }
         }
 
-        sf::sleep(sf::milliseconds(10));
+        sf::sleep(sf::milliseconds(100));
 
     /*
         if (recievedMessages_.size() > 0)
@@ -63,8 +84,6 @@ void server()
         p >> i >> s;
         std::cout << i << " " << s << std::endl;
         nh.broadcastTCPPacket(cps.asPacket());
-
-
     }
 }
 
@@ -72,7 +91,7 @@ void testMessages()
 {
     ConsolePrintString* m1 = new ConsolePrintString();
     m1->str = "Test";
-    std::cout << "Paket av typ: " << m1->header << "med innehÂll: " << m1->str << std::endl;
+    std::cout << "Paket av typ: " << m1->header << "med innehåll: " << m1->str << std::endl;
     delete m1;
 }
 
