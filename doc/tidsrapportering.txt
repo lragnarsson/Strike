@@ -16,10 +16,10 @@ Jesper: PhysicalObject-hierarki 2h, Client 1h, Felsökning och integrering 4h
 Rasmus: Map (xml-parsning) 4h
 Isak: Player 2h, NetworkHandler 2h, Client 3h
 
-v. 49
+v. 50
 Erik: NetworkHandler och Server 12h
 Filip:
 Lage:
 Jesper: Map 2h, Client 4h, GameState 1h, PhysicalObject-hierarki 5h
 Rasmus: Map 12h
-Isak: NetworkHandler och Server 12h
+Isak: NetworkHandler och Server 13h, 
