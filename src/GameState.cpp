@@ -60,6 +60,10 @@ void GameState::removeOldShots(bool ignoreTime) {
                                         handledShots_.end());
 }
 
+std::vector<Shot*> GameState::getHandledShots() {
+    return handledShots_;
+}
+
 void GameState::draw(sf::RenderWindow* window) {
     window->draw(mapSprite_);
     map_.draw(window);

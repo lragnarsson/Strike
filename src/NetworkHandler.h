@@ -1,9 +1,3 @@
-/***************************************
-NetworkHandler - Klass för att hålla koll på anslutna klienter och att skicka och ta emot data.
-
-Skriven av:
-Erik Sköld
-***************************************/
 
 #ifndef NETWORKHANDLER_H
 #define NETWORKHANDLER_H

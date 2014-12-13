@@ -36,8 +36,8 @@ public:
     Server& operator=(const Server&) = delete; // borttagen kopieringstilldelning
 
     void run() override;
-    void readNetwork() override;
-    void writeNetwork() override;
+    void readFromNetwork() override;
+    void writeToNetwork() override;
     void handleGameLogic() override;
     void handleCollisions() override;
 
@@ -47,7 +47,9 @@ private:
     NetworkHandler nh_;
     GameState gameState_;
 
-    handleShot(Shot*);
+    void roundRestart();
+    void handleShot(Message*);
+    void updatePlayer(Message*);
 };
 
 #endif /* defined(__Strike__Server__) */

@@ -33,9 +33,44 @@ void Server::readFromNetwork() {
           case PLAYER_UPDATE: updatePlayer(message); break;
           case ADD_SHOT: handleShot(message); break;
       }
-  }
-  for (auto message : recievedMessages_)
       delete message;
+  }
+}
+
+void Server::writeToNetwork() {
+    std::vector<Message*> outboundMessages;
+    for (auto player : gameState_.getPlayers())
+        outboundMessages.push_back(new PlayerUpdate(player->getPosition().x,
+                                                    player->getPosition().y,
+                                                    player->getRotation(),
+                                                    player->getHealth()));
+    for (auto shot : gameState_.getHandledShots())
+        outboundMessages.push_back(new AddShot(shot->getClientID(),
+                                               shot->getOrigin().x,
+                                               shot->getOrigin().y,
+                                               shot->getDirection().x,
+                                               shot->getDirection().y,
+                                               shot->getEndPoint().x,
+                                               shot->getEndPoint().y,
+                                               shot->getDamage()));
+    nh_.addToOutbox(outboundMessages);
+    gameState_.removeOldShots(true);
+}
+
+void Server::handleGameLogic(){
+  
+}
+
+void Server::acceptConnections(){
+    while(!sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+        nh_.checkForNewTcpConnections();
+        nh_.recieveTCPPackets();
+        nh_.processInternalMessages();
+    }
+}
+
+void Server::roundRestart() {
+  
 }
 
 void Server::updatePlayer(Message* message) {
@@ -44,29 +79,7 @@ void Server::updatePlayer(Message* message) {
           player->setPosition(sf::Vector2f(message->xCoord,
                                            message->yCoord));
           player->setRotation(message->rotation);
-    }
-}
-
-void Server::writeToNetwork() {
-  
-}
-
-void Server::handleGameLogic(){
-  
-}
-
-void Server::acceptConnections(){
-    while(true) {
-        nh_.checkForNewTcpConnections();
-        nh_.recieveTCPPackets();
-        nh_.processInternalMessages();
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-            break;
-    }
-}
-
-void Server::roundRestart() {
-  
+      }
 }
 
 void Server::handleShot(Message* message) {
@@ -94,6 +107,5 @@ void Server::handleShot(Message* message) {
             }
     }
     hitPlayer->decreaseHealth(shot->getDamage());
-    gameState_.removeOldShots(true);
     gameState_.addHandledShots(shot);
 }

@@ -32,6 +32,7 @@ public:
     std::vector<sf::Vector2f> getCTspawnpoints() const;
     void setplayerSpawnPoints();
     std::vector<Shot*> takeUnhandledShots();
+    std::vector<Shot*> getHandledShots();
     void removeOldShots(bool ignoreTime = false);
     std::vector<Player*> getPlayers();
     void addHUDElement(sf::Drawable* HUD);
@@ -39,7 +40,6 @@ public:
     void addAnimatedDecal(AnimatedDecal* decal);
     void handleDecals();
     void addTeam(Team* team);
-
 
 private:
     std::vector<Team*> teams_;
