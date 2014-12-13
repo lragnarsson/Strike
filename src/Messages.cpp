@@ -50,6 +50,19 @@ sf::Packet ConsolePrintString::asPacket()
     return pkt;
 }
 
+InitialInformationFromClient::InitialInformationFromClient(sf::Packet packet) :
+    Message(INITIAL_INFORMATION_FROM_CLIENT)
+{
+    packet >> name >> teamID;
+}
+
+sf::Packet InitialInformationFromClient::asPacket()
+{
+    sf::Packet pkt;
+    pkt << header << name << teamID;
+    return pkt;
+}
+
 PlayerUpdate::PlayerUpdate(sf::Packet packet) : Message(PLAYER_UPDATE)
 {
     packet >> playerID >> xCoord >> yCoord >> rotation >> health;

@@ -21,6 +21,7 @@
 #include "./Controller.h"
 #include "./Team.h"
 #include "./Weapon.h"
+#include "./NetworkHandler.h"
 
 /*  Client är en subklass till Game som skapas hos användaren när denne startar
  *  spelet. Här finns bland annat information för att unikt identifiera en klient
@@ -51,6 +52,7 @@ private:
                            float radius);
     void handleShots();
 
+    NetworkHandler nh_;
     GameState gameState_;
     int clientID_;
     std::string clientName_;
