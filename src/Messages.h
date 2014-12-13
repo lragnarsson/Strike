@@ -125,7 +125,7 @@ public:
 
     RoundRestart() : Message(ROUND_RESTART) {};
     RoundRestart(sf::Packet);
-    RoundRestart(int tTS, int ctTS, int spawnPInd) : Message(ROUND_RESTART), tTeamScore(tTS), ctTeamScore(ctTS), spawnpointIndex(spanPInd) {}
+    RoundRestart(int tTS, int ctTS, int spawnPInd) : Message(ROUND_RESTART), tTeamScore(tTS), ctTeamScore(ctTS), spawnpointIndex(spawnPInd) {}
 
     sf::Packet asPacket();
 };

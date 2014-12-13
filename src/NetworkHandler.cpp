@@ -207,6 +207,21 @@ Message* NetworkHandler::unpackPacket(sf::Packet packet)
     packet >> header;
     switch(header)
     {
+        case PLAYER_UPDATE:
+        {
+            return new PlayerUpdate(packet);
+            break;
+        }
+        case ADD_SHOT:
+        {
+            return new AddShot(packet);
+            break;
+        }
+        case ROUND_RESTART:
+        {
+            return new RoundRestart(packet);
+            break;
+        }
         case CLIENT_NOTIFY_UDP_PORT:
             {
                 return new ClientNotifyUDPPort(packet);
