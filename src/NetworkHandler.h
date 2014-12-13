@@ -45,7 +45,7 @@ public:
     sf::UdpSocket Usocket_; // fšr test endast
 
 private:
-    
+
     unsigned short serverPort_ = 5060;
 
     sf::TcpListener listener;
@@ -60,12 +60,12 @@ private:
     };
 
     std::vector<client_> clients_;
-    
+
     // the message-vectors are guarded by mutexlock
     SecureVector incomingMessages_;
-    SecureVector outboundMessages_;
+    SecureVector outgoingMessages_;
     std::vector<Message*> internalMessages_;
-    
+
     std::map<int, int> playerLatestUpdate_;
 
     Message* unpackPacket(sf::Packet);

@@ -14,14 +14,16 @@
 #include <mutex>
 #include "Messages.h"
 
+#include <windows.h>
+#include <WinBase.h>
+#include <system_error>
+#include "mingw.mutex.h"
+
 class SecureVector {
 public:
     SecureVector() = default;
     SecureVector(const SecureVector&) = delete;
-    
-    SecureVector& operator=(SecureVector&&)& = delete;
-    SecureVector& operator=(const SecureVector&)& = delete;
-    
+
     std::vector<Message*> stealNewMessages();
     void push_back(Message*);
     void append(std::vector<Message*>);
