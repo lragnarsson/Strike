@@ -38,40 +38,44 @@ void Client::run() {
 bool Client::connectToServer(std::string name,
                              int team,
                              sf::IpAddress ip) {
-    return nh_.connectToServer(name, team, ip);
+  //return nh_.connectToServer(name, team, ip);
+  return true;
 }
 
 void Client::readFromNetwork() {
     std::vector<Message*> receivedMessages = nh_.getNewMessages();
     for (auto message : receivedMessages) {
         switch (message->header) {
-            case ADD_SHOT:
+            case ADD_SHOT: {
                 AddShot* msg = static_cast<AddShot*>(message);
                 if (msg->clientID == clientID_)
                     break;
-                gameState_.addHandledShots(std::vector<Shot*>(new Shot(msg->clientID,
-                                                                       sf::Vector2f(msg->originXPos, msg->originYPos),
-                                                                       sf::Vector2f(msg->directionXPos, msg->directionYPos),
-                                                                       sf::Vector2f(msg->endPointXPos, msg->endPointYPos),
-                                                                       msg->damage), 1);
+                gameState_.addHandledShots(new Shot(msg->clientID,
+                                                    sf::Vector2f(msg->originXPos, msg->originYPos),
+                                                    sf::Vector2f(msg->directionXPos, msg->directionYPos),
+                                                    sf::Vector2f(msg->endPointXPos, msg->endPointYPos),
+                                                    msg->damage));
                 break;
-            case PLAYER_UPDATE:
-                PlayerUpdate* msg = static_cast<PlayerUpdate*>(message);
-                for (auto player : gameState_.getPlayers()) {
-                    if (player->getClientID() == clientID_) {
-                        player->setHealth(msg->health);
-                        player->setPosition(msg->xCoord, msg->yCoord);
-                        player->setRotation(msg->rotation);
-                    }
-                }
-                break;
-            case ROUND_RESTART:
+          }
+          case PLAYER_UPDATE: {
+              PlayerUpdate* msg = static_cast<PlayerUpdate*>(message);
+              for (auto player : gameState_.getPlayers()) {
+                  if (player->getClientID() == clientID_) {
+                      player->setHealth(msg->health);
+                      player->setPosition(msg->xCoord, msg->yCoord);
+                      player->setRotation(msg->rotation);
+                  }
+              }
+              break;
+          }
+          case ROUND_RESTART:
 
                 break;
-            case ADD_PLAYER:
-                AddPlayer* msg = static_cast<AddPlayer*>(message);
-                gameState_.addPlayer(new Player(msg->playerID, textures_["cage3.png"]));
-                break;
+          case ADD_PLAYER: {
+              AddPlayer* msg = static_cast<AddPlayer*>(message);
+              gameState_.addPlayer(new Player(msg->playerID, textures_["cage3.png"]));
+              break;
+          }
         }
 
         delete message;
@@ -155,7 +159,7 @@ void Client::loadTextures() {
 }
 
 void Client::handleShots() {
-    std::vector<Shot*> shots {gameState_.takeUnhandledShots()};
+    std::vector<Shot*> shots {gameState_.getUnhandledShots()};
     for (auto shot : shots) {
         float maxDistance = 100000.f;
         sf::Vector2f centerAfterCollision = shot->getEndPoint();

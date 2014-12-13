@@ -31,6 +31,7 @@ public:
     std::vector<Shot*> fire();
     sf::Vector2f& getMoveVector();
     void decreaseHealth(int amount);
+    void setHealth(int health);
     void calculateMoveVector(const sf::Vector2f& moveVector,
                              float elapsedSeconds);
     void handleRotation(const sf::Vector2f& aimVector);

@@ -126,7 +126,7 @@ std::vector<Player*> GameState::getPlayers() {
     return players_;
 }
 
-void migrateShots() {
+void GameState::migrateShots() {
     handledShots_.insert(handledShots_.end(),
                          unhandledShots_.begin(),
                          unhandledShots_.end());

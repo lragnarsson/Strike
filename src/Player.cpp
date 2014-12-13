@@ -56,6 +56,10 @@ int Player::getHealth() { //För testning!
   return health_;
 }
 
+void Player::setHealth(int health) {
+    health_ = health;
+}
+
 void Player::hasNotFired() {
     weapon_->hasNotFired();
 }
