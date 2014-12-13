@@ -45,7 +45,9 @@ public:
 
 private:
     NetworkHandler nh_;
-    std::vector<Message*> recievedMessages_;
+    GameState gameState_;
+
+    handleShot(Shot*);
 };
 
 #endif /* defined(__Strike__Server__) */
