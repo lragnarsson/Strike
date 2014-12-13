@@ -26,11 +26,11 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
 
 void Client::run() {
     while (renderWindow_.isOpen()) {
-        readNetwork();
+        readFromNetwork();
         handleInput();
         handleCollisions();
         handleGameLogic();
-        writeNetwork();
+        writeToNetwork();
         draw();
     }
 }
@@ -40,11 +40,11 @@ bool Client::connectToServer(std::string name,
                              sf::IpAddress ip) {
     return nh_.connectToServer(name, team, ip);
 }
-void Client::readNetwork() {
+void Client::readFromNetwork() {
     return;
 }
 
-void Client::writeNetwork() {
+void Client::writeToNetwork() {
     return;
 }
 
@@ -125,8 +125,6 @@ void Client::handleShots() {
                     shot->setEndPoint(centerAfterCollision);
                     maxDistance = length(centerAfterCollision - shot->getOrigin());
                     shot->setTargetID(player->getClientID());
-                    player->setHealth(shot->getDamage()); //För testning!
-                    std::cout << "Health: " << player->getHealth() << std::endl; //För testning!
                 }
         }
     }

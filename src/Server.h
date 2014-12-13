@@ -39,7 +39,6 @@ public:
     void readFromNetwork() override;
     void writeToNetwork() override;
     void handleGameLogic() override;
-    void handleCollisions() override;
 
     void acceptConnections();
 
@@ -48,8 +47,8 @@ private:
     GameState gameState_;
 
     void roundRestart();
-    void handleShot(Message*);
-    void updatePlayer(Message*);
+    void handleShot(AddShot*);
+    void updatePlayer(PlayerUpdate*);
 };
 
 #endif /* defined(__Strike__Server__) */

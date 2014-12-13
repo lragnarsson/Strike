@@ -30,7 +30,7 @@ public:
     void setWeapon(Weapon* weapon);
     std::vector<Shot*> fire();
     sf::Vector2f& getMoveVector();
-    void setHealth(int amount);
+    void decreaseHealth(int amount);
     void calculateMoveVector(const sf::Vector2f& moveVector,
                              float elapsedSeconds);
     void handleRotation(const sf::Vector2f& aimVector);

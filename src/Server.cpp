@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "NetworkHandler.h"
 #include "./MessageCodes.h"
+#include <SFML/System.hpp>
 
 void Server::run() {
     sf::sleep(sf::milliseconds(1000));
@@ -15,23 +16,21 @@ void Server::run() {
     nh_.initRemotePlayers();
     std::cout << "Startar server" << std::endl;
 
-    while (event.type == sf::Event::KeyPressed &&
-           event.key.code == sf::Keyboard::Escape) {
-      readFromNetwork();
-      handleGameLogic();
-      writeToNetwork();
-      /*ConsolePrintString cps{"Servern säger hej!"};
-      nh_.broadcastUDPPacket(cps.asPacket());
-      sf::sleep(sf::milliseconds(1000));*/
+    while (true) {
+        readFromNetwork();
+        handleGameLogic();
+        writeToNetwork();
+        /*ConsolePrintString cps{"Servern säger hej!"};
+          nh_.broadcastUDPPacket(cps.asPacket());
+          sf::sleep(sf::milliseconds(1000));*/
     }
 }
 
 void Server::readFromNetwork() {
-  std::vector<Message*> receivedMessages = nh_.getNewMessages();
-  for (auto message : recievedMessages_) {
-      switch (message.header) {
-          case PLAYER_UPDATE: updatePlayer(message); break;
-          case ADD_SHOT: handleShot(message); break;
+  for (auto message : nh_.getNewMessages()) {
+      switch (message->header) {
+          case PLAYER_UPDATE: updatePlayer(static_cast<PlayerUpdate*>(message)); break;
+          case ADD_SHOT: handleShot(static_cast<AddShot*>(message)); break;
       }
       delete message;
   }
@@ -62,18 +61,14 @@ void Server::handleGameLogic(){
 }
 
 void Server::acceptConnections(){
-    while(!sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
-        nh_.checkForNewTcpConnections();
-        nh_.recieveTCPPackets();
-        nh_.processInternalMessages();
-    }
+  
 }
 
 void Server::roundRestart() {
   
 }
 
-void Server::updatePlayer(Message* message) {
+void Server::updatePlayer(PlayerUpdate* message) {
   for (auto player : gameState_.getPlayers())
       if (player->getClientID() == message->playerID) {
           player->setPosition(sf::Vector2f(message->xCoord,
@@ -82,10 +77,10 @@ void Server::updatePlayer(Message* message) {
       }
 }
 
-void Server::handleShot(Message* message) {
+void Server::handleShot(AddShot* message) {
     Shot* shot = new Shot(message->clientID,
                           sf::Vector2f(message->originXPos, message->originYPos),
-                          sf::Vector2f(message->directlaionXPos, message->directionYPos),
+                          sf::Vector2f(message->directionXPos, message->directionYPos),
                           sf::Vector2f(message->endPointXPos, message->endPointYPos),
                           message->damage);
     Player* hitPlayer;
@@ -107,5 +102,7 @@ void Server::handleShot(Message* message) {
             }
     }
     hitPlayer->decreaseHealth(shot->getDamage());
-    gameState_.addHandledShots(shot);
+    std::vector<Shot*> shotVector;
+    shotVector.push_back(shot);
+    gameState_.addHandledShots(shotVector);
 }

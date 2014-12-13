@@ -47,6 +47,10 @@ int Shot::getTargetID() {
     return targetID_;
 }
 
+int Shot::getClientID() const {
+    return clientID_;
+}
+
 void Shot::setTargetID(int id) {
     targetID_ = id;
 }

@@ -31,6 +31,7 @@ public:
     sf::Vector2f getOrigin() const;
     sf::Vector2f getDirection() const;
     Ray getRay() const;
+    int getClientID() const;
     int getTargetID();
     void setTargetID(int id);
 

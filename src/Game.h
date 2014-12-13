@@ -33,8 +33,8 @@ public:
 
 
 protected:
-    virtual void readNetwork() = 0;  // ta emot data från nätverket och behandla den.
-    virtual void writeNetwork() = 0;  // skicka data på nätverket.
+    virtual void readFromNetwork() = 0;  // ta emot data från nätverket och behandla den.
+    virtual void writeToNetwork() = 0;  // skicka data på nätverket.
     virtual void handleGameLogic() = 0;  // sköter logiken hos klient resp. server.
     virtual void handleCollisions() = 0;  // beräknar kollissioner.
     Game() = default;
