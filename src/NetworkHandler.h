@@ -26,12 +26,7 @@ public:
     NetworkHandler& operator=(const NetworkHandler& rhs) = delete;
 
     std::vector<Message*> getNewMessages();
-    void recieveUDPPackets();
-    void recieveTCPPackets();
-    void sendUDPPacket(sf::Packet, int);
-    void broadcastUDPPacket(sf::Packet);
-    void sendTCPPacket(sf::Packet, int);
-    void broadcastTCPPacket(sf::Packet);
+    void addToOutbox(std::vector<Message*> messages);
 
     void checkForNewTcpConnections();
     bool connectToServer(std::string name, int teamID, sf::IpAddress);
@@ -68,7 +63,14 @@ private:
     std::vector<Message*> internalMessages_;
 
     std::map<int, int> playerLatestUpdate_;
-
+    
+    void recieveUDPPackets();
+    void recieveTCPPackets();
+    void sendUDPPacket(sf::Packet, int);
+    void broadcastUDPPacket(sf::Packet);
+    void sendTCPPacket(sf::Packet, int);
+    void broadcastTCPPacket(sf::Packet);
+    
     Message* unpackPacket(sf::Packet);
 };
 

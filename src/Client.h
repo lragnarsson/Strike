@@ -31,7 +31,7 @@ public:
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;
 
-    bool connectToServer(std::string name, unsigned int team, sf::IpAddress ip);
+    bool connectToServer(std::string name, int team, sf::IpAddress ip);
     void run() override;
 
 private:

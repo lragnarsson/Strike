@@ -37,6 +37,10 @@ std::vector<Message*> NetworkHandler::getNewMessages()
     return incomingMessages_.stealNewMessages();
 }
 
+void NetworkHandler::addToOutbox(std::vector<Message*> messages)
+{
+    outgoingMessages_.append(messages);
+}
 
 void NetworkHandler::recieveUDPPackets()
 {
@@ -177,7 +181,11 @@ bool NetworkHandler::connectToServer(std::string name, int teamID, sf::IpAddress
 
         clients_.push_back(serverClient);
         
-        
+        // skicka Initial_Info meddelande med name och teamID
+        InitialInformationFromClient* msgP {new InitialInformationFromClient(name, teamID)};
+        sf::Packet pkt {msgP->asPacket()};
+        sendTCPPacket(pkt, serverClient.ID);
+        delete msgP;
         return true;
     }
 }
