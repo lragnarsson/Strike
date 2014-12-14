@@ -11,17 +11,10 @@
 
 #include <stdio.h>
 #include <vector>
-#include <mutex>
+
+#include <boost/thread/mutex.hpp>
+
 #include "Messages.h"
-
-//#ifdef OS_WINDOWS
-
-#include <windows.h>
-#include <WinBase.h>
-#include "errno.h"
-#include "mingw.mutex.h"
-
-//#endif
 
 class SecureVector {
 public:
@@ -32,7 +25,7 @@ public:
     void push_back(Message*);
     void append(std::vector<Message*>);
 private:
-    std::mutex guardian_;
+    boost::mutex guardian_;
     std::vector<Message*> messages_;
 };
 #endif /* defined(__Strike__SecureVector__) */

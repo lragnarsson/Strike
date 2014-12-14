@@ -6,7 +6,11 @@
 #include <string>
 
 #include <stdlib.h>
+#include <boost/thread/thread.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/chrono/chrono.hpp>
 
+/*
 NetworkHandler nh;
 
 void client()
@@ -16,7 +20,7 @@ void client()
     sf::IpAddress addr("130.236.210.102");
     nh.initClient();
     nh.connectToServer(addr);
-    
+
     while(true)
     {
         nh.recieveTCPPackets();
@@ -25,11 +29,11 @@ void client()
             nh.recieveUDPPackets();
             sf::sleep(sf::milliseconds(1000));
         }
-        
-        
+
+
         recievedMessages_ = nh.getNewMessages();
         //std::cout << "recievedMessages_ innehåller " << recievedMessages_.size() << " element" << std::endl;
-        
+
 
         for (Message* message : recievedMessages_)
         {
@@ -53,14 +57,6 @@ void client()
         }
 
         sf::sleep(sf::milliseconds(100));
-
-    /*
-        if (recievedMessages_.size() > 0)
-            {
-                std::cout << "Fick ett paket med header: " << recievedMessages_[0]->header << std::endl;
-                std::cout << static_cast<ConsolePrintString*>(recievedMessages_[0])->str << std::endl;
-            }
-    */
 
     }
 }
@@ -94,12 +90,53 @@ void testMessages()
     std::cout << "Paket av typ: " << m1->header << "med innehŒll: " << m1->str << std::endl;
     delete m1;
 }
+*/
 
+boost::mutex m;
+
+void thrd1()
+{
+    for (int i = 0; i < 10; i++)
+    {
+        m.lock();
+        std::cout << "Thread1" << std::endl;
+        m.unlock();
+        boost::this_thread::sleep_for( boost::chrono::seconds(1) );
+    }
+}
+
+void thrd2()
+{
+    for (int i = 0; i < 10; i++)
+    {
+        m.lock();
+        std::cout << "Thread2" << std::endl;
+        m.unlock();
+        boost::this_thread::sleep_for( boost::chrono::seconds(2) );
+    }
+}
+
+
+void testThread()
+{
+    std::cout << "Starting 2 boost threads" << std::endl;
+    boost::thread t1(thrd1);
+    boost::thread t2(thrd2);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "Both threads ended" << std::endl;
+
+
+
+}
 
 int main()
 {
     //testMessages();
-    client();
+    testThread();
+    //client();
     //server();
 }
 
