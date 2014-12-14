@@ -26,7 +26,7 @@
 class Client: public Game {
 public:
     Client();
-    ~Client() {}
+    ~Client();
 
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;
@@ -46,6 +46,9 @@ private:
                            float radius);
     void handleShots();
     void loadTextures();
+    void handleVision();
+    void createDecals();
+    void roundRestart();
 
     int clientID_ = 1337;
     NetworkHandler nh_;

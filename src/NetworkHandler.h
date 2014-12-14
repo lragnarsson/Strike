@@ -26,6 +26,7 @@ public:
     bool connectToServer(std::string name, int teamID, sf::IpAddress);
     void initServer();
     void initClient(sf::IpAddress serverAdress);
+    void update();
 
     void initRemotePlayers();
 
@@ -41,6 +42,8 @@ private:
     sf::TcpListener listener;
 
     int clientIDcounter = 1;
+    int teamID;
+    std::string playerName;
 
     struct client_
     {
@@ -60,9 +63,9 @@ private:
     
     void recieveUDPPackets();
     void recieveTCPPackets();
-    void sendUDPPacket(sf::Packet, int);
+    void sendUDPPacket(sf::Packet, int recieverID);
     void broadcastUDPPacket(sf::Packet);
-    void sendTCPPacket(sf::Packet, int);
+    void sendTCPPacket(sf::Packet, int recieverID);
     void broadcastTCPPacket(sf::Packet);
     
     Message* unpackPacket(sf::Packet);

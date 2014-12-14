@@ -19,6 +19,22 @@ GameState::GameState()  {
     map_.load("map_test1.tmx");
 }
 
+GameState::~GameState() {
+    for (auto shot : unhandledShots_)
+        delete shot;
+    for (auto shot : handledShots_)
+        delete shot;
+    for (auto player : players_)
+        delete player;
+    for (auto team : teams_)
+        delete team;/*
+    for (auto elem : HUDElements_)
+        delete elem;*/
+    for (auto decal : unhandledDecals_)
+        delete decal;
+    for (auto decal : animatedDecals_)
+        delete decal;
+}
 
 void GameState::addTeam(Team* team){
     teams_.push_back(team);
@@ -41,17 +57,17 @@ void GameState::addHandledShot(Shot* shot) {
 }
 
 void GameState::removeOldShots(bool ignoreTime) {
-  int elapsed = gameTime_.getElapsedTime().asMilliseconds();
-  auto f = [ignoreTime, elapsed](Shot* s) {
-      bool tooOld = ignoreTime || (elapsed - s->getTimestamp().asMilliseconds() > 10000);
-      if (tooOld)
-          delete s;
-      return tooOld;
-  };
+    int elapsed = gameTime_.getElapsedTime().asMilliseconds();
+    auto f = [ignoreTime, elapsed](Shot* s) {
+        bool tooOld = ignoreTime || (elapsed - s->getTimestamp().asMilliseconds() > 10000);
+        if (tooOld)
+            delete s;
+        return tooOld;
+    };
 
-  handledShots_.erase(std::remove_if(handledShots_.begin(),
-                                        handledShots_.end(), f),
-                                        handledShots_.end());
+    handledShots_.erase(std::remove_if(handledShots_.begin(),
+                                       handledShots_.end(), f),
+                        handledShots_.end());
 }
 
 std::vector<Shot*> GameState::getHandledShots() {
@@ -121,6 +137,8 @@ std::vector<Player*> GameState::getPlayers() {
 }
 
 void GameState::migrateShots() {
+    for (auto shot : unhandledShots_)
+        shot->setTimestamp(gameTime_.getElapsedTime());
     handledShots_.insert(handledShots_.end(),
                          unhandledShots_.begin(),
                          unhandledShots_.end());
@@ -140,19 +158,19 @@ void GameState::addAnimatedDecal(AnimatedDecal* decal) {
 }
 
 void GameState::handleDecals() {
-  for (auto decal : animatedDecals_) {
-      if (decal->animationComplete() && decal->isPermanent())
-          unhandledDecals_.push_back(decal);
-  }
-  for (auto decal : unhandledDecals_) {
-      map_.drawToMap(*decal);
-      delete decal;
-  }
-  unhandledDecals_.clear();
-  animatedDecals_.erase(std::remove_if(animatedDecals_.begin(),
-                                       animatedDecals_.end(),
-                                       [](AnimatedDecal* d) { return d->animationComplete(); }),
-                        animatedDecals_.end());
+    for (auto decal : animatedDecals_) {
+        if (decal->animationComplete() && decal->isPermanent())
+            unhandledDecals_.push_back(decal);
+    }
+    for (auto decal : unhandledDecals_) {
+        map_.drawToMap(*decal);
+        delete decal;
+    }
+    unhandledDecals_.clear();
+    animatedDecals_.erase(std::remove_if(animatedDecals_.begin(),
+                                         animatedDecals_.end(),
+                                         [](AnimatedDecal* d) { return d->animationComplete(); }),
+                          animatedDecals_.end());
 }
 
 

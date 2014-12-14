@@ -24,6 +24,11 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.addPlayer(p2);
 }
 
+Client::~Client() {
+    for (auto texture : textures_)
+        delete texture.second;
+}
+
 void Client::run() {
     while (renderWindow_.isOpen()) {
         readFromNetwork();
@@ -38,13 +43,16 @@ void Client::run() {
 bool Client::connectToServer(std::string name,
                              int team,
                              sf::IpAddress ip) {
-  //return nh_.connectToServer(name, team, ip);
-  return true;
+  return nh_.connectToServer(name, team, ip);
+  //return true;
+}
+
+void Client::roundRestart() {
+
 }
 
 void Client::readFromNetwork() {
-    std::vector<Message*> receivedMessages = nh_.getNewMessages();
-    for (auto message : receivedMessages) {
+    for (auto message : nh_.getNewMessages()) {
         switch (message->header) {
             case ADD_SHOT: {
                 AddShot* msg = static_cast<AddShot*>(message);
@@ -102,41 +110,36 @@ void Client::writeToNetwork() {
 }
 
 void Client::handleCollisions() {
-    collideMoveVector(controller_.getPlayer()->getPosition(),
-                      controller_.getPlayer()->getMoveVector(),
-                      controller_.getPlayer()->getRadius());
-    controller_.playerMove();
-    handleShots();
+    if (!controller_.getPlayer()->isDead()) {
+        collideMoveVector(controller_.getPlayer()->getPosition(),
+                          controller_.getPlayer()->getMoveVector(),
+                          controller_.getPlayer()->getRadius());
+        controller_.playerMove();
+        handleShots();
+        handleVision();
+    }
 }
 
 void Client::handleGameLogic() {
-    // Check player visibility
-    for (auto player : gameState_.getPlayers()) {
-        bool blocked = false;
-
-        if (player == controller_.getPlayer())
-            player->lastSeenNow();
-        else
-            for (auto obj : gameState_.getPhysicalObjects())
-                blocked |= obj->intersectLineSegment( LineSegment(controller_.getPlayer()->getPosition(), player->getPosition()) );
-
-        if (!blocked)
-			player->lastSeenNow();
-    }
+  
 }
 
 void Client::handleInput() {
     controller_.handleKeyEvents(&renderWindow_);
-    controller_.handlePlayerActions();
-    controller_.updatePlayerInputVector();
-    controller_.setPlayerRotation(renderWindow_);
-    gameState_.addUnhandledShots(controller_.playerFire());
+    if (!controller_.getPlayer()->isDead()) {
+        controller_.handlePlayerActions();
+        controller_.updatePlayerInputVector();
+        controller_.setPlayerRotation(renderWindow_);
+        gameState_.addUnhandledShots(controller_.playerFire());
+    }
 }
 
 void Client::draw() {
     renderWindow_.clear();
     controller_.updateView();
     renderWindow_.setView(*controller_.getView());
+    handleVision();
+    createDecals();
     gameState_.draw(&renderWindow_);
     renderWindow_.display();
 }
@@ -148,7 +151,6 @@ void Client::loadTextures() {
             if (fileName.length() > 3) {
                 textures_[fileName] = new sf::Texture();
                 textures_[fileName]->loadFromFile(resourcePath("res/images/") + fileName);
-                textures_[fileName]->setRepeated(false);
                 std::cout << "Loaded file: " << fileName << std::endl;
             }
         }
@@ -159,8 +161,7 @@ void Client::loadTextures() {
 }
 
 void Client::handleShots() {
-    std::vector<Shot*> shots {gameState_.getUnhandledShots()};
-    for (auto shot : shots) {
+    for (auto shot : gameState_.getUnhandledShots()) {
         float maxDistance = 100000.f;
         sf::Vector2f centerAfterCollision = shot->getEndPoint();
 
@@ -181,8 +182,11 @@ void Client::handleShots() {
                 }
         }
     }
+    gameState_.removeOldShots();
+}
 
-    for (auto shot : shots) {
+void Client::createDecals() {
+    for (auto shot : gameState_.getHandledShots()) {
       if (shot->getTargetID() != -1) {
           gameState_.addAnimatedDecal(
               new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
@@ -199,8 +203,6 @@ void Client::handleShots() {
                                 textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
                                 20, 25, false, 25));
     }
-
-    gameState_.removeOldShots();
 }
 
 void Client::collideMoveVector(sf::Vector2f position,
@@ -251,4 +253,20 @@ void Client::collideMoveVector(sf::Vector2f position,
     }
 
     moveVector += tangentMoveVector;
+}
+
+void Client::handleVision() {
+    // Check player visibility
+    for (auto player : gameState_.getPlayers()) {
+        bool blocked = false;
+
+        if (player == controller_.getPlayer())
+            player->lastSeenNow();
+        else
+            for (auto obj : gameState_.getPhysicalObjects())
+                blocked |= obj->intersectLineSegment( LineSegment(controller_.getPlayer()->getPosition(), player->getPosition()) );
+
+        if (!blocked)
+            player->lastSeenNow();
+    }
 }

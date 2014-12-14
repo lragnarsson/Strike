@@ -11,7 +11,6 @@
 
 #include <stdio.h>
 #include <vector>
-
 #include <boost/thread/mutex.hpp>
 
 #include "Messages.h"
