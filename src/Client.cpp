@@ -110,7 +110,7 @@ void Client::writeToNetwork() {
 }
 
 void Client::handleCollisions() {
-    if (!controller_.getPlayer->isDead()) {
+    if (!controller_.getPlayer()->isDead()) {
         collideMoveVector(controller_.getPlayer()->getPosition(),
                           controller_.getPlayer()->getMoveVector(),
                           controller_.getPlayer()->getRadius());
@@ -126,7 +126,7 @@ void Client::handleGameLogic() {
 
 void Client::handleInput() {
     controller_.handleKeyEvents(&renderWindow_);
-    if (!controller_.getPlayer->isDead()) {
+    if (!controller_.getPlayer()->isDead()) {
         controller_.handlePlayerActions();
         controller_.updatePlayerInputVector();
         controller_.setPlayerRotation(renderWindow_);

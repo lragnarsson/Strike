@@ -60,7 +60,7 @@ void Player::setHealth(int health) {
     health_ = health;
 }
 
-bool isDead() {
+bool Player::isDead() {
     return health_ == 0;
 }
 
