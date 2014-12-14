@@ -34,6 +34,7 @@ private:
     std::vector<PhysicalObject*> physicalObjects_;
     std::vector<sf::Vector2f> Tspawnpoints_;
     std::vector<sf::Vector2f> CTspawnpoints_;
+  //std::vector<??> objectpoints_;
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
     sf::RenderTexture renderTexture_;

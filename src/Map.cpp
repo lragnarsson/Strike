@@ -84,7 +84,7 @@ void Map::load(std::string filename){
             std::string propertyName = property->Attribute("name");
             if (propertyName == "background")
                 mapfile = property->Attribute("value");
-            if (!mapTexture_.loadFromFile(resourcePath("res/maps/") + mapfile.c_str()))
+            if (!mapTexture_.loadFromFile(resourcePath("res/maps/") + mapfile))
                 std::cerr << "Failed to load background file ";
             mapSprite_.setTexture(mapTexture_);
             renderTexture_.draw(mapSprite_);
@@ -140,7 +140,7 @@ void Map::load(std::string filename){
                     std::string spawnY = elem1->Attribute("y");
                     float spawnXf = stof(spawnX);
                     float spawnYf = stof(spawnY);
-                    sf::Vector2f points{spawnXf,spawnYf};
+                    sf::Vector2f points{spawnXf, spawnYf};
                     if(TorCT == "Tspawn")
                         Tspawnpoints_.push_back (points);
                     else if(TorCT == "CTspawn")
@@ -149,6 +149,21 @@ void Map::load(std::string filename){
                         std::cerr << "can't find: " << TorCT << std::endl;
                 }
             }
+           /* else if (whatobject == "gameobject"){
+                for (TiXmlElement* elem1 = elem->FirstChildElement(); elem1 != nullptr; elem1 = elem1->NextSiblingElement()){
+                    std::string objecttag = elem1->Attribute("name");
+                    std::string objectspawnX = elem1->Attribute("x");
+                    std::string objectspawnY = elem1->Attribute("y");
+                    float objectspawnXf = stof(objectspawnX);
+                    float objectspawnYf = stof(objectspawnY);
+                    sf::Vector2f objectpoints{objectspawnXf, objectspawnYf};
+                    if(weapontag == "AK47")
+                        objectSpawns_.push_back (objectpoints);
+                    if(weapontag == "Glock")
+
+                    if(weapontag == "Grenade")
+                }
+            } */
         }
     }
 }
