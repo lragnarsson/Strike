@@ -24,6 +24,11 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.addPlayer(p2);
 }
 
+Client::~Client() {
+    for (auto texture : textures_)
+        delete texture.second;
+}
+
 void Client::run() {
     while (renderWindow_.isOpen()) {
         readFromNetwork();
@@ -43,8 +48,7 @@ bool Client::connectToServer(std::string name,
 }
 
 void Client::readFromNetwork() {
-    std::vector<Message*> receivedMessages = nh_.getNewMessages();
-    for (auto message : receivedMessages) {
+    for (auto message : nh_.getNewMessages()) {
         switch (message->header) {
             case ADD_SHOT: {
                 AddShot* msg = static_cast<AddShot*>(message);
@@ -159,8 +163,7 @@ void Client::loadTextures() {
 }
 
 void Client::handleShots() {
-    std::vector<Shot*> shots {gameState_.getUnhandledShots()};
-    for (auto shot : shots) {
+    for (auto shot : gameState_.getUnhandledShots()) {
         float maxDistance = 100000.f;
         sf::Vector2f centerAfterCollision = shot->getEndPoint();
 
@@ -180,24 +183,22 @@ void Client::handleShots() {
                     shot->setTargetID(player->getClientID());
                 }
         }
-    }
 
-    for (auto shot : shots) {
-      if (shot->getTargetID() != -1) {
-          gameState_.addAnimatedDecal(
-              new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
-                                textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
-                                20, 16, false, 4));
-          gameState_.addAnimatedDecal(
-              new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
-                                sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
-                                sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
-      }
-      else
-          gameState_.addAnimatedDecal(
-              new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
-                                textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
-                                20, 25, false, 25));
+        if (shot->getTargetID() != -1) {
+            gameState_.addAnimatedDecal(
+                new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
+                              textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
+                              20, 16, false, 4));
+            gameState_.addAnimatedDecal(
+                new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
+                                  sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
+                                  sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
+        }
+        else
+            gameState_.addAnimatedDecal(
+                new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
+                                  textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                  20, 25, false, 25));
     }
 
     gameState_.removeOldShots();

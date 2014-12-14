@@ -26,7 +26,7 @@
 class Client: public Game {
 public:
     Client();
-    ~Client() {}
+    ~Client();
 
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;

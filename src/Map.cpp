@@ -117,7 +117,7 @@ void Map::load(std::string filename){
                             float originXf = stof(originX);
                             float originYf = stof(originY);
                             std::string rawVector = objTest->Attribute("points");
-                            physicalObjects_.push_back (new PhysicalPolygon(makePolygonVector(rawVector, originXf, originYf, true)));
+                            physicalObjects_.push_back (new PhysicalPolygon(makePolygonVector(rawVector, originXf, originYf, (polCircle == "polygon"))));
                         }
                     }
                     else{ ///it must now be a box
