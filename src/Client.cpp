@@ -4,6 +4,7 @@
 #include "./Client.h"
 #include "./GeomUtils.h"
 #include "./SysUtils.h"
+#include "./Team.h"
 
 Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     renderWindow_.setFramerateLimit(120);
@@ -11,14 +12,15 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
 
     loadTextures();
 
-    Player* player = new Player(clientID_, textures_["cage3.png"]);
+    Player* player = new Player(clientID_, gameState_.ctTeam(), textures_["cage3.png"]);
+    player->setTeam(gameState_.ctTeam());
     player->setWeapon(new Weapon(1000, 2000, 1000, 20, 500, 10, 500.f));
     gameState_.addPlayer(player);
     gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
     gameState_.setplayerSpawnPoints();
 
-    Player* p2 = new Player(2, textures_["cage3.png"]);
+    Player* p2 = new Player(2, gameState_.tTeam(), textures_["cage3.png"]);
     p2->setPosition(sf::Vector2f(500.f, 100.f));
     p2->move();
     gameState_.addPlayer(p2);
@@ -84,8 +86,9 @@ void Client::readFromNetwork() {
             }
             case ADD_PLAYER: {
                 AddPlayer* msg = static_cast<AddPlayer*>(message);
-                if (msg->playerID != clientID_)
-                    gameState_.addPlayer(new Player(msg->playerID, textures_["cage3.png"]));
+                if (msg->playerID == clientID_)
+                    break;
+                gameState_.addPlayer(new Player(msg->playerID, (msg->teamID == T_TEAM ? gameState_.tTeam() : gameState_.ctTeam()), textures_["cage3.png"]));
                 break;
             }
         }
@@ -125,7 +128,7 @@ void Client::handleCollisions() {
 }
 
 void Client::handleGameLogic() {
-  
+
 }
 
 void Client::handleInput() {

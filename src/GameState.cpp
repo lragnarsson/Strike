@@ -25,9 +25,7 @@ GameState::~GameState() {
     for (auto shot : handledShots_)
         delete shot;
     for (auto player : players_)
-        delete player;
-    for (auto team : teams_)
-        delete team;/*
+        delete player;/*
     for (auto elem : HUDElements_)
         delete elem;*/
     for (auto decal : unhandledDecals_)
@@ -36,12 +34,16 @@ GameState::~GameState() {
         delete decal;
 }
 
-void GameState::addTeam(Team* team){
-    teams_.push_back(team);
-}
-
 void GameState::addPlayer(Player* playerP) {
     players_.push_back(playerP);
+}
+
+Team* GameState::ctTeam() {
+    return &ctTeam_;
+}
+
+Team* GameState::tTeam() {
+    return &tTeam_;
 }
 
 void GameState::addUnhandledShots(std::vector<Shot*> newShots) {
@@ -59,7 +61,7 @@ void GameState::addHandledShot(Shot* shot) {
 void GameState::removeOldShots(bool ignoreTime) {
     int elapsed = gameTime_.getElapsedTime().asMilliseconds();
     auto f = [ignoreTime, elapsed](Shot* s) {
-        bool tooOld = ignoreTime || (elapsed - s->getTimestamp().asMilliseconds() > 10000);
+        bool tooOld = ignoreTime || (elapsed - s->getTimestamp().asMilliseconds() > 20);
         if (tooOld)
             delete s;
         return tooOld;
@@ -110,21 +112,16 @@ std::vector<sf::Vector2f> GameState::getCTspawnpoints() const {
 
 
 void GameState::setplayerSpawnPoints(){
-    std::vector<sf::Vector2f> Tspawns = getTspawnpoints();
-    std::vector<sf::Vector2f> CTspawns = getCTspawnpoints();
-    for(auto team : teams_){
-        int i{0};
-        for(auto player : team->getPlayers()){
-            if(team->getTeamID() == "T"){
-                sf::Vector2f spawn = Tspawns.at(i);
-                player->setPosition(spawn.x,spawn.y);
-            }
-            if(team->getTeamID() == "CT"){
-                sf::Vector2f spawn = CTspawns.at(i);
-                player->setPosition(spawn.x,spawn.y);
-            }
-            i += 1;
-        }
+    std::vector<sf::Vector2f> tSpawns = getTspawnpoints();
+    std::vector<sf::Vector2f> ctSpawns = getCTspawnpoints();
+    int ti = 0;
+    int cti = 0;
+
+    for (Player* player : players_) {
+        if (player->getTeam()->getTeamID() == T_TEAM)
+            player->setPosition(tSpawns[ti++ % tSpawns.size()]);
+        else
+            player->setPosition(ctSpawns[cti++ % ctSpawns.size()]);
     }
 }
 

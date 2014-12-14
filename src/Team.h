@@ -9,29 +9,24 @@
 #ifndef __Strike__Team__
 #define __Strike__Team__
 
-#include <stdio.h>
-#include "Player.h"
-#include <vector>
+#define T_TEAM 0
+#define CT_TEAM 1
+
 
 class Team
 {
 public:
     Team() = default;
     ~Team() = default;
-    Team(std::string teamname) : teamID_{teamname} {};
-    std::vector<Player*> getPlayers() const;
-    void addPlayer(Player*);
-    void removePlayer(int playerID);
-    std::string getTeamID() const;
+    Team(int teamID) : teamID_(teamID) {}
+    void setTeamID(int teamID);
+    int getTeamID() const;
+    void setScore(int score);
     int getScore() const;
-    void setScore(int);
-    void setTeamID(std::string);
 
 private:
-    std::string teamID_;
-    std::vector<Player*> players_;
-    int score_;
-
+    int teamID_ = 0;
+    int score_ = 0;
 };
 
 #endif /* defined(__Strike__Team__) */

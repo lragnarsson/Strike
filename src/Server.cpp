@@ -17,7 +17,7 @@ void Server::run() {
     std::cout << "Startar server" << std::endl;
     initRemotePlayers();
     roundRestart();
-    
+
     while (true) {
         readFromNetwork();
         handleGameLogic();
@@ -59,7 +59,7 @@ void Server::writeToNetwork() {
 }
 
 void Server::handleGameLogic() {
-  
+
 }
 
 void Server::acceptConnections() {
@@ -67,7 +67,7 @@ void Server::acceptConnections() {
     while(true)
     {
         nh_.checkForNewTcpConnections();
-        
+
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
             break;
     }
@@ -83,12 +83,21 @@ void Server::initRemotePlayers() {
             newPlayerMessages.push_back(msg);
         }
     }
-    
+
     nh_.addToOutbox(newPlayerMessages);
 }
 
 void Server::roundRestart() {
+    std::vector<Message*> outboundMessages;
 
+    int ti = 0;
+    int cti = 0;
+    for (auto player : gameState_.getPlayers()) {
+        player->setHealth(100);
+        outboundMessages.push_back(new RoundRestart(gameState_.ctTeam()->getScore(), gameState_.tTeam()->getScore(), (player->getTeam()->getTeamID() == T_TEAM ? ti++ : cti++), player->getClientID()));
+    }
+
+    nh_.addToOutbox(outboundMessages);
 }
 
 void Server::updatePlayer(PlayerUpdate* message) {

@@ -10,8 +10,8 @@
 #include <math.h>
 #include <vector>
 
-Player::Player(int ClientID, sf::Texture* spriteSheet)
-    : PhysicalCircle(getPosition(), 64.0f), clientID_(ClientID), crosshair_(5.f) {
+Player::Player(int ClientID, Team* team, sf::Texture* spriteSheet)
+    : PhysicalCircle(getPosition(), 64.0f), clientID_(ClientID), team_(team), crosshair_(5.f) {
 
     initCrosshair();
     initAnimation(spriteSheet);
@@ -99,6 +99,14 @@ std::vector<Shot*> Player::fire() {
 
 int Player::getClientID() const {
     return clientID_;
+}
+
+Team* Player::getTeam() const {
+    return team_;
+}
+
+void Player::setTeam(Team* team) {
+    team_ = team;
 }
 
 

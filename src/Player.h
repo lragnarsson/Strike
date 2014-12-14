@@ -17,15 +17,18 @@
 #include "./Weapon.h"
 #include "./ResourcePath.h"
 #include "./PhysicalObject.h"
+#include "./Team.h"
 
 class Player: public sf::Sprite, public PhysicalCircle {
 public:
-  explicit Player(int ClientID, sf::Texture* spriteSheet);
     Player(int ClientID); // Server only!
+    explicit Player(int ClientID, Team* team, sf::Texture* spriteSheet);
     Player() = delete;
     ~Player() noexcept {};
 
     int getClientID() const;
+    Team* getTeam() const;
+    void setTeam(Team* team);
     std::string getClientName() const;
     void setClientName(std::string newName);
     void setWeapon(Weapon* weapon);
@@ -49,10 +52,12 @@ public:
     sf::CircleShape* getCrosshair();
     void animate();
     int getHealth(); //För testning!
+
 private:
     int health_ = 100;
     sf::Texture texture_;
     int clientID_;
+    Team* team_;
     std::string clientName_;
     float speedMultiplier_ = 1.0f;
     float maxSpeed_ = 400.0f;  // pixels per second

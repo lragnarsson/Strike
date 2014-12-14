@@ -35,15 +35,17 @@ public:
     std::vector<Shot*> getUnhandledShots() const;
     void removeOldShots(bool ignoreTime = false);
     std::vector<Player*> getPlayers();
+    Team* ctTeam();
+    Team* tTeam();
     void addHUDElement(sf::Drawable* HUD);
     void addDecal(Decal* decal);
     void addAnimatedDecal(AnimatedDecal* decal);
     void handleDecals();
-    void addTeam(Team* team);
     void migrateShots();
 
 private:
-    std::vector<Team*> teams_;
+    Team ctTeam_{T_TEAM};
+    Team tTeam_{CT_TEAM};
     std::vector<Player*> players_;
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
