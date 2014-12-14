@@ -22,4 +22,4 @@ Filip:
 Lage:
 Jesper: Map 2h, Client 5h, GameState 3h, PhysicalObject-hierarki 5h, Team 1h, Server 1h, Player 1h
 Rasmus: Map 12h
-Isak: NetworkHandler och Server 13h, 
+Isak: NetworkHandler och Server 13h, Client 2h, Server 2h
