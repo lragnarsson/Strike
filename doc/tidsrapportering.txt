@@ -20,6 +20,6 @@ v. 50
 Erik: NetworkHandler och Server 12h
 Filip:
 Lage:
-Jesper: Map 2h, Client 4h, GameState 1h, PhysicalObject-hierarki 5h
+Jesper: Map 2h, Client 5h, GameState 3h, PhysicalObject-hierarki 5h, Team 1h, Server 1h, Player 1h
 Rasmus: Map 12h
 Isak: NetworkHandler och Server 13h, 
