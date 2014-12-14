@@ -16,13 +16,13 @@ sf::Packet ServerAcceptConnection::asPacket()
 
 AddPlayer::AddPlayer(sf::Packet packet) : Message(ADD_PLAYER, TCP, -1)
 {
-    packet >> playerID >> teamID;
+    packet >> playerID >> teamID >> name;
 }
 
 sf::Packet AddPlayer::asPacket()
 {
     sf::Packet pkt;
-    pkt << header << playerID << teamID;
+    pkt << header << playerID << teamID << name;
     return pkt;
 }
 
@@ -49,7 +49,7 @@ sf::Packet ConsolePrintString::asPacket()
     pkt << header << str;
     return pkt;
 }
-
+/*
 InitialInformationFromClient::InitialInformationFromClient(sf::Packet packet) :
     Message(INITIAL_INFORMATION_FROM_CLIENT, TCP, -1)
 {
@@ -62,6 +62,7 @@ sf::Packet InitialInformationFromClient::asPacket()
     pkt << header << name << teamID;
     return pkt;
 }
+ */
 
 PlayerUpdate::PlayerUpdate(sf::Packet packet) : Message(PLAYER_UPDATE, UDP, -1)
 {

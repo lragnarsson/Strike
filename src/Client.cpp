@@ -38,8 +38,8 @@ void Client::run() {
 bool Client::connectToServer(std::string name,
                              int team,
                              sf::IpAddress ip) {
-  //return nh_.connectToServer(name, team, ip);
-  return true;
+  return nh_.connectToServer(name, team, ip);
+  //return true;
 }
 
 void Client::readFromNetwork() {
