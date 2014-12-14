@@ -102,7 +102,5 @@ void Server::handleShot(AddShot* message) {
             }
     }
     hitPlayer->decreaseHealth(shot->getDamage());
-    std::vector<Shot*> shotVector;
-    shotVector.push_back(shot);
-    gameState_.addHandledShots(shotVector);
+    gameState_.addHandledShot(shot);
 }

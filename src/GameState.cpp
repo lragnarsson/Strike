@@ -36,14 +36,8 @@ void GameState::addUnhandledShots(std::vector<Shot*> newShots) {
     }
 }
 
-void GameState::addHandledShots(std::vector<Shot*> newShots) {
-    if (!newShots.empty()) {
-        for (auto shot : newShots)
-            shot->setTimestamp(gameTime_.getElapsedTime());
-        handledShots_.insert(handledShots_.end(),
-                             newShots.begin(),
-                             newShots.end());
-    }
+void GameState::addHandledShot(Shot* shot) {
+    handledShots_.push_back(shot);
 }
 
 void GameState::removeOldShots(bool ignoreTime) {

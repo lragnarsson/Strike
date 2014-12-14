@@ -26,7 +26,7 @@ public:
     void addPlayer(Player* player);
     void draw(sf::RenderWindow* window);
     void addUnhandledShots(std::vector<Shot*>);
-    void addHandledShots(std::vector<Shot*>);
+    void addHandledShot(Shot* shot);
     std::vector<PhysicalObject*> getPhysicalObjects() const;
     std::vector<sf::Vector2f> getTspawnpoints() const;
     std::vector<sf::Vector2f> getCTspawnpoints() const;

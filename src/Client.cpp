@@ -50,7 +50,7 @@ void Client::readFromNetwork() {
                 AddShot* msg = static_cast<AddShot*>(message);
                 if (msg->clientID == clientID_)
                     break;
-                gameState_.addHandledShots(new Shot(msg->clientID,
+                gameState_.addHandledShot(new Shot(msg->clientID,
                                                     sf::Vector2f(msg->originXPos, msg->originYPos),
                                                     sf::Vector2f(msg->directionXPos, msg->directionYPos),
                                                     sf::Vector2f(msg->endPointXPos, msg->endPointYPos),

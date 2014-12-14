@@ -2,7 +2,7 @@
 # Makefile for Strike, GNU GCC (g++)
 #
 
-CCC = gccfilter -c -a g++
+CCC = g++
 
 SRC = src
 TINY = libraries/tinyxml
