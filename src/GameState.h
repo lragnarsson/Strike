@@ -26,12 +26,13 @@ public:
     void addPlayer(Player* player);
     void draw(sf::RenderWindow* window);
     void addUnhandledShots(std::vector<Shot*>);
-    void addHandledShots(std::vector<Shot*>);
+    void addHandledShot(Shot* shot);
     std::vector<PhysicalObject*> getPhysicalObjects() const;
     std::vector<sf::Vector2f> getTspawnpoints() const;
     std::vector<sf::Vector2f> getCTspawnpoints() const;
     void setplayerSpawnPoints();
-    std::vector<Shot*> takeUnhandledShots();
+    std::vector<Shot*> getHandledShots();
+    std::vector<Shot*> getUnhandledShots() const;
     void removeOldShots(bool ignoreTime = false);
     std::vector<Player*> getPlayers();
     void addHUDElement(sf::Drawable* HUD);
@@ -39,7 +40,7 @@ public:
     void addAnimatedDecal(AnimatedDecal* decal);
     void handleDecals();
     void addTeam(Team* team);
-
+    void migrateShots();
 
 private:
     std::vector<Team*> teams_;

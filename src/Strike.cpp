@@ -22,7 +22,8 @@ void startClient(std::string name, unsigned int team, std::string ip) {
 }
 
 void startServer(unsigned int maxPlayers, std::string mapName) {
-    std::cout << maxPlayers << "  " << mapName << std::endl;
+    std::cout << maxPlayers << "  " << mapName << "\nServer IP is: "
+    << sf::IpAddress::getPublicAddress(sf::seconds(2.0f)) << std::endl;
    // Server server;
     //server.run();
 }

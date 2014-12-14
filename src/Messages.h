@@ -79,6 +79,7 @@ public:
 
 class InitialInformationFromClient : public Message
 {
+public:
 
     std::string name;
     int teamID;

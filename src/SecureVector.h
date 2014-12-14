@@ -14,10 +14,14 @@
 #include <mutex>
 #include "Messages.h"
 
+#ifdef OS_WINDOWS
+
 #include <windows.h>
 #include <WinBase.h>
 #include "errno.h"
 #include "mingw.mutex.h"
+
+#endif
 
 class SecureVector {
 public:

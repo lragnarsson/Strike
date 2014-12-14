@@ -45,7 +45,7 @@ void Player::setSpeedMultiplier(float speed) {
         speedMultiplier_ = speed;
 }
 
-void Player::setHealth(int amount) {
+void Player::decreaseHealth(int amount) {
     if (amount >= health_)
         health_ = 0;
     else
@@ -54,6 +54,10 @@ void Player::setHealth(int amount) {
 
 int Player::getHealth() { //För testning!
   return health_;
+}
+
+void Player::setHealth(int health) {
+    health_ = health;
 }
 
 void Player::hasNotFired() {

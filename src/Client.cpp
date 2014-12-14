@@ -26,26 +26,79 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
 
 void Client::run() {
     while (renderWindow_.isOpen()) {
-        readNetwork();
+        readFromNetwork();
         handleInput();
         handleCollisions();
         handleGameLogic();
-        writeNetwork();
+        writeToNetwork();
         draw();
     }
 }
 
 bool Client::connectToServer(std::string name,
-                             unsigned int team,
+                             int team,
                              sf::IpAddress ip) {
-    return nh_.connectToServer(name, team, ip);
-}
-void Client::readNetwork() {
-    return;
+  //return nh_.connectToServer(name, team, ip);
+  return true;
 }
 
-void Client::writeNetwork() {
-    return;
+void Client::readFromNetwork() {
+    std::vector<Message*> receivedMessages = nh_.getNewMessages();
+    for (auto message : receivedMessages) {
+        switch (message->header) {
+            case ADD_SHOT: {
+                AddShot* msg = static_cast<AddShot*>(message);
+                if (msg->clientID == clientID_)
+                    break;
+                gameState_.addHandledShot(new Shot(msg->clientID,
+                                                    sf::Vector2f(msg->originXPos, msg->originYPos),
+                                                    sf::Vector2f(msg->directionXPos, msg->directionYPos),
+                                                    sf::Vector2f(msg->endPointXPos, msg->endPointYPos),
+                                                    msg->damage));
+                break;
+          }
+          case PLAYER_UPDATE: {
+              PlayerUpdate* msg = static_cast<PlayerUpdate*>(message);
+              for (auto player : gameState_.getPlayers()) {
+                  if (player->getClientID() == clientID_) {
+                      player->setHealth(msg->health);
+                      player->setPosition(msg->xCoord, msg->yCoord);
+                      player->setRotation(msg->rotation);
+                  }
+              }
+              break;
+          }
+          case ROUND_RESTART:
+
+                break;
+          case ADD_PLAYER: {
+              AddPlayer* msg = static_cast<AddPlayer*>(message);
+              gameState_.addPlayer(new Player(msg->playerID, textures_["cage3.png"]));
+              break;
+          }
+        }
+
+        delete message;
+    }
+}
+
+void Client::writeToNetwork() {
+    std::vector<Message*> outboundMessages;
+    outboundMessages.push_back(new PlayerUpdate(controller_.getPlayer()->getPosition().x,
+                                                controller_.getPlayer()->getPosition().y,
+                                                controller_.getPlayer()->getRotation(),
+                                                0));
+    for (auto shot : gameState_.getUnhandledShots())
+        outboundMessages.push_back(new AddShot(shot->getClientID(),
+                                               shot->getOrigin().x,
+                                               shot->getOrigin().y,
+                                               shot->getDirection().x,
+                                               shot->getDirection().y,
+                                               shot->getEndPoint().x,
+                                               shot->getEndPoint().y,
+                                               shot->getDamage()));
+    nh_.addToOutbox(outboundMessages);
+    gameState_.migrateShots();
 }
 
 void Client::handleCollisions() {
@@ -106,7 +159,7 @@ void Client::loadTextures() {
 }
 
 void Client::handleShots() {
-    std::vector<Shot*> shots {gameState_.takeUnhandledShots()};
+    std::vector<Shot*> shots {gameState_.getUnhandledShots()};
     for (auto shot : shots) {
         float maxDistance = 100000.f;
         sf::Vector2f centerAfterCollision = shot->getEndPoint();
@@ -125,8 +178,6 @@ void Client::handleShots() {
                     shot->setEndPoint(centerAfterCollision);
                     maxDistance = length(centerAfterCollision - shot->getOrigin());
                     shot->setTargetID(player->getClientID());
-                    player->setHealth(shot->getDamage()); //För testning!
-                    std::cout << "Health: " << player->getHealth() << std::endl; //För testning!
                 }
         }
     }
@@ -150,7 +201,6 @@ void Client::handleShots() {
     }
 
     gameState_.removeOldShots();
-    gameState_.addHandledShots(shots);
 }
 
 void Client::collideMoveVector(sf::Vector2f position,

@@ -36,14 +36,8 @@ void GameState::addUnhandledShots(std::vector<Shot*> newShots) {
     }
 }
 
-void GameState::addHandledShots(std::vector<Shot*> newShots) {
-    if (!newShots.empty()) {
-        for (auto shot : newShots)
-            shot->setTimestamp(gameTime_.getElapsedTime());
-        handledShots_.insert(handledShots_.end(),
-                             newShots.begin(),
-                             newShots.end());
-    }
+void GameState::addHandledShot(Shot* shot) {
+    handledShots_.push_back(shot);
 }
 
 void GameState::removeOldShots(bool ignoreTime) {
@@ -58,6 +52,10 @@ void GameState::removeOldShots(bool ignoreTime) {
   handledShots_.erase(std::remove_if(handledShots_.begin(),
                                         handledShots_.end(), f),
                                         handledShots_.end());
+}
+
+std::vector<Shot*> GameState::getHandledShots() {
+    return handledShots_;
 }
 
 void GameState::draw(sf::RenderWindow* window) {
@@ -114,15 +112,19 @@ void GameState::setplayerSpawnPoints(){
     }
 }
 
-std::vector<Shot*> GameState::takeUnhandledShots() {
-    std::vector<Shot*> tempVec;// {unhandledShots_};
-    tempVec.swap(unhandledShots_);
-    //unhandledShots_.clear();
-    return tempVec;
+std::vector<Shot*> GameState::getUnhandledShots() const {
+    return unhandledShots_;
 }
 
 std::vector<Player*> GameState::getPlayers() {
     return players_;
+}
+
+void GameState::migrateShots() {
+    handledShots_.insert(handledShots_.end(),
+                         unhandledShots_.begin(),
+                         unhandledShots_.end());
+    unhandledShots_.clear();
 }
 
 void GameState::addHUDElement(sf::Drawable* HUD) {

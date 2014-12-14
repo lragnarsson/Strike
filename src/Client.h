@@ -31,12 +31,12 @@ public:
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;
 
-    bool connectToServer(std::string name, unsigned int team, sf::IpAddress ip);
+    bool connectToServer(std::string name, int team, sf::IpAddress ip);
     void run() override;
 
 private:
-    void readNetwork() override;
-    void writeNetwork() override;
+    void readFromNetwork() override;
+    void writeToNetwork() override;
     void handleGameLogic() override;
     void handleInput();
     void handleCollisions() override;
@@ -47,7 +47,6 @@ private:
     void handleShots();
     void loadTextures();
 
-    int clientID_{1337};
     NetworkHandler nh_;
     GameState gameState_;
     std::string clientName_;
