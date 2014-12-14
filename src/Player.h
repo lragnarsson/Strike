@@ -43,6 +43,8 @@ public:
     void lastSeenNow();
     int getLastSeen();
 
+    bool isDead();
+
     sf::CircleShape* getCrosshair();
     void animate();
     int getHealth(); //För testning!
