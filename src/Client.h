@@ -47,6 +47,7 @@ private:
     void handleShots();
     void loadTextures();
 
+    int clientID_ = 1337;
     NetworkHandler nh_;
     GameState gameState_;
     std::string clientName_;

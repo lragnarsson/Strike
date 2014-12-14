@@ -13,7 +13,7 @@ void Server::run() {
     sf::sleep(sf::milliseconds(1000));
     nh_.initServer();
     acceptConnections();
-    nh_.initRemotePlayers();
+    //nh_.initRemotePlayers();
     std::cout << "Startar server" << std::endl;
 
     while (true) {
@@ -57,15 +57,15 @@ void Server::writeToNetwork() {
 }
 
 void Server::handleGameLogic(){
-  
+
 }
 
 void Server::acceptConnections(){
-  
+
 }
 
 void Server::roundRestart() {
-  
+
 }
 
 void Server::updatePlayer(PlayerUpdate* message) {

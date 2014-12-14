@@ -19,7 +19,7 @@ Erik Sköld
 
 NetworkHandler::NetworkHandler()
 {
-    
+
 }
 
 
@@ -144,7 +144,7 @@ void NetworkHandler::checkForNewTcpConnections() //Server only
         sf::Packet packet = sac.asPacket();
         newClient.TCPSocket->send(packet); //Send SERVER_ACCEPT_CONNECTION
 
-        incomingMessages_.push_back(new AddPlayer(newClient.ID));
+        //incomingMessages_.push_back(new AddPlayer(newClient.ID));
 
         clients_.push_back(std::move(newClient));
 
@@ -169,7 +169,7 @@ bool NetworkHandler::connectToServer(std::string name, int teamID, sf::IpAddress
     else
     {
         std::cout << "Ansluten!" << std::endl;
-    
+
 
         conn->setBlocking(false);
 
@@ -180,7 +180,7 @@ bool NetworkHandler::connectToServer(std::string name, int teamID, sf::IpAddress
         serverClient.TCPSocket = conn;
 
         clients_.push_back(serverClient);
-        
+
         // skicka Initial_Info meddelande med name och teamID
         InitialInformationFromClient* msgP {new InitialInformationFromClient(name, teamID)};
         sf::Packet pkt {msgP->asPacket()};
@@ -204,6 +204,7 @@ void NetworkHandler::initClient(sf::IpAddress serverAdress)
     Usocket_.bind(sf::Socket::AnyPort);
 }
 
+/* HAS STOPPED WORKING!!!
 void NetworkHandler::initRemotePlayers() //Server only
 {
     AddPlayer ap;
@@ -214,6 +215,7 @@ void NetworkHandler::initRemotePlayers() //Server only
             broadcastTCPPacket(ap.asPacket());
         }
 }
+*/
 
 Message* NetworkHandler::unpackPacket(sf::Packet packet)
 {

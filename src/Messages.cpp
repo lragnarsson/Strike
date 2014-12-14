@@ -2,7 +2,7 @@
 
 #include <SFML/Network.hpp>
 
-ServerAcceptConnection::ServerAcceptConnection(sf::Packet packet) : Message(SERVER_ACCEPT_CONNECTION)
+ServerAcceptConnection::ServerAcceptConnection(sf::Packet packet) : Message(SERVER_ACCEPT_CONNECTION, TCP, -1)
 {
     packet >> playerID;
 }
@@ -14,7 +14,7 @@ sf::Packet ServerAcceptConnection::asPacket()
     return pkt;
 }
 
-AddPlayer::AddPlayer(sf::Packet packet) : Message(ADD_PLAYER)
+AddPlayer::AddPlayer(sf::Packet packet) : Message(ADD_PLAYER, TCP, -1)
 {
     packet >> playerID >> teamID;
 }
@@ -26,7 +26,7 @@ sf::Packet AddPlayer::asPacket()
     return pkt;
 }
 
-ClientNotifyUDPPort::ClientNotifyUDPPort(sf::Packet packet) : Message(CLIENT_NOTIFY_UDP_PORT)
+ClientNotifyUDPPort::ClientNotifyUDPPort(sf::Packet packet) : Message(CLIENT_NOTIFY_UDP_PORT, TCP, -1)
 {
     packet >> playerID >> port;
 }
@@ -38,7 +38,7 @@ sf::Packet ClientNotifyUDPPort::asPacket()
     return pkt;
 }
 
-ConsolePrintString::ConsolePrintString(sf::Packet packet) : Message(CONSOLE_PRINT_STRING)
+ConsolePrintString::ConsolePrintString(sf::Packet packet) : Message(CONSOLE_PRINT_STRING, TCP, -1)
 {
     packet >> str;
 }
@@ -51,7 +51,7 @@ sf::Packet ConsolePrintString::asPacket()
 }
 
 InitialInformationFromClient::InitialInformationFromClient(sf::Packet packet) :
-    Message(INITIAL_INFORMATION_FROM_CLIENT)
+    Message(INITIAL_INFORMATION_FROM_CLIENT, TCP, -1)
 {
     packet >> name >> teamID;
 }
@@ -63,7 +63,7 @@ sf::Packet InitialInformationFromClient::asPacket()
     return pkt;
 }
 
-PlayerUpdate::PlayerUpdate(sf::Packet packet) : Message(PLAYER_UPDATE)
+PlayerUpdate::PlayerUpdate(sf::Packet packet) : Message(PLAYER_UPDATE, UDP, -1)
 {
     packet >> playerID >> xCoord >> yCoord >> rotation >> health;
 }
@@ -75,7 +75,7 @@ sf::Packet PlayerUpdate::asPacket()
     return pkt;
 }
 
-AddShot::AddShot(sf::Packet packet) : Message(ADD_SHOT)
+AddShot::AddShot(sf::Packet packet) : Message(ADD_SHOT, UDP, -1)
 {
     packet >> clientID >> originXPos >> originYPos >> directionXPos
     >> directionYPos >> endPointXPos >> endPointYPos >> damage;
@@ -89,7 +89,7 @@ sf::Packet AddShot::asPacket()
     return pkt;
 }
 
-RoundRestart::RoundRestart(sf::Packet packet) : Message(ROUND_RESTART)
+RoundRestart::RoundRestart(sf::Packet packet) : Message(ROUND_RESTART, TCP, -1)
 {
     packet >> tTeamScore >> ctTeamScore >> spawnpointIndex;
 }

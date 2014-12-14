@@ -59,7 +59,7 @@ public:
 
     ClientNotifyUDPPort() = delete;
     ClientNotifyUDPPort(sf::Packet);
-    ClientNotifyUDPPort(int pID, unsigned short prt) : Message(CLIENT_NOTIFY_UDP_PORT, TCP), playerID(pID), port(prt)  {}
+    ClientNotifyUDPPort(int pID, unsigned short prt, int reciever = -1) : Message(CLIENT_NOTIFY_UDP_PORT, TCP, reciever), playerID(pID), port(prt)  {}
 
     sf::Packet asPacket();
 };
