@@ -16,7 +16,7 @@
 
 #include <windows.h>
 #include <WinBase.h>
-#include <system_error>
+#include "errno.h"
 #include "mingw.mutex.h"
 
 class SecureVector {

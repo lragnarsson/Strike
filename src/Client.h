@@ -50,7 +50,6 @@ private:
     int clientID_{1337};
     NetworkHandler nh_;
     GameState gameState_;
-    int clientID_;
     std::string clientName_;
     sf::RenderWindow renderWindow_;
     Controller controller_;

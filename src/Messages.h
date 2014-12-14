@@ -14,10 +14,12 @@ public:
     virtual ~Message() = default;
 
     const int header;
+    const int protocol;
+    const int reciever; //-1 means broadcast
 
 
 protected:
-    Message(int h) : header(h) {}
+    Message(int header, int protocol, int reciever) : header(header), protocol(protocol), reciever(reciever) {}
     Message(const Message&) = delete;
 };
 
@@ -27,9 +29,9 @@ public:
 
     int playerID;
 
-    ServerAcceptConnection() : Message(SERVER_ACCEPT_CONNECTION) {}
+    ServerAcceptConnection() = delete;
     ServerAcceptConnection(sf::Packet);
-    ServerAcceptConnection(int pID) : Message(SERVER_ACCEPT_CONNECTION), playerID(pID) {}
+    ServerAcceptConnection(int pID, int reciever = -1) : Message(SERVER_ACCEPT_CONNECTION, TCP, reciever), playerID(pID) {}
 
     sf::Packet asPacket();
 };
@@ -41,9 +43,9 @@ public:
     int playerID;
     int teamID;
 
-    AddPlayer() : Message(ADD_PLAYER) {}
+    AddPlayer() = delete;
     AddPlayer(sf::Packet);
-    AddPlayer(int pID) : Message(ADD_PLAYER), playerID(pID) {}
+    AddPlayer(int pID, int tID, int reciever = -1) : Message(ADD_PLAYER, TCP, reciever), playerID(pID), teamID(tID) {}
 
     sf::Packet asPacket();
 };
@@ -55,9 +57,9 @@ public:
     int playerID;
     unsigned short port;
 
-    ClientNotifyUDPPort() : Message(CLIENT_NOTIFY_UDP_PORT) {}
+    ClientNotifyUDPPort() = delete;
     ClientNotifyUDPPort(sf::Packet);
-    ClientNotifyUDPPort(int pID, unsigned short prt) : Message(CLIENT_NOTIFY_UDP_PORT), playerID(pID), port(prt)  {}
+    ClientNotifyUDPPort(int pID, unsigned short prt) : Message(CLIENT_NOTIFY_UDP_PORT, TCP), playerID(pID), port(prt)  {}
 
     sf::Packet asPacket();
 };
@@ -68,26 +70,26 @@ public:
 
     std::string str;
 
-    ConsolePrintString() : Message(CONSOLE_PRINT_STRING) {}
+    ConsolePrintString() = delete;
     ConsolePrintString(sf::Packet);
-    ConsolePrintString(std::string s) : Message(CONSOLE_PRINT_STRING), str(s) {}
+    ConsolePrintString(std::string s, int reciever = -1) : Message(CONSOLE_PRINT_STRING, TCP, reciever), str(s) {}
 
     sf::Packet asPacket();
 };
 
 class InitialInformationFromClient : public Message
 {
-    
+
     std::string name;
     int teamID;
-    
-    InitialInformationFromClient() : Message(INITIAL_INFORMATION_FROM_CLIENT) {}
+
+    InitialInformationFromClient() = delete;
     InitialInformationFromClient(sf::Packet);
-    InitialInformationFromClient(std::string name, int teamID)
-    :  Message(INITIAL_INFORMATION_FROM_CLIENT), name(name), teamID(teamID) {}
-    
+    InitialInformationFromClient(std::string name, int teamID, int reciever = -1)
+    :  Message(INITIAL_INFORMATION_FROM_CLIENT, TCP, reciever), name(name), teamID(teamID) {}
+
     sf::Packet asPacket();
-    
+
 };
 
 class PlayerUpdate : public Message
@@ -100,9 +102,9 @@ public:
     float rotation;
     int health;
 
-    PlayerUpdate() : Message(PLAYER_UPDATE) {}
+    PlayerUpdate() = delete;
     PlayerUpdate(sf::Packet);
-    PlayerUpdate(float x, float y, float r, int h) : Message(PLAYER_UPDATE),
+    PlayerUpdate(float x, float y, float r, int h, int reciever = -1) : Message(PLAYER_UPDATE, UDP, reciever),
         xCoord(x), yCoord(y), rotation(r), health(h) {}
 
     sf::Packet asPacket();
@@ -121,10 +123,10 @@ public:
     float endPointYPos;
     int damage;
 
-    AddShot() : Message(ADD_SHOT) {};
+    AddShot() = delete;
     AddShot(sf::Packet);
-    AddShot(int cID, float origXP, float origYP, float dirXP, float dirYP, float endPXP, float endPYP, int dmg) :
-        Message(ADD_SHOT), clientID(cID), originXPos(origXP), originYPos(origYP), directionXPos(dirXP),
+    AddShot(int cID, float origXP, float origYP, float dirXP, float dirYP, float endPXP, float endPYP, int dmg, int reciever = -1) :
+        Message(ADD_SHOT, UDP, reciever), clientID(cID), originXPos(origXP), originYPos(origYP), directionXPos(dirXP),
             directionYPos(dirYP), endPointXPos(endPXP), endPointYPos(endPYP), damage(dmg) {}
 
     sf::Packet asPacket();
@@ -138,9 +140,9 @@ public:
     int ctTeamScore;
     int spawnpointIndex;
 
-    RoundRestart() : Message(ROUND_RESTART) {};
+    RoundRestart() = delete;
     RoundRestart(sf::Packet);
-    RoundRestart(int tTS, int ctTS, int spawnPInd) : Message(ROUND_RESTART), tTeamScore(tTS), ctTeamScore(ctTS), spawnpointIndex(spawnPInd) {}
+    RoundRestart(int tTS, int ctTS, int spawnPInd, int reciever = -1) : Message(ROUND_RESTART, TCP, reciever), tTeamScore(tTS), ctTeamScore(ctTS), spawnpointIndex(spawnPInd) {}
 
     sf::Packet asPacket();
 };

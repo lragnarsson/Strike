@@ -7,7 +7,11 @@ Erik Sköld
 #ifndef MESSAGECODES_H
 #define MESSAGECODES_H
 
-const int EMPTY_MESSAGE = 1;
+//protocol defines
+const int TCP = 10;
+const int UDP = 11;
+
+const int EMPTY_MESSAGE = 500;
 
 //networkHandler internal messages
 const int CLIENT_NOTIFY_UDP_PORT = 1001;

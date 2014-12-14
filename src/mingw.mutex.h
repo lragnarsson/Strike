@@ -183,6 +183,7 @@ public:
         return try_lock_for(timeout_time - Clock::now());
     }
 };
+/*
 class timed_mutex: public _NonRecursiveMutex<recursive_timed_mutex>
 {
 protected:
@@ -211,6 +212,7 @@ public:
         return ret;
     }
 };
+*/
 // You can use the scoped locks and other helpers that are still provided by <mutex>
 // In that case, you must include <mutex> before inclusing this file, so that this
 // file will not try to redefine them

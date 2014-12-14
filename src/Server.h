@@ -47,7 +47,7 @@ private:
     NetworkHandler nh_;
     GameState gameState_;
 
-    handleShot(Shot*);
+    void handleShot(Shot*);
 };
 
 #endif /* defined(__Strike__Server__) */
