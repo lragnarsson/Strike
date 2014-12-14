@@ -60,6 +60,10 @@ void Player::setHealth(int health) {
     health_ = health;
 }
 
+bool isDead() {
+    return health_ == 0;
+}
+
 void Player::hasNotFired() {
     weapon_->hasNotFired();
 }

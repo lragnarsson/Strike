@@ -56,12 +56,12 @@ void Server::writeToNetwork() {
     gameState_.removeOldShots(true);
 }
 
-void Server::handleGameLogic(){
-
+void Server::handleGameLogic() {
+  
 }
 
-void Server::acceptConnections(){
-
+void Server::acceptConnections() {
+  
 }
 
 void Server::roundRestart() {
