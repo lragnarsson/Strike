@@ -181,8 +181,7 @@ void NetworkHandler::checkForNewTcpConnections() //Server only
         sf::Packet packet = sac.asPacket();
         newClient.TCPSocket->send(packet); //Send SERVER_ACCEPT_CONNECTION
 
-        //incomingMessages_.push_back(new AddPlayer(newClient.ID));
-
+        
         clients_.push_back(std::move(newClient));
 
         for (auto& client : clients_)

@@ -17,6 +17,11 @@ Player::Player(int ClientID, sf::Texture* spriteSheet)
     initAnimation(spriteSheet);
 }
 
+Player::Player(int ClientID)
+: PhysicalCircle(getPosition(), 64.0f), clientID_(ClientID), crosshair_(5.f) {
+    
+}
+
 void Player::initCrosshair() {
     crosshair_.setFillColor(sf::Color::White);
     crosshair_.setOrigin(sf::Vector2f(3.f, 3.f));

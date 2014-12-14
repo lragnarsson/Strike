@@ -21,6 +21,7 @@
 class Player: public sf::Sprite, public PhysicalCircle {
 public:
   explicit Player(int ClientID, sf::Texture* spriteSheet);
+    Player(int ClientID); // Server only!
     Player() = delete;
     ~Player() noexcept {};
 

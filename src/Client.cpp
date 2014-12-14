@@ -59,31 +59,35 @@ void Client::readFromNetwork() {
                 if (msg->clientID == clientID_)
                     break;
                 gameState_.addHandledShot(new Shot(msg->clientID,
-                                                    sf::Vector2f(msg->originXPos, msg->originYPos),
-                                                    sf::Vector2f(msg->directionXPos, msg->directionYPos),
-                                                    sf::Vector2f(msg->endPointXPos, msg->endPointYPos),
-                                                    msg->damage));
+                                                   sf::Vector2f(msg->originXPos, msg->originYPos),
+                                                   sf::Vector2f(msg->directionXPos, msg->directionYPos),
+                                                   sf::Vector2f(msg->endPointXPos, msg->endPointYPos),
+                                                   msg->damage));
                 break;
-          }
-          case PLAYER_UPDATE: {
-              PlayerUpdate* msg = static_cast<PlayerUpdate*>(message);
-              for (auto player : gameState_.getPlayers()) {
-                  if (player->getClientID() == clientID_) {
-                      player->setHealth(msg->health);
-                      player->setPosition(msg->xCoord, msg->yCoord);
-                      player->setRotation(msg->rotation);
-                  }
-              }
-              break;
-          }
-          case ROUND_RESTART:
-
+            }
+            case PLAYER_UPDATE: {
+                PlayerUpdate* msg = static_cast<PlayerUpdate*>(message);
+                for (auto player : gameState_.getPlayers()) {
+                    if (player->getClientID() == clientID_) {
+                        player->setHealth(msg->health);
+                        player->setPosition(msg->xCoord, msg->yCoord);
+                        player->setRotation(msg->rotation);
+                    }
+                }
                 break;
-          case ADD_PLAYER: {
-              AddPlayer* msg = static_cast<AddPlayer*>(message);
-              gameState_.addPlayer(new Player(msg->playerID, textures_["cage3.png"]));
-              break;
-          }
+            }
+            case ROUND_RESTART: {
+                RoundRestart* rrmsg {static_cast<RoundRestart*>(message)};
+                gameState_.tTeam()->setScore(rrmsg->tTeamScore);
+                gameState_.ctTeam()->setScore(rrmsg->ctTeamScore);
+                break;
+            }
+            case ADD_PLAYER: {
+                AddPlayer* msg = static_cast<AddPlayer*>(message);
+                if (msg->playerID != clientID_)
+                    gameState_.addPlayer(new Player(msg->playerID, textures_["cage3.png"]));
+                break;
+            }
         }
 
         delete message;

@@ -15,7 +15,7 @@ public:
 
     const int header;
     const int protocol;
-    const int reciever; //-1 means broadcast
+    int reciever; //-1 means broadcast
 
     virtual sf::Packet asPacket() = 0;
 

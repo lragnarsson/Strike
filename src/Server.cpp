@@ -12,10 +12,12 @@
 void Server::run() {
     sf::sleep(sf::milliseconds(1000));
     nh_.initServer();
-    acceptConnections();
+    acceptConnections();     // Loops until user presses enter
     //nh_.initRemotePlayers();
     std::cout << "Startar server" << std::endl;
-
+    initRemotePlayers();
+    roundRestart();
+    
     while (true) {
         readFromNetwork();
         handleGameLogic();
@@ -61,7 +63,28 @@ void Server::handleGameLogic() {
 }
 
 void Server::acceptConnections() {
-  
+    std::cout << "Waiting for players to connect. Press return when you want to start the game." << std::endl;
+    while(true)
+    {
+        nh_.checkForNewTcpConnections();
+        
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+            break;
+    }
+}
+
+void Server::initRemotePlayers() {
+    std::vector<Message*> newPlayerMessages;
+    for (Message* msg : nh_.getNewMessages()) {
+        if (msg->header == ADD_PLAYER) {
+            AddPlayer* ap {static_cast<AddPlayer*>(msg)};
+            gameState_.addPlayer(new Player(ap->playerID));
+            msg->reciever = -1; // set message to broadcastmode
+            newPlayerMessages.push_back(msg);
+        }
+    }
+    
+    nh_.addToOutbox(newPlayerMessages);
 }
 
 void Server::roundRestart() {

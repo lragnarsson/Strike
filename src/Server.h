@@ -40,7 +40,8 @@ public:
     void writeToNetwork() override;
     void handleGameLogic() override;
 
-    void acceptConnections();
+    void acceptConnections();               // Loops until user presses enter
+    void initRemotePlayers();
 
 private:
     NetworkHandler nh_;
