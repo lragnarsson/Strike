@@ -21,7 +21,7 @@
 class GameState{
 public:
     GameState();
-    ~GameState() = default;
+    ~GameState();
 
     void addPlayer(Player* player);
     void draw(sf::RenderWindow* window);
@@ -48,7 +48,7 @@ private:
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
     Map map_;
-    std::vector<PhysicalObject*> physicalObjects_;
+    //std::vector<PhysicalObject*> physicalObjects_;
     std::vector<Shot*> unhandledShots_;
     std::vector<Shot*> handledShots_;  // shots here have both timestamp and endpoint.
     sf::Clock gameTime_;
