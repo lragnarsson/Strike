@@ -11,7 +11,6 @@ Lage Ragnarsson
 #include "./Map.h"
 
 #include "./ResourcePath.h"
-
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -109,11 +108,10 @@ void Map::load(std::string filename){
                         if (polCircle == "ellipse"){ ///in this case it's a circle
                             std::string xCoord = elem1->Attribute("x");
                             std::string yCoord = elem1->Attribute("y");
-                            std::string radius = elem1->Attribute("width");
-                            float radiusf = stof(radius) / 2.0f;
+                            std::string diameter = elem1->Attribute("width");
+                            float radiusf = stof(diameter) / 2.0f;
                             float xCoordf = stof(xCoord) + radiusf;
                             float yCoordf = stof(yCoord) + radiusf;
-
                             physicalObjects_.push_back (new PhysicalCircle(sf::Vector2f(xCoordf, yCoordf), radiusf));
                         }
                         else if ( (polCircle == "polygon") || (polCircle == "polyline")){
@@ -154,19 +152,25 @@ void Map::load(std::string filename){
                         std::cerr << "can't find: " << TorCT << std::endl;
                 }
             }
-           /* else if (whatobject == "gameobject"){
+         /*   else if (whatobject == "Gameobject"){
                 for (TiXmlElement* elem1 = elem->FirstChildElement(); elem1 != nullptr; elem1 = elem1->NextSiblingElement()){
-                    std::string objecttag = elem1->Attribute("name");
-                    std::string objectspawnX = elem1->Attribute("x");
-                    std::string objectspawnY = elem1->Attribute("y");
-                    float objectspawnXf = stof(objectspawnX);
-                    float objectspawnYf = stof(objectspawnY);
-                    sf::Vector2f objectpoints{objectspawnXf, objectspawnYf};
-                    if(weapontag == "AK47")
-                        objectSpawns_.push_back (objectpoints);
-                    if(weapontag == "Glock")
-
-                    if(weapontag == "Grenade")
+                    std::string whatWeapon = elem1->Attribute("name");
+                    std::string weaponspawnX = elem1->Attribute("x");
+                    std::string weaponspawnY = elem1->Attribute("y");
+                    float weaponspawnXf = stof (weaponspawnX);
+                    float weaponspawnYf = stof (weaponspawnY);
+                    sf::Vector2f weaponCoords{weaponspawnXf, weaponspawnYf};
+                    WeaponFactory w;
+                    if (whatWeapon == "AK47")
+                        w.createAK47(weaponCoords);
+                    if (whatWeapon == "Glock")
+                        w.createGlock(weaponCoords);
+                    if (whatWeapon == "M4")
+                        w.createM4(weaponCoords);
+                    if (whatWeapon == "Nova")
+                        w.createNova(weaponCoords);
+                    else
+                        std::cerr << "can't find: " << whatWeapon << std::endl;
                 }
             } */
         }
