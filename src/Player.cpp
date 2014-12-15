@@ -207,7 +207,8 @@ bool Player::inFireAnimation() {
 void Player::equipAt(unsigned int index) {
   if (index < inventory_.size())
       equippedIndex_ = index;
-  CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
+  if (!emptyInventory())
+      CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
 }
 
 void Player::equipNext() {
