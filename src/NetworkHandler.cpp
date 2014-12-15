@@ -349,19 +349,12 @@ void NetworkHandler::processInternalMessages()
                     sendTCPPacket(cnudpp.asPacket(), 0);
                     std::cout << "Recieved server_accept_connection and returned ClientNotifyUDPPort. \nAdded InitialInformation-message to incoming.\n"
                     << "playerID, localPort: " << static_cast<ServerAcceptConnection*>(internalMessage)->playerID << ", " << Usocket_.getLocalPort() << "\n";
-<<<<<<< Updated upstream
 
                     int myClientID = static_cast<ServerAcceptConnection*>(internalMessage)->playerID;
                     incomingMessages_.push_back(new InitialInformation{myClientID, teamID, playerName});
 
                     AddPlayer ap{myClientID, teamID, playerName, 0};
-=======
 
-                    int myPlayerID = static_cast<ServerAcceptConnection*>(internalMessage)->playerID;
-                    incomingMessages_.push_back(new InitialInformation{myPlayerID});
-
-                    AddPlayer ap{myPlayerID, teamID, playerName, 0};
->>>>>>> Stashed changes
                     sendTCPPacket(ap.asPacket(), 0);
 
                     std::cout << "Sent AddPlayer message to server." << std::endl;
