@@ -16,7 +16,7 @@
 
 
 GameState::GameState()  {
-    map_.load("map_test1.tmx");
+    map_.load("map2.tmx");
 }
 
 GameState::~GameState() {
@@ -118,10 +118,14 @@ void GameState::setplayerSpawnPoints(){
     int cti = 0;
 
     for (Player* player : players_) {
-        if (player->getTeam()->getTeamID() == T_TEAM)
+        if (player->getTeam()->getTeamID() == T_TEAM) {
             player->setPosition(tSpawns[ti++ % tSpawns.size()]);
-        else
+            player->move();
+        }
+        else {
             player->setPosition(ctSpawns[cti++ % ctSpawns.size()]);
+            player->move();
+        }
     }
 }
 

@@ -9,7 +9,7 @@
 #include "./Client.h"
 #include "Server.h"
 
-const std::string valid_cmds("hcsq");
+const std::string valid_cmds("hcsql");
 char command;
 
 void startClient(std::string name, unsigned int team, std::string ip) {
@@ -20,7 +20,11 @@ void startClient(std::string name, unsigned int team, std::string ip) {
     else
         std::cout << "Could not connect to IP: " << ip << std::endl;
 }
-
+void startLocalClient(std::string name, unsigned int team) {
+    std::cout << name << "  " << team << std::endl;
+    Client client;
+    client.run();
+}
 void startServer(unsigned int maxPlayers, std::string mapName) {
     std::cout << maxPlayers << "  " << mapName << "\nServer IP is: "
     << sf::IpAddress::getPublicAddress(sf::seconds(2.0f)) << std::endl;
@@ -41,6 +45,7 @@ void printHelp() {
     std::cout << "  c <name> <team> <ip>         Start a game client\n";
     std::cout << "  s <maxplayers> <mapname>     Start a game server\n";
     std::cout << "  q                            Quit Strike\n";
+    std::cout << "  l                            Start local client\n";
 }
 
 void getCommand() {
@@ -70,6 +75,11 @@ void getCommand() {
             startServer(maxPlayers, mapName);
         } else if (command == 'q') {
             std::cout << "Thank you for playing Strike." << std::endl;
+        } else if (command == 'l'){
+            std::string name;
+            unsigned int team;
+            ss >> name >> team;
+            startLocalClient(name, team);
         } else {
             std::cout << "The menu is broken!\n" << std::endl;
         }

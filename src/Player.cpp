@@ -11,15 +11,15 @@
 #include <vector>
 
 Player::Player(int ClientID, Team* team, sf::Texture* spriteSheet)
-    : PhysicalCircle(getPosition(), 64.0f), clientID_(ClientID), team_(team), crosshair_(5.f) {
+    : PhysicalCircle(getPosition(), 40.0f), clientID_(ClientID), team_(team), crosshair_(5.f) {
 
     initCrosshair();
     initAnimation(spriteSheet);
 }
 
 Player::Player(int ClientID)
-: PhysicalCircle(getPosition(), 64.0f), clientID_(ClientID), crosshair_(5.f) {
-    
+: PhysicalCircle(getPosition(), 40.0f), clientID_(ClientID), crosshair_(5.f) {
+
 }
 
 void Player::initCrosshair() {
@@ -35,7 +35,7 @@ void Player::initAnimation(sf::Texture* spriteSheet) {
     texture_.setSmooth(true);
     setTexture(*spriteSheet);
     setTextureRect(frameRect_);
-    setScale(sf::Vector2f(0.8f, 0.8f));
+    setScale(sf::Vector2f(0.5f, 0.5f));
     setOrigin(80.f, 80.f);
 }
 

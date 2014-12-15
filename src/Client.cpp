@@ -18,12 +18,10 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.addPlayer(player);
     gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
-    gameState_.setplayerSpawnPoints();
 
     Player* p2 = new Player(2, gameState_.tTeam(), textures_["cage3.png"]);
-    p2->setPosition(sf::Vector2f(500.f, 100.f));
-    p2->move();
     gameState_.addPlayer(p2);
+    gameState_.setplayerSpawnPoints();
 }
 
 Client::~Client() {
