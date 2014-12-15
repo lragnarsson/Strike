@@ -53,13 +53,13 @@ sf::Packet ConsolePrintString::asPacket()
 InitialInformation::InitialInformation(sf::Packet packet) :
     Message(INITIAL_INFORMATION, TCP, -1)
 {
-    packet >> clientID;
+    packet >> clientID >> teamID >> clientName;
 }
 
 sf::Packet InitialInformation::asPacket()
 {
     sf::Packet pkt;
-    pkt << header << clientID;
+    pkt << header << clientID << teamID << clientName;
     return pkt;
 }
 

@@ -17,9 +17,9 @@ Player::Player(int ClientID, Team* team, sf::Texture* spriteSheet)
     initAnimation(spriteSheet);
 }
 
-Player::Player(int ClientID)
-: PhysicalCircle(getPosition(), 40.0f), clientID_(ClientID), crosshair_(5.f) {
-
+Player::Player(int ClientID, Team* team)
+: PhysicalCircle(getPosition(), 40.0f), clientID_(ClientID), team_(team), crosshair_(5.f) {
+    
 }
 
 void Player::initCrosshair() {

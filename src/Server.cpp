@@ -23,17 +23,35 @@ void Server::run() {
         readFromNetwork();
         handleGameLogic();
         writeToNetwork();
-        /*ConsolePrintString cps{"Servern säger hej!"};
-          nh_.broadcastUDPPacket(cps.asPacket());
-          sf::sleep(sf::milliseconds(1000));*/
     }
 }
 
 void Server::readFromNetwork() {
   for (auto message : nh_.getNewMessages()) {
       switch (message->header) {
-          case PLAYER_UPDATE: updatePlayer(static_cast<PlayerUpdate*>(message)); break;
-          case ADD_SHOT: handleShot(static_cast<AddShot*>(message)); break;
+          case PLAYER_UPDATE: {
+              updatePlayer(static_cast<PlayerUpdate*>(message));
+              break;
+          }
+          case ADD_SHOT: {
+              handleShot(static_cast<AddShot*>(message));
+              break;
+          }
+          case ADD_PLAYER: {
+              AddPlayer* ap {static_cast<AddPlayer*>(message)};
+              if (ap->teamID == CT_TEAM) {
+                  gameState_.addPlayer(new Player{ap->playerID, gameState_.ctTeam()});
+                  std::cout << "added player to CT_TEAM with id: " << ap->playerID << std::endl;
+              }
+              else if (ap->teamID == T_TEAM) {
+                  gameState_.addPlayer(new Player{ap->playerID, gameState_.tTeam()});
+                  std::cout << "added player to CT_TEAM with id: " << ap->playerID << std::endl;
+              }
+              else
+                  std::cout << "Team index did not match any of CT_TEAM or T_Team. No player was created." << std::endl;
+              break;
+          }
+              
       }
       delete message;
   }
@@ -79,7 +97,16 @@ void Server::initRemotePlayers() {
     for (Message* msg : nh_.getNewMessages()) {
         if (msg->header == ADD_PLAYER) {
             AddPlayer* ap {static_cast<AddPlayer*>(msg)};
-            gameState_.addPlayer(new Player(ap->playerID));
+            if (ap->teamID == CT_TEAM) {
+                gameState_.addPlayer(new Player(ap->playerID, gameState_.ctTeam()));
+                std::cout << "Added player with (clientID, team): (" << ap->playerID << ", " << "CT_TEAM)" << std::endl;
+            }
+            else if (ap->teamID == T_TEAM) {
+                gameState_.addPlayer(new Player{ap->playerID, gameState_.tTeam()});
+                std::cout << "Added player with (clientID, team): (" << ap->playerID << ", " << "T_TEAM)" << std::endl;
+            }
+            else
+                std::cout << "Team index did not match any CT_TEAM or T_Team. No player was created." << std::endl;
             msg->reciever = -1; // set message to broadcastmode
             newPlayerMessages.push_back(msg);
         }

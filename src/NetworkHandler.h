@@ -32,13 +32,13 @@ public:
 
     void processInternalMessages();
 
-    sf::UdpSocket Usocket_; // fšr test endast
+    
 
 private:
 
-    sf::IpAddress serverAdress_;
     unsigned short serverPort_ = 5060;
-
+    sf::UdpSocket Usocket_; // fšr test endast
+    
     sf::TcpListener listener;
 
     int clientIDcounter = 1;

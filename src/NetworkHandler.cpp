@@ -58,13 +58,15 @@ void NetworkHandler::update()
         {
             if (outgoingMessage->reciever == -1)
                 broadcastTCPPacket(pkt);
-            sendTCPPacket(pkt, outgoingMessage->reciever);
+            else
+                sendTCPPacket(pkt, outgoingMessage->reciever);
         }
         else if (outgoingMessage->protocol == UDP)
         {
             if (outgoingMessage->reciever == -1)
                 broadcastUDPPacket(pkt);
-            sendUDPPacket(pkt, outgoingMessage->reciever);
+            else
+                sendUDPPacket(pkt, outgoingMessage->reciever);
         }
         else         {
             std::cout << "I refuse to send via undefined protocol! (message protocol was not defined in update)" << std::endl;
@@ -80,7 +82,7 @@ void NetworkHandler::recieveUDPPackets()
 
     if (Usocket_.receive(recievePacket, remoteIP, remotePort) == sf::Socket::Done)
     {
-        std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << unpackPacket(recievePacket)->header << std::endl;
+        std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ? "PLAYER_UPDATE" : "ADD_SHOT") << std::endl;
         
         incomingMessages_.push_back(unpackPacket(recievePacket));
     }
@@ -124,8 +126,13 @@ void NetworkHandler::sendUDPPacket(sf::Packet data, int clientID)
             recieverFound = true;
         }
     }
-    if (!recieverFound)
-        std::cout << "No matching client found for reciever of message." << std::endl;
+    if (!recieverFound) {
+        std::cout << "No matching client with ID: " << clientID << "found for reciever of message.\n" << "Known clientID's: " ;
+        for (auto client : clients_) {
+            std::cout << client.ID << ", ";
+        }
+        std::cout << std::endl;
+    }
 }
 
 void NetworkHandler::broadcastUDPPacket(sf::Packet data)
@@ -150,9 +157,13 @@ void NetworkHandler::sendTCPPacket(sf::Packet data, int clientID)
         }
 
     }
-    if (!recieverFound)
-        std::cout << "No matching client found for reciever of message." << std::endl;
-
+    if (!recieverFound) {
+        std::cout << "No matching client with ID: " << clientID << "found for reciever of message.\n" << "Known clientID's: " ;
+        for (auto client : clients_) {
+            std::cout << client.ID << ", ";
+        }
+        std::cout << std::endl;
+    }
 }
 
 void NetworkHandler::broadcastTCPPacket(sf::Packet data)
@@ -293,6 +304,11 @@ Message* NetworkHandler::unpackPacket(sf::Packet packet)
                 return new ConsolePrintString{packet};
                 break;
             }
+        case INITIAL_INFORMATION:
+        {
+            return new InitialInformation{packet};
+            break;
+        }
         default:
         {
             throw std::exception();
@@ -330,10 +346,10 @@ void NetworkHandler::processInternalMessages()
                     std::cout << "Recieved server_accept_connection and returned ClientNotifyUDPPort. \nAdded InitialInformation-message to incoming.\n"
                     << "playerID, localPort: " << static_cast<ServerAcceptConnection*>(internalMessage)->playerID << ", " << Usocket_.getLocalPort() << "\n";
                     
-                    int myPlayerID = static_cast<ServerAcceptConnection*>(internalMessage)->playerID;
-                    incomingMessages_.push_back(new InitialInformation{myPlayerID});
+                    int myClientID = static_cast<ServerAcceptConnection*>(internalMessage)->playerID;
+                    incomingMessages_.push_back(new InitialInformation{myClientID, teamID, playerName});
                     
-                    AddPlayer ap{myPlayerID, teamID, playerName, 0};
+                    AddPlayer ap{myClientID, teamID, playerName, 0};
                     sendTCPPacket(ap.asPacket(), 0);
 
                     std::cout << "Sent AddPlayer message to server." << std::endl;

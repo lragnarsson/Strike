@@ -84,10 +84,12 @@ class InitialInformation : public Message
 public:
 
     int clientID;
+    int teamID;
+    std::string clientName;
 
     InitialInformation() = delete;
     InitialInformation(sf::Packet);
-    InitialInformation(int clientID, int reciever = -1)
+    InitialInformation(int clientID, int teamID, std::string clientName, int reciever = -1)
     :  Message(INITIAL_INFORMATION, TCP, reciever), clientID(clientID) {}
 
     sf::Packet asPacket();

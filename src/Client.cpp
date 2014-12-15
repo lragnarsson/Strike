@@ -19,7 +19,7 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
 
-    Player* p2 = new Player(2, gameState_.tTeam(), textures_["cage3.png"]);
+    Player* p2 = new Player(42, gameState_.tTeam(), textures_["cage3.png"]);
     gameState_.addPlayer(p2);
     gameState_.setplayerSpawnPoints();
 }
@@ -87,15 +87,19 @@ void Client::readFromNetwork() {
             }
             case ADD_PLAYER: {
                 AddPlayer* msg = static_cast<AddPlayer*>(message);
-                if (msg->playerID == clientID_)
+                if (msg->playerID == controller_.getPlayer()->getClientID())
                     break;
                 gameState_.addPlayer(new Player(msg->playerID, (msg->teamID == T_TEAM ? gameState_.tTeam() : gameState_.ctTeam()), textures_["cage3.png"]));
                 break;
             }
             case INITIAL_INFORMATION: {
                 InitialInformation* msg = static_cast<InitialInformation*>(message);
-                controller_.getPlayer()->setClientID(msg->clientID);
-                std::cout << "ClientID of player updated to: " << msg->clientID << std::endl;
+                Player* myPlayer {controller_.getPlayer()};
+                clientID_ = msg->clientID;
+                myPlayer->setClientID(msg->clientID);
+                myPlayer->setTeam((msg->teamID == T_TEAM ? gameState_.tTeam() : gameState_.ctTeam()));
+                
+                std::cout << "ClientID and TeamID (0 = T, 1 = CT) of player updated to: " << msg->clientID << ", " << msg->teamID << std::endl;
                 break;
             }
         }
@@ -109,7 +113,7 @@ void Client::writeToNetwork() {
     outboundMessages.push_back(new PlayerUpdate(controller_.getPlayer()->getPosition().x,
                                                 controller_.getPlayer()->getPosition().y,
                                                 controller_.getPlayer()->getRotation(),
-                                                controller_->getPlayer()->getHealth(),
+                                                controller_.getPlayer()->getHealth(),
                                                 0));
     for (auto shot : gameState_.getUnhandledShots())
         outboundMessages.push_back(new AddShot(shot->getClientID(),
@@ -150,6 +154,11 @@ void Client::handleInput() {
 }
 
 void Client::draw() {
+    std::cout << "\n\n\n\n";
+    for (auto player : gameState_.getPlayers()) {
+        std::cout << "Player info (id,xpos,ypos): (" << player->getClientID() << ", " << player->getPosition().x << ", " << player->getPosition().y << ")\n";
+    }
+    std::cout << std::endl;
     renderWindow_.clear();
     controller_.updateView();
     renderWindow_.setView(*controller_.getView());
