@@ -14,8 +14,6 @@
 
 GameState::GameState()  {
     map_.load("map2.tmx");
-    WeaponFactory w;
-    addStationaryGameObject(w.createAK47());
 }
 
 GameState::~GameState() {
@@ -180,7 +178,9 @@ void GameState::handleDecals() {
 }
 
 void GameState::addMovingGameObject(GameObject* gameObject) {
-    movingGameObjects_.push_back(gameObject);
+    if (gameObject != nullptr) {
+        movingGameObjects_.push_back(gameObject);
+      }
 }
 
 void GameState::addStationaryGameObject(GameObject* gameObject) {
@@ -189,8 +189,9 @@ void GameState::addStationaryGameObject(GameObject* gameObject) {
 
 void GameState::movingToStationaryObjects() {
   for (auto gameObject : movingGameObjects_) {
-      if (gameObject->isStationary())
+      if (gameObject->isStationary()) {
           stationaryGameObjects_.push_back(gameObject);
+          }
   }
   movingGameObjects_.erase(std::remove_if(movingGameObjects_.begin(),
                                           movingGameObjects_.end(),
@@ -198,6 +199,27 @@ void GameState::movingToStationaryObjects() {
                            movingGameObjects_.end());
 }
 
-std::vector<GameObject*>& GameState::getMovingGameObjects() {
-    return movingGameObjects_;
+std::vector<GameObject*>* GameState::getMovingGameObjects() {
+    return &movingGameObjects_;
+}
+
+std::vector<GameObject*>* GameState::getStationaryGameObjects() {
+    return &stationaryGameObjects_;
+}
+
+
+void GameState::removeGameObjects() {
+    stationaryGameObjects_.erase(std::remove_if(stationaryGameObjects_.begin(),
+                                                stationaryGameObjects_.end(),
+                                                [](GameObject* go) { return go->isEquipped(); }),
+                                 stationaryGameObjects_.end());
+    stationaryGameObjects_.erase(std::remove_if(stationaryGameObjects_.begin(),
+                                                stationaryGameObjects_.end(),
+                                                [](GameObject* go) {
+                                                    bool remove = go->isMarkedForRemoval();
+                                                    if (remove)
+                                                        delete go;
+                                                    return remove;
+                                                }),
+                                 stationaryGameObjects_.end());
 }

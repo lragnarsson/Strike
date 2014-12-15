@@ -30,9 +30,9 @@ public:
 
     bool connectToServer(std::string name, int team, sf::IpAddress ip);
     void run() override;
-    static sf::Texture* getTexturePtr(std::string name);
     static void loadTextures();
     static std::map<std::string, sf::Texture*> textures_;
+
 private:
     void readFromNetwork() override;
     void writeToNetwork() override;
@@ -44,7 +44,6 @@ private:
                            sf::Vector2f& moveVector,
                            float radius);
     void handleShots();
-    void loadTextures();
     void handleVision();
     void createDecals();
     void roundRestart();
@@ -56,6 +55,7 @@ private:
     std::string clientName_;
     sf::RenderWindow renderWindow_;
     Controller controller_;
+    sf::Clock clock_;
 };
 
 #endif /* defined(__Strike__Client__) */

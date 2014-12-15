@@ -30,12 +30,14 @@ public:
     GameObject* playerThrow();
     void reloadWeapon();
     void isSprinting();
+    void pickupObjects(std::vector<GameObject*>* gameObjects);
 
 private:
     sf::Vector2f inputVector_;
     Player* player_;
     sf::View* view_;
     sf::Clock clock_;
+    sf::Clock dropTimer_;
     float sqrt2 = 1.4142135;
 };
 

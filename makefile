@@ -9,7 +9,7 @@ TINY = libraries/tinyxml
 # Kompilatorflaggor, lägg till '-g' om kompilering för avlusning ska göras.
 CCFLAGS = -I$(SRC) -std=c++11 -Wpedantic -Wall -Wextra #-fpermissive
 
-LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -ltinyxml
+LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -ltinyxml -lboost_system -I/usr/include/boost/ -lboost_filesystem -lboost_thread
 
 # Objektkodsmoduler som ingår i den kompletta kalkylatorn.
 
@@ -65,13 +65,11 @@ PhysicalObject.o: $(SRC)/PhysicalObject.h $(SRC)/PhysicalObject.cpp
 Decal.o: $(SRC)/Decal.h $(SRC)/Decal.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/Decal.cpp
 
-<<<<<<< HEAD
 SecureVector.o: $(SRC)/SecureVector.h $(SRC)/SecureVector.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/SecureVector.cpp
-=======
+
 GameObject.o: $(SRC)/GameObject.h $(SRC)/GameObject.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/GameObject.cpp
 
->>>>>>> Started work on an inventory system, game objects and grenades.
 clean:
 	@ \rm -rf *.o *.gch core

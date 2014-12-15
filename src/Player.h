@@ -14,33 +14,24 @@
 #include "./Weapon.h"
 #include "./ResourcePath.h"
 #include "./PhysicalObject.h"
-<<<<<<< HEAD
 #include "./Team.h"
+#include "./GameObject.h"
 
 class Player: public sf::Sprite, public PhysicalCircle {
 public:
     Player(int ClientID); // Server only!
     explicit Player(int ClientID, Team* team, sf::Texture* spriteSheet);
-=======
-#include "./GameObject.h"
 
-class Player: public sf::Sprite, public PhysicalCircle {
-public:
-    explicit Player(int ClientID, sf::Texture* spriteSheet);
->>>>>>> Started work on an inventory system, game objects and grenades.
     Player() = delete;
     ~Player() noexcept {};
 
     int getClientID() const;
-<<<<<<< HEAD
     Team* getTeam() const;
     void setTeam(Team* team);
     std::string getClientName() const;
     void setClientName(std::string newName);
     void setWeapon(Weapon* weapon);
-=======
     void addEquipment(GameObject* equipment);
->>>>>>> Started work on an inventory system, game objects and grenades.
     std::vector<Shot*> fire();
     sf::Vector2f& getMoveVector();
     void decreaseHealth(int amount);
@@ -62,8 +53,7 @@ public:
     void animate();
     int getHealth(); //För testning!
 
-<<<<<<< HEAD
-=======
+    void addObject(GameObject* gameObject);
     bool holdingFirearm();
     bool holdingGrenade();
     GameObject* throwEquipped();
@@ -72,8 +62,8 @@ public:
     void equipAt(unsigned int index);
     void equipNext();
     void equipPrevious();
+    void pickUpObject(GameObject* gameObject);
 
->>>>>>> Started work on an inventory system, game objects and grenades.
 private:
     int health_ = 100;
     sf::Texture texture_;

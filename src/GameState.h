@@ -44,7 +44,9 @@ public:
     void addMovingGameObject(GameObject* gameObject);
     void addStationaryGameObject(GameObject* gameObject);
     void movingToStationaryObjects();
-    std::vector<GameObject*>& getMovingGameObjects();
+    std::vector<GameObject*>* getMovingGameObjects();
+    std::vector<GameObject*>* getStationaryGameObjects();
+    void removeGameObjects();
 
 private:
     Team ctTeam_{T_TEAM};

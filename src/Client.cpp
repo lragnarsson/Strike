@@ -5,6 +5,7 @@
 #include "./GeomUtils.h"
 #include "./SysUtils.h"
 #include "./Team.h"
+#include "./WeaponFactory.h"
 
 Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     renderWindow_.setFramerateLimit(120);
@@ -14,10 +15,13 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
 
     Player* player = new Player(clientID_, gameState_.ctTeam(), textures_["cage3.png"]);
     player->setTeam(gameState_.ctTeam());
-    player->setWeapon(new Weapon(1000, 2000, 1000, 20, 500, 10, 500.f));
     gameState_.addPlayer(player);
     gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
+    WeaponFactory w;
+    player->addObject(w.createFrag(sf::Vector2f()));
+    player->addObject(w.createFrag(sf::Vector2f()));
+    player->addObject(w.createAK47(sf::Vector2f()));
 
     Player* p2 = new Player(2, gameState_.tTeam(), textures_["cage3.png"]);
     gameState_.addPlayer(p2);
@@ -44,7 +48,6 @@ bool Client::connectToServer(std::string name,
                              int team,
                              sf::IpAddress ip) {
   return nh_.connectToServer(name, team, ip);
-  //return true;
 }
 
 void Client::roundRestart() {
@@ -120,9 +123,9 @@ void Client::handleCollisions() {
                           controller_.getPlayer()->getMoveVector(),
                           controller_.getPlayer()->getRadius());
         controller_.playerMove();
+        handleGameObjects();
         handleShots();
         handleVision();
-        handleGameObjects();
     }
 }
 
@@ -136,8 +139,9 @@ void Client::handleInput() {
         controller_.handlePlayerActions();
         controller_.updatePlayerInputVector();
         controller_.setPlayerRotation(renderWindow_);
-        gameState_.addUnhandledShots(controller_.playerFire());
+        controller_.pickupObjects(gameState_.getStationaryGameObjects());
         gameState_.addMovingGameObject(controller_.playerThrow());
+        gameState_.addUnhandledShots(controller_.playerFire());
     }
 }
 
@@ -165,10 +169,6 @@ void Client::loadTextures() {
     catch (const std::exception& e) {
         std::cerr << e.what();
     }
-}
-
-sf::Texture* getTexturePtr(std::string name) {
-    return textures_[name];
 }
 
 void Client::handleShots() {
@@ -267,7 +267,6 @@ void Client::collideMoveVector(sf::Vector2f position,
 }
 
 void Client::handleVision() {
-    // Check player visibility
     for (auto player : gameState_.getPlayers()) {
         bool blocked = false;
 
@@ -280,22 +279,26 @@ void Client::handleVision() {
         if (!blocked)
             player->lastSeenNow();
     }
+}
 
 void Client::handleGameObjects() {
-  for (auto gameObject : gameState_.getMovingGameObjects()) {
-      if (Grenade* grenade = dynamic_cast<Grenade*>(gameObject)) {
-          if (grenade->endOfFuse()) {
-              gameState_.addUnhandledShots(grenade->explode());
-              gameState_.addAnimatedDecal(
-                  new AnimatedDecal(gameObject->getPosition(), sf::Vector2f(0.8f,0.8f),
-                                    textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
-                                    20, 25, false, 25));
-          }
-      } else {
-        collideMoveVector(gameObject->getPosition(),
-                          gameObject->getMoveVector(),
-                          gameObject->getRadius());
-      }
+  for (auto gameObject : *(gameState_.getMovingGameObjects())) {
+    if (Grenade* grenade = dynamic_cast<Grenade*>(gameObject)) {
+        if (grenade->endOfFuse()) {
+            gameState_.addUnhandledShots(grenade->explode());
+            gameState_.addAnimatedDecal(
+                new AnimatedDecal(gameObject->getPosition(), sf::Vector2f(1.5f,1.5f),
+                                  textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                  20, 25, false, 25));
+        }
+    }
+    gameObject->calculateMoveVector(clock_.getElapsedTime().asMilliseconds());
+    collideMoveVector(gameObject->getPosition(),
+                      gameObject->getMoveVector(),
+                      gameObject->getRadius());
+    gameObject->move();
   }
   gameState_.movingToStationaryObjects();
+  gameState_.removeGameObjects();
+  clock_.restart();
 }

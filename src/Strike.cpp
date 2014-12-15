@@ -11,6 +11,7 @@
 
 const std::string valid_cmds("hcsql");
 char command;
+std::map<std::string, sf::Texture*> Client::textures_;
 
 void startClient(std::string name, unsigned int team, std::string ip) {
     std::cout << name << "  " << team << "  " << ip << std::endl;

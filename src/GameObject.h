@@ -12,19 +12,23 @@ public:
 
     void equip(int clientID);
     virtual void unEquip(sf::Vector2f position, sf::Vector2f velocity);
-    void calculateMoveVector(const sf::Vector2f& moveVector, float elpasedSeconds);
+    void calculateMoveVector(float elpased);
     sf::Vector2f& getMoveVector();
     void move();
     virtual bool isStationary();
+    bool isEquipped();
     float getCHDistance();
+    void markForRemoval();
+    bool isMarkedForRemoval();
 
 protected:
     bool equipped_;
     int clientID_;
     sf::Vector2f moveVector_;
     sf::Vector2f currentVelocity_;
-    float deceleration_{0.5f};
+    float deceleration_{0.10f};
     float CHDistance_;
+    bool markedForRemoval_{false};
 };
 
 class Grenade : public GameObject {
@@ -39,7 +43,7 @@ public:
 
 protected:
     sf::Clock fuse_;
-    int fuseTime_{5};
+    int fuseTime_{1000};
     bool triggered_;
     int shrapnelCount_{15};
     int shrapnelDamage_{50};

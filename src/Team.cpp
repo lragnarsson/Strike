@@ -20,3 +20,4 @@ int Team::getScore() const{
 
 void Team::setScore(int score){
     score_ = score;
+}
