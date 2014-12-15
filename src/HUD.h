@@ -14,6 +14,7 @@ public:
     sf::Drawable* getCrosshair() const;
     void setHealth(int health);
     void setAmmo(int mag, int additional);
+    void setScore(int tTeam, int ctTeam);
     void setPositions(sf::RenderTarget& target);
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -23,6 +24,7 @@ private:
     sf::Drawable* crosshair_;
     sf::Text health_;
     sf::Text ammo_;
+    sf::Text score_;
 };
 
 #endif // HUD
