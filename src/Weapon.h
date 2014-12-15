@@ -17,7 +17,7 @@ Filip Östman
 class Weapon : public GameObject { //Automatic weapon
 public:
     Weapon() = default;
-    virtual ~Weapon() = default;
+    virtual ~Weapon() noexcept {}
     Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
            int fireRate, int reloadTime, int Damage, float CHDistance,
            sf::Texture* texture, sf::Vector2f position, float radius);

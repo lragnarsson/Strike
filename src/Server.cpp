@@ -21,7 +21,7 @@ Erik Sköld
 void Server::networkFunction() {
     while (true) {
         nh_.update();
-        sf::Time sleepTime {sf::milliseconds(100)};
+        sf::Time sleepTime {sf::milliseconds(10)};
         sf::sleep(sleepTime);
     }
 }
@@ -36,10 +36,10 @@ void Server::run() {
     initRemotePlayers();
     roundRestart();
 
-    //boost::thread networkThread(&Server::networkFunction, this);
+    boost::thread networkThread(&Server::networkFunction, this);
 
     while (true) {
-        nh_.update();
+        //nh_.update();
         readFromNetwork();
         handleGameLogic();
         writeToNetwork();

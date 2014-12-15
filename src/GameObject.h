@@ -8,7 +8,7 @@
 class GameObject : public sf::Sprite, public PhysicalCircle {
 public:
     GameObject(sf::Texture* texture, sf::Vector2f position, float radius, float CHDistance);
-    ~GameObject() = default;
+    ~GameObject() noexcept {}
 
     void equip(int clientID);
     virtual void unEquip(sf::Vector2f position, sf::Vector2f velocity);
@@ -34,7 +34,7 @@ protected:
 class Grenade : public GameObject {
 public:
     Grenade(sf::Texture* texture, sf::Vector2f position, float radius, float CHDistance);
-    ~Grenade() = default;
+    ~Grenade() noexcept {}
 
     bool isStationary() override;
     std::vector<Shot*> explode();
