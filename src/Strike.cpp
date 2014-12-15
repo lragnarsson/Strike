@@ -14,6 +14,7 @@ char command;
 
 void startClient(std::string name, unsigned int team, std::string ip) {
     std::cout << name << "  " << team << "  " << ip << std::endl;
+
     Client client;
     if (client.connectToServer(name, team, sf::IpAddress(ip)))
         client.run();

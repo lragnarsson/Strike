@@ -19,7 +19,7 @@
 
 
 /*  Game är en abstrakt klass som innehåller en run-funktion för att starta,
- *  ett GameState-objekt för att hålla reda på spelets tillstånd och ett 
+ *  ett GameState-objekt för att hålla reda på spelets tillstånd och ett
  *  NetworkHandler-objekt för att kommunicera med nätverket.
  */
 
@@ -36,7 +36,7 @@ protected:
     virtual void readFromNetwork() = 0;  // ta emot data från nätverket och behandla den.
     virtual void writeToNetwork() = 0;  // skicka data på nätverket.
     virtual void handleGameLogic() = 0;  // sköter logiken hos klient resp. server.
-    virtual void handleCollisions() = 0;  // beräknar kollissioner.
+
     Game() = default;
     Game(const Game&) = delete;             // borttagen kopieringskonstruktor
     Game& operator=(const Game&) = delete;  // borttagen kopieringstilldelning

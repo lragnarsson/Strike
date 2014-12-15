@@ -46,9 +46,9 @@ void NetworkHandler::update()
 {
     recieveTCPPackets();
     recieveUDPPackets();
-    
+
     processInternalMessages();
-    
+
     std::vector<Message*> outboundMessages {outgoingMessages_.stealNewMessages()};
     for (auto& outgoingMessage : outboundMessages)
     {
@@ -120,7 +120,7 @@ void NetworkHandler::sendUDPPacket(sf::Packet data, int clientID)
     {
         if (client.ID == clientID)
         {
-            Usocket_.send(data, client.TCPSocket->getRemoteAddress(), client.TCPSocket->getRemotePort());
+            Usocket_.send(data, client.TCPSocket->getRemoteAddress(), client.UDPPort);
             recieverFound = true;
         }
     }
@@ -144,6 +144,7 @@ void NetworkHandler::sendTCPPacket(sf::Packet data, int clientID)
     {
         if (client.ID == clientID)
         {
+            recieverFound = true;
             client.TCPSocket->send(data);
             recieverFound = true;
         }
@@ -183,7 +184,7 @@ void NetworkHandler::checkForNewTcpConnections() //Server only
         sf::Packet packet = sac.asPacket();
         newClient.TCPSocket->send(packet); //Send SERVER_ACCEPT_CONNECTION
 
-        
+
         clients_.push_back(std::move(newClient));
 
         for (auto& client : clients_)
@@ -196,6 +197,7 @@ void NetworkHandler::checkForNewTcpConnections() //Server only
 
 bool NetworkHandler::connectToServer(std::string name, int newTeamID, sf::IpAddress ip)
 {
+    initClient();
     playerName = name;
     teamID = newTeamID;
     sf::TcpSocket* conn = new sf::TcpSocket();
@@ -231,9 +233,8 @@ void NetworkHandler::initServer()
     Usocket_.bind(serverPort_);
 }
 
-void NetworkHandler::initClient(sf::IpAddress serverAdress)
+void NetworkHandler::initClient()
 {
-    serverAdress_ = serverAdress;
     Usocket_.setBlocking(false);
     Usocket_.bind(sf::Socket::AnyPort);
 }
@@ -334,10 +335,10 @@ void NetworkHandler::processInternalMessages()
                     
                     AddPlayer ap{myPlayerID, teamID, playerName, 0};
                     sendTCPPacket(ap.asPacket(), 0);
-                    
+
                     std::cout << "Sent AddPlayer message to server." << std::endl;
                 }
-                    
+
             }
 
         }
