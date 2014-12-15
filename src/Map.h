@@ -1,14 +1,8 @@
 /***************************************
 Map.h
-=======
-//
-//  Map.h
-//  Strike
->>>>>>> Small changes
 
 Representation of a map. Can parse a map from a (somewhat) modified .tmx-file
 
-<<<<<<< HEAD
 Written by
 Rasmus Vilhelmsson
 Lage Ragnarsson

@@ -13,10 +13,10 @@ Filip Östman
 
 #include <math.h>
 #include <vector>
+#include <iostream>
 
 Player::Player(int ClientID, Team* team, sf::Texture* spriteSheet)
-    : PhysicalCircle(getPosition(), 40.0f), clientID_(ClientID), team_(team), crosshair_(5.f) {
-
+    : PhysicalCircle(getPosition(), 40.0f), clientID_(ClientID), team_(team), crosshair_(5.f), inventory_() {
     initCrosshair();
     initAnimation(spriteSheet);
 }
@@ -42,8 +42,15 @@ void Player::initAnimation(sf::Texture* spriteSheet) {
     setOrigin(80.f, 80.f);
 }
 
-void Player::setWeapon(Weapon* newWeapon) {
-    weapon_ = newWeapon;
+void Player::addEquipment(GameObject* equipment) {
+    if (inventory_.size() < inventorySize_) {
+        inventory_.push_back(equipment);
+        equippedIndex_ = inventory_.size() - 1;
+    } else {
+        throwEquipped();
+        inventory_.insert(inventory_.begin() + ++equippedIndex_, equipment);
+    }
+    CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
 }
 
 void Player::setSpeedMultiplier(float speed) {
@@ -73,19 +80,29 @@ bool Player::isDead() {
 }
 
 void Player::hasNotFired() {
-    weapon_->hasNotFired();
+    if (holdingFirearm())
+        static_cast<Weapon*>(inventory_.at(equippedIndex_))->hasNotFired();
 }
 
 void Player::reloadWeapon() {
-    weapon_->reloadWeapon();
+  if (holdingFirearm())
+      static_cast<Weapon*>(inventory_.at(equippedIndex_))->reloadWeapon();
 }
 
 int Player::getMagazineAmmo() const {
-    weapon_->getMagazineAmmo();
+    if(emptyInventory())
+        return 0;
+    if (Weapon* weapon = dynamic_cast<Weapon*>(inventory_.at(equippedIndex_)))
+        return weapon->getMagazineAmmo();
+    return 1;
 }
 
 int Player::getAdditionalAmmo() const {
-    weapon_->getAdditionalAmmo();
+    if(emptyInventory())
+        return 0;
+    if (Weapon* weapon = dynamic_cast<Weapon*>(inventory_.at(equippedIndex_)))
+        return weapon->getAdditionalAmmo();
+    return 0;
 }
 
 void Player::lastSeenNow() {
@@ -97,15 +114,11 @@ int Player::getLastSeen() {
 }
 
 std::vector<Shot*> Player::fire() {
-  if(speedMultiplier_ <= 1.0f) {
-    return weapon_->fire(clientID_,
-                       getPosition() + aimVector_ * (PhysicalCircle::getRadius() + 1.f),
-                       aimVector_);
-  }
-  else {
+    if(speedMultiplier_ <= 1.0f)
+        return static_cast<Weapon*>(inventory_.at(equippedIndex_))->fire(
+            clientID_, getPosition() + aimVector_ * (getRadius() + 5.f), aimVector_);
     std::vector<Shot*> shotVector;
     return shotVector;
-  }
 }
 
 int Player::getClientID() const {
@@ -153,7 +166,7 @@ void Player::handleRotation(const sf::Vector2f& aimVector) {
     float angle = (aimVector_.y > 0) ? radConversion_ * acosf(aimVector_.x)
           : 360 - radConversion_ * acosf(aimVector_.x);
     setRotation(angle);
-    crosshair_.setPosition(getPosition() + aimVector_ * weapon_->getCHDistance());
+    crosshair_.setPosition(getPosition() + aimVector_ * CHDistance_);
 }
 
 void Player::move() {
@@ -167,21 +180,98 @@ sf::CircleShape* Player::getCrosshair() {
 
 void Player::animate() {
       if (animClock_.getElapsedTime().asMilliseconds() >= frameTime_) {
-        if (length(curSpeed_) > 400)
-          currentRow_ = 4;
-        else if (length(curSpeed_) > 0)
-          currentRow_ = 2;
-        else
-          currentRow_ = 2;
-        if (weapon_->isAnimating())
-          currentRow_++;
-        setTextureRect(sf::IntRect(frameWidth_ * currentFrame_,
-                                   frameHeight_ * currentRow_,
-                                   frameWidth_, frameHeight_));
-        if (currentFrame_ == columns_ - 1)
-          currentFrame_ = 0;
-        else
-          currentFrame_++;
-        animClock_.restart();
+          if (length(curSpeed_) > 400)
+              currentRow_ = 4;
+          else if (length(curSpeed_) > 0)
+              currentRow_ = 2;
+          else
+              currentRow_ = 0;
+          if (inFireAnimation())
+              currentRow_++;
+          setTextureRect(sf::IntRect(frameWidth_ * currentFrame_,
+                                     frameHeight_ * currentRow_,
+                                     frameWidth_, frameHeight_));
+          if (currentFrame_ == columns_ - 1)
+              currentFrame_ = 0;
+          else
+              currentFrame_++;
+          animClock_.restart();
       }
+}
+
+bool Player::inFireAnimation() {
+  return (holdingFirearm() &&
+          static_cast<Weapon*>(inventory_.at(equippedIndex_))->isAnimating());
+}
+
+void Player::equipAt(unsigned int index) {
+  if (index < inventory_.size())
+      equippedIndex_ = index;
+  CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
+}
+
+void Player::equipNext() {
+    equippedIndex_++;
+    equippedIndex_ %= inventory_.size();
+    CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
+}
+
+void Player::equipPrevious() {
+    equippedIndex_--;
+    equippedIndex_ %= inventory_.size();
+    CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
+}
+
+bool Player::holdingFirearm() {
+    return (!emptyInventory() && (dynamic_cast<Weapon*>(inventory_.at(equippedIndex_))));
+}
+
+bool Player::holdingGrenade() {
+    return (!emptyInventory() && (dynamic_cast<Grenade*>(inventory_.at(equippedIndex_))));
+}
+
+GameObject* Player::throwEquipped() {
+    inventory_.at(equippedIndex_)->unEquip(getPosition() + aimVector_ * (getRadius() + 10.f),
+                                           aimVector_ * 50.f);
+    auto throwed = inventory_.at(equippedIndex_);
+    inventory_.erase(inventory_.begin() + equippedIndex_);
+    if (emptyInventory()) {
+      equippedIndex_ = 0;
+      CHDistance_ = 100.f;
+    } else {
+        equippedIndex_ %= inventory_.size();
+        CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
+    }
+    return throwed;
+}
+
+GameObject* Player::throwGrenade() {
+    auto throwed = inventory_.at(equippedIndex_);
+    inventory_.at(equippedIndex_)->unEquip(getPosition() + aimVector_ * (getRadius() + 50.f),
+                                         aimVector_ * 350.f);
+    inventory_.erase(inventory_.begin() + equippedIndex_);
+    if (emptyInventory()) {
+      equippedIndex_ = 0;
+      CHDistance_ = 100.f;
+    } else {
+        equippedIndex_ %= inventory_.size();
+        CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
+    }
+    return throwed;
+}
+
+bool Player::emptyInventory() const {
+  return (inventory_.size() == 0);
+}
+
+void Player::addObject(GameObject* gameObject) {
+    inventory_.push_back(gameObject);
+    CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();  
+}
+
+void Player::pickUpObject(GameObject* gameObject) {
+  if (inventory_.size() == inventorySize_)
+      throwEquipped();
+  addObject(gameObject);
+  gameObject->equip(clientID_);
 }

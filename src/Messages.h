@@ -119,8 +119,8 @@ public:
 
     PlayerUpdate() = delete;
     PlayerUpdate(sf::Packet);
-    PlayerUpdate(float x, float y, float r, int h, int reciever = -1) : Message(PLAYER_UPDATE, UDP, reciever),
-        xCoord(x), yCoord(y), rotation(r), health(h) {}
+    PlayerUpdate(int pID, float x, float y, float r, int h, int reciever = -1) : Message(PLAYER_UPDATE, UDP, reciever),
+        playerID(pID), xCoord(x), yCoord(y), rotation(r), health(h) {}
 
     sf::Packet asPacket() override;
 };

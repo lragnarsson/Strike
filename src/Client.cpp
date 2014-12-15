@@ -17,6 +17,7 @@ Filip Östman
 #include "./GeomUtils.h"
 #include "./SysUtils.h"
 #include "./Team.h"
+#include "./WeaponFactory.h"
 
 Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     renderWindow_.setFramerateLimit(2);
@@ -25,9 +26,13 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     loadTextures();
 
     Player* player = new Player(clientID_, gameState_.tTeam(), textures_["cage3.png"]);
-    player->setWeapon(new Weapon(1000, 2000, 1000, 20, 500, 10, 500.f));
+
     gameState_.addPlayer(player);
     controller_.bindPlayer(player);
+    WeaponFactory w;
+    player->addObject(w.createFrag(sf::Vector2f()));
+    player->addObject(w.createFrag(sf::Vector2f()));
+    player->addObject(w.createAK47(sf::Vector2f()));
 
     hud_.setCrosshair(player->getCrosshair());
 
@@ -37,9 +42,11 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.addPlayer(p2);
 
     gameState_.setPlayerSpawnPoints();
+    buffer.loadFromFile(resourcePath("res/sounds/") + "pistol.wav");
+    shotSound_.setBuffer(buffer);
 }
 
-Client::~Client() {
+Client::~Client() noexcept {
     for (auto texture : textures_)
         delete texture.second;
 }
@@ -53,15 +60,16 @@ void Client::networkFunction() {
 }
 
 void Client::run() {
-    
+
     boost::thread networkThread(&Client::networkFunction, this);
-    
+
     while (renderWindow_.isOpen()) {
         //nh_.update();
         readFromNetwork();
         handleInput();
         handleCollisions();
         handleGameLogic();
+        handleSounds();
         writeToNetwork();
         draw();
     }
@@ -145,7 +153,8 @@ void Client::readFromNetwork() {
 
 void Client::writeToNetwork() {
     std::vector<Message*> outboundMessages;
-    outboundMessages.push_back(new PlayerUpdate(controller_.getPlayer()->getPosition().x,
+    outboundMessages.push_back(new PlayerUpdate(controller_.getPlayer()->getClientID(),
+                                                controller_.getPlayer()->getPosition().x,
                                                 controller_.getPlayer()->getPosition().y,
                                                 controller_.getPlayer()->getRotation(),
                                                 controller_.getPlayer()->getHealth(),
@@ -169,6 +178,7 @@ void Client::handleCollisions() {
                           controller_.getPlayer()->getMoveVector(),
                           controller_.getPlayer()->getRadius());
         controller_.playerMove();
+        handleGameObjects();
         handleShots();
         handleVision();
     }
@@ -186,6 +196,8 @@ void Client::handleInput() {
         controller_.handlePlayerActions();
         controller_.updatePlayerInputVector();
         controller_.setPlayerRotation(renderWindow_);
+        controller_.pickupObjects(gameState_.getStationaryGameObjects());
+        gameState_.addMovingGameObject(controller_.playerThrow());
         gameState_.addUnhandledShots(controller_.playerFire());
     }
 }
@@ -320,7 +332,6 @@ void Client::collideMoveVector(sf::Vector2f position,
 }
 
 void Client::handleVision() {
-    // Check player visibility
     for (auto player : gameState_.getPlayers()) {
         bool blocked = false;
 
@@ -333,4 +344,53 @@ void Client::handleVision() {
         if (!blocked)
             player->lastSeenNow();
     }
+}
+
+void Client::handleSounds() {
+    for (auto player : gameState_.getPlayers()) {
+        for (auto shot : gameState_.getHandledShots()) {
+            if (!shot->getSoundstatus()) {
+                sf::Vector2f distanceVector;
+                distanceVector = player->getPosition() - shot->getOrigin();
+                float distance = length(distanceVector);
+                if(distance < 100.0f) {
+                    shotSound_.setVolume(100);
+                    shotSound_.play();
+                    shot->setSoundstatus();
+                }
+                else if(distance < 1000.0f) {
+                    shotSound_.setVolume(50);
+                    shotSound_.play();
+                    shot->setSoundstatus();
+                }
+                else {
+                    shotSound_.setVolume(10);
+                    shotSound_.play();
+                    shot->setSoundstatus();
+                }
+            }
+        }
+    }
+}
+
+void Client::handleGameObjects() {
+  for (auto gameObject : *(gameState_.getMovingGameObjects())) {
+    if (Grenade* grenade = dynamic_cast<Grenade*>(gameObject)) {
+        if (grenade->endOfFuse()) {
+            gameState_.addUnhandledShots(grenade->explode());
+            gameState_.addAnimatedDecal(
+                new AnimatedDecal(gameObject->getPosition(), sf::Vector2f(1.5f,1.5f),
+                                  textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                  20, 25, false, 25));
+        }
+    }
+    gameObject->calculateMoveVector(clock_.getElapsedTime().asMilliseconds());
+    collideMoveVector(gameObject->getPosition(),
+                      gameObject->getMoveVector(),
+                      gameObject->getRadius());
+    gameObject->move();
+  }
+  gameState_.movingToStationaryObjects();
+  gameState_.removeGameObjects();
+  clock_.restart();
 }

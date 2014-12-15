@@ -23,6 +23,7 @@ Filip Östman
 #include "./NetworkHandler.h"
 #include "./HUD.h"
 
+
 #include <stdio.h>
 #include <string>
 
@@ -33,7 +34,7 @@ Filip Östman
 class Client: public Game {
 public:
     Client();
-    ~Client();
+    ~Client() noexcept;
 
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;
@@ -41,6 +42,8 @@ public:
     bool connectToServer(std::string name, int team, sf::IpAddress ip);
     void networkFunction();
     void run() override;
+    static void loadTextures();
+    static std::map<std::string, sf::Texture*> textures_;
 
 private:
     void readFromNetwork() override;
@@ -53,10 +56,11 @@ private:
                            sf::Vector2f& moveVector,
                            float radius);
     void handleShots();
-    void loadTextures();
     void handleVision();
     void createDecals();
     void roundRestart();
+    void handleSounds();
+    void handleGameObjects();
 
     int clientID_ = 1337;
     NetworkHandler nh_;
@@ -65,7 +69,9 @@ private:
     std::string clientName_;
     sf::RenderWindow renderWindow_;
     Controller controller_;
-    std::map<std::string, sf::Texture*> textures_;
+    sf::SoundBuffer buffer;
+    sf::Sound shotSound_;
+    sf::Clock clock_;
 };
 
 #endif // _CLIENT_

@@ -92,6 +92,7 @@ void NetworkHandler::recieveUDPPackets()
     {
         std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ? "PLAYER_UPDATE" : "ADD_SHOT") << std::endl;
         incomingMessages_.push_back(unpackPacket(recievePacket));
+        std::cout << incomingMessages_.size() << std::endl;
     }
 }
 
@@ -146,7 +147,7 @@ void NetworkHandler::broadcastUDPPacket(sf::Packet data)
 {
     for (auto& client : clients_)
     {
-        std::cout << "Skickar udp till klient " << client.ID << "på port " << client.UDPPort << std::endl;
+        //std::cout << "Skickar udp till klient " << client.ID << "på port " << client.UDPPort << std::endl;
         Usocket_.send(data, client.TCPSocket->getRemoteAddress(), client.UDPPort);
     }
 }

@@ -13,11 +13,11 @@ Jesper Otterholm
 #define T_TEAM 0
 #define CT_TEAM 1
 
-class Team
-{
+class Team {
 public:
     Team() = default;
     ~Team() = default;
+
     Team(int teamID) : teamID_(teamID) {}
     void setTeamID(int teamID);
     int getTeamID() const;

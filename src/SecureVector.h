@@ -25,6 +25,7 @@ public:
     std::vector<Message*> stealNewMessages();
     void push_back(Message*);
     void append(std::vector<Message*>);
+    int size();
 private:
     boost::mutex guardian_;
     std::vector<Message*> messages_;

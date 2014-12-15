@@ -9,7 +9,6 @@ Lage Ragnarsson
 ***************************************/
 
 #include "./Map.h"
-
 #include "./ResourcePath.h"
 #include <iostream>
 #include <string>

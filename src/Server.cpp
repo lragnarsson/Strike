@@ -21,7 +21,7 @@ Erik Sköld
 void Server::networkFunction() {
     while (true) {
         nh_.update();
-        sf::Time sleepTime {sf::milliseconds(10)};
+        sf::Time sleepTime {sf::milliseconds(100)};
         sf::sleep(sleepTime);
     }
 }
@@ -42,7 +42,7 @@ void Server::run() {
     
     
     while (true) {
-        //nh_.update();
+        nh_.update();
         readFromNetwork();
         handleGameLogic();
         writeToNetwork();
@@ -50,10 +50,12 @@ void Server::run() {
 }
 
 void Server::readFromNetwork() {
-  for (auto message : nh_.getNewMessages()) {
+  std::vector<Message*> resMess = nh_.getNewMessages();
+  for (auto message : resMess) {
       switch (message->header) {
           case PLAYER_UPDATE: {
               updatePlayer(static_cast<PlayerUpdate*>(message));
+              std::cout << "got player update from " << static_cast<PlayerUpdate*>(message)->playerID << std::endl;
               break;
           }
           case ADD_SHOT: {
@@ -76,7 +78,7 @@ void Server::readFromNetwork() {
                   std::cout << "Team index did not match any of CT_TEAM or T_Team. No player was created." << std::endl;
               break;
           }
-              
+
       }
   }
 }
@@ -84,7 +86,8 @@ void Server::readFromNetwork() {
 void Server::writeToNetwork() {
     std::vector<Message*> outboundMessages;
     for (auto player : gameState_.getPlayers())
-        outboundMessages.push_back(new PlayerUpdate(player->getPosition().x,
+        outboundMessages.push_back(new PlayerUpdate(player->getClientID(),
+                                                    player->getPosition().x,
                                                     player->getPosition().y,
                                                     player->getRotation(),
                                                     player->getHealth()));

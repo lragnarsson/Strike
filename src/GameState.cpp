@@ -11,14 +11,13 @@ Filip Östman
 ***************************************/
 
 #include "./GameState.h"
-
+#include <vector>
 #include "./ResourcePath.h"
 #include "./Player.h"
 #include "./Team.h"
 #include "./GeomUtils.h"
 #include "./Map.h"
-
-#include <vector>
+#include "./WeaponFactory.h"
 
 GameState::GameState()  {
     map_.load("map2.tmx");
@@ -81,7 +80,12 @@ std::vector<Shot*> GameState::getHandledShots() {
 
 void GameState::draw(sf::RenderWindow* window) {
     map_.draw(window);
-
+    for (auto gameObject : movingGameObjects_) {
+        window->draw(*gameObject);
+    }
+    for (auto gameObject : stationaryGameObjects_) {
+        window->draw(*gameObject);
+    }
     for (auto player : players_) {
         if (player->getLastSeen() < 500) {
             player->setColor(sf::Color(255, 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 100, player->getLastSeen()))));
@@ -173,4 +177,49 @@ void GameState::handleDecals() {
                           animatedDecals_.end());
 }
 
+void GameState::addMovingGameObject(GameObject* gameObject) {
+    if (gameObject != nullptr) {
+        movingGameObjects_.push_back(gameObject);
+      }
+}
 
+void GameState::addStationaryGameObject(GameObject* gameObject) {
+    stationaryGameObjects_.push_back(gameObject);
+}
+
+void GameState::movingToStationaryObjects() {
+  for (auto gameObject : movingGameObjects_) {
+      if (gameObject->isStationary()) {
+          stationaryGameObjects_.push_back(gameObject);
+          }
+  }
+  movingGameObjects_.erase(std::remove_if(movingGameObjects_.begin(),
+                                          movingGameObjects_.end(),
+                                          [](GameObject* go) { return go->isStationary(); }),
+                           movingGameObjects_.end());
+}
+
+std::vector<GameObject*>* GameState::getMovingGameObjects() {
+    return &movingGameObjects_;
+}
+
+std::vector<GameObject*>* GameState::getStationaryGameObjects() {
+    return &stationaryGameObjects_;
+}
+
+
+void GameState::removeGameObjects() {
+    stationaryGameObjects_.erase(std::remove_if(stationaryGameObjects_.begin(),
+                                                stationaryGameObjects_.end(),
+                                                [](GameObject* go) { return go->isEquipped(); }),
+                                 stationaryGameObjects_.end());
+    stationaryGameObjects_.erase(std::remove_if(stationaryGameObjects_.begin(),
+                                                stationaryGameObjects_.end(),
+                                                [](GameObject* go) {
+                                                    bool remove = go->isMarkedForRemoval();
+                                                    if (remove)
+                                                        delete go;
+                                                    return remove;
+                                                }),
+                                 stationaryGameObjects_.end());
+}

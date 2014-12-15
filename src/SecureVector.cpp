@@ -29,3 +29,8 @@ void SecureVector::append(std::vector<Message*> newMessages) {
     messages_.insert(messages_.end(), newMessages.begin(), newMessages.end());
     guardian_.unlock();
 }
+
+int SecureVector::size()
+{
+    return messages_.size();
+    }
