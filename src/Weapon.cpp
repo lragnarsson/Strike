@@ -1,12 +1,14 @@
-//
-//  Weapon.cpp
-//  Strike
-//
-//  Created by Filip Östman on 2014-11-19.
-//  Copyright (c) 2014 Filip Östman. All rights reserved.
-//
+/***************************************
+Weapon.cpp
 
-#include "Weapon.h"
+Polymorph class structure representing different weapons and types.
+
+Written by:
+Filip Östman
+***************************************/
+
+#include "./Weapon.h"
+
 #include <iostream>
 
 Weapon::Weapon(unsigned int newAmmo, unsigned int newAdditionalAmmo,
@@ -25,7 +27,7 @@ void Weapon::reloadWeapon() {
             if (allAmmo_ >= magazineSize_) {
                 ammo_ = magazineSize_;
                 additionalAmmo_ = allAmmo_ - magazineSize_;
-            } 
+            }
             else {
               ammo_ = allAmmo_;
               additionalAmmo_ = 0;
@@ -122,7 +124,7 @@ std::vector<Shot*> Shotgun::fire(int clientID, const sf::Vector2f& pos, const sf
             randomVector.x = -20 + (std::rand() % 41) + dir.x*100;
             randomVector.y = -20 + (std::rand() % 41) + dir.y*100;
 
-            shotVector.push_back(new Shot{clientID, pos, randomVector, pos + randomVector * 10000.f, damage_}); 
+            shotVector.push_back(new Shot{clientID, pos, randomVector, pos + randomVector * 10000.f, damage_});
         }
         return shotVector;
     } else {

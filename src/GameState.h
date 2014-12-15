@@ -1,22 +1,27 @@
-//
-//  GameState.h
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-11-16.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+GameState.h
 
-#ifndef __Strike__GameState__
-#define __Strike__GameState__
+Holds information about the game. Map, players, team etc.
+
+Written by:
+Lage Ragnarsson
+Isak Wiberg
+Rasmus Vilhelmsson
+Filip Östman
+***************************************/
+
+#ifndef _GAME_STATE_
+#define _GAME_STATE_
+
+#include "./Player.h"
+#include "./Shot.h"
+#include "./PhysicalObject.h"
+#include "./Decal.h"
+#include "./Map.h"
+#include "./Team.h"
 
 #include <stdio.h>
-#include "Player.h"
-#include "Shot.h"
-#include "PhysicalObject.h"
-#include "./Decal.h"
 #include <vector>
-#include "Map.h"
-#include "Team.h"
 
 class GameState{
 public:
@@ -50,7 +55,6 @@ private:
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
     Map map_;
-    //std::vector<PhysicalObject*> physicalObjects_;
     std::vector<Shot*> unhandledShots_;
     std::vector<Shot*> handledShots_;  // shots here have both timestamp and endpoint.
     sf::Clock gameTime_;
@@ -60,4 +64,4 @@ private:
     sf::Texture boomtexture;
 };
 
-#endif /* defined(__Strike__GameState__) */
+#endif // _GAME_STATE_

@@ -1,17 +1,17 @@
-//
-//  Team.h
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-11-19.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+Team.h
 
-#ifndef __Strike__Team__
-#define __Strike__Team__
+Simple class for keeping score of a team.
+
+Written by:
+Jesper Otterholm
+***************************************/
+
+#ifndef _TEAM_
+#define _TEAM_
 
 #define T_TEAM 0
 #define CT_TEAM 1
-
 
 class Team
 {
@@ -29,4 +29,4 @@ private:
     int score_ = 0;
 };
 
-#endif /* defined(__Strike__Team__) */
+#endif // _TEAM_

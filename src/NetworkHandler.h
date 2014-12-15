@@ -1,14 +1,24 @@
+/***************************************
+NetworkHandler.h
 
-#ifndef NETWORKHANDLER_H
-#define NETWORKHANDLER_H
+Class for recieving and sending messages between server and client.
+Also Handles connections.
 
-#include <SFML/Network.hpp>
+Written by:
+Erik Sköld
+Isak Wiberg
+***************************************/
 
-#include "Messages.h"
-#include "SecureVector.h"
+#ifndef _NETWORKHANDLER_
+#define _NETWORKHANDLER_
+
+#include "./Messages.h"
+#include "./SecureVector.h"
 
 #include <vector>
 #include <map>
+
+#include <SFML/Network.hpp>
 
 class NetworkHandler
 {
@@ -59,8 +69,6 @@ private:
     SecureVector outgoingMessages_;
     std::vector<Message*> internalMessages_;
 
-    std::map<int, int> playerLatestUpdate_;
-
     void recieveUDPPackets();
     void recieveTCPPackets();
     void sendUDPPacket(sf::Packet, int recieverID);
@@ -71,4 +79,4 @@ private:
     Message* unpackPacket(sf::Packet);
 };
 
-#endif // NETWORKHANDLER_H
+#endif // _NETWORKHANDLER_

@@ -1,12 +1,22 @@
-#ifndef MESSAGES_H
-#define MESSAGES_H
+/***************************************
+Messages.h
 
-#include <SFML/Network.hpp>
+Polymorph class structure for messages to be passed over the internet or localy.
+
+Written by:
+Erik Sköld
+Isak Wiberg
+***************************************/
+
+#ifndef _MESSAGES_
+#define _MESSAGES_
+
+#include "./MessageCodes.h"
+#include "./GeomUtils.h"
 
 #include <string>
 
-#include "MessageCodes.h"
-#include "./GeomUtils.h"
+#include <SFML/Network.hpp>
 
 class Message
 {
@@ -151,4 +161,4 @@ public:
 
     sf::Packet asPacket() override;
 };
-#endif
+#endif // _MESSAGES_

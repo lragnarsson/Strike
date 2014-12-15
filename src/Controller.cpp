@@ -1,4 +1,15 @@
+/***************************************
+Controller.cpp
+
+Controls the local player
+
+Written by:
+Lage Ragnarsson
+Isak Wiberg
+***************************************/
+
 #include "./Controller.h"
+
 #include <iostream>
 #include <vector>
 

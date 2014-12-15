@@ -1,19 +1,21 @@
-//
-//  SecureVector.h
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-12-10.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+SecureVector.h
 
-#ifndef __Strike__SecureVector__
-#define __Strike__SecureVector__
+Thread-safe class for vectors.
+
+Written by:
+Isak Wiberg
+***************************************/
+
+#ifndef _SECURE_VECTOR_
+#define _SECURE_VECTOR_
+
+#include "./Messages.h"
 
 #include <stdio.h>
 #include <vector>
-#include <boost/thread/mutex.hpp>
 
-#include "Messages.h"
+#include <boost/thread/mutex.hpp>
 
 class SecureVector {
 public:
@@ -27,4 +29,4 @@ private:
     boost::mutex guardian_;
     std::vector<Message*> messages_;
 };
-#endif /* defined(__Strike__SecureVector__) */
+#endif // _SECURE_VECTOR_

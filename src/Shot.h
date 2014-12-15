@@ -1,28 +1,28 @@
-//
-//  Shot.h
-//  Strike
-//
-//  Created by Rasmus Vilhelmsson on 2014-11-20.
-//  Copycopy (c) 2014 Rasmus Vilhelmsson. Alla rätter serverade.
-//
+/***************************************
+Shot.h
 
-#ifndef SHOT_H
-#define SHOT_H
+Class for representing shots.
 
-#include <SFML/Graphics.hpp>
+Written by:
+Filip Östman
+Rasmus Vilhelmsson
+***************************************/
+
+#ifndef _SHOT_
+#define _SHOT_
+
 #include "./GeomUtils.h"
 
+#include <SFML/Graphics.hpp>
 
 class Shot: public sf::Drawable {
 public:
-    // Konstruktorer
     Shot() = default;
     Shot(int clientID, sf::Vector2f origin, sf::Vector2f direction, sf::Vector2f endPoint, int damage);
     Shot(int clientID, Ray ray_, sf::Vector2f endPoint, int damage);
     Shot(const Shot& shot) = default;
     virtual ~Shot() = default;
 
-    // Funktioner
     int getDamage();
     void setEndPoint(sf::Vector2f);
     sf::Vector2f getEndPoint();
@@ -37,7 +37,6 @@ public:
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 private:
-    // Datamedlemmar
     int timestamp_;  // in milliseconds
     int clientID_;
     sf::Vector2f origin_;
@@ -47,4 +46,4 @@ private:
     int targetID_{-1};
 };
 
-#endif // SHOT_H
+#endif // _SHOT_

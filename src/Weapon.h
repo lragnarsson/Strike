@@ -1,16 +1,19 @@
-//
-//  Weapon.h
-//  Strike
-//
-//  Created by Filip Östman on 2014-11-19.
-//  Copyright (c) 2014 Filip Östman. All rights reserved.
-//
+/***************************************
+Weapon.h
 
-#ifndef __Strike__Weapon__
-#define __Strike__Weapon__
+Polymorph class structure representing different weapons and types.
+
+Written by:
+Filip Östman
+***************************************/
+
+#ifndef _WEAPON_
+#define _WEAPON_
+
+#include "./Shot.h"
 
 #include <stdio.h>
-#include "Shot.h"
+
 class Weapon{ //Automatic weapon
 public:
     Weapon() = default;
@@ -62,4 +65,4 @@ private:
     int numberOfBullets_;
 };
 
-#endif
+#endif // _WEAPON_

@@ -1,10 +1,20 @@
+/***************************************
+GeomUtils.h
+
+Linear algebra utils.
+
+Written by
+Jesper Otterholm
+***************************************/
+
 #ifndef _GEOM_UTILS_
 #define _GEOM_UTILS_
 
-#include <SFML/System.hpp>
 #include <stdlib.h>
 #include <cmath>
 #include <limits>
+
+#include <SFML/System.hpp>
 
 #define MIN_FLOAT std::numeric_limits<float>::min()
 #define MAX_FLOAT std::numeric_limits<float>::max()

@@ -1,19 +1,18 @@
-//
-//  Client.h
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-11-25.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+Client.h
 
-#ifndef __Strike__Client__
-#define __Strike__Client__
+Class for running the game client-side
 
-#include <stdio.h>
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Network.hpp>
-#include <string>
+Written by:
+Lage Ragnarsson
+Isak Wiberg
+Jesper Otterholm
+Filip Östman
+***************************************/
+
+#ifndef _CLIENT_
+#define _CLIENT_
+
 #include "./Game.h"
 #include "./ResourcePath.h"
 #include "./Player.h"
@@ -22,6 +21,13 @@
 #include "./Team.h"
 #include "./Weapon.h"
 #include "./NetworkHandler.h"
+
+#include <stdio.h>
+#include <string>
+
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 
 class Client: public Game {
 public:
@@ -59,4 +65,4 @@ private:
     std::map<std::string, sf::Texture*> textures_;
 };
 
-#endif /* defined(__Strike__Client__) */
+#endif // _CLIENT_

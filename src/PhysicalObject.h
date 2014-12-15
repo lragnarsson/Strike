@@ -1,8 +1,17 @@
+/***************************************
+PhysicalObject.h
+
+Class for representing shapes and check collisions between them.
+
+Written by:
+Jesper Otterholm
+***************************************/
 
 #ifndef _PHYSICAL_OBJECT_
 #define _PHYSICAL_OBJECT_
 
-#include "GeomUtils.h"
+#include "./GeomUtils.h"
+
 #include <vector>
 
 class PhysicalObject {

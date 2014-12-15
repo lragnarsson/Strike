@@ -1,4 +1,14 @@
-#include "Messages.h"
+/***************************************
+Messages.cpp
+
+Polymorph class structure for messages to be passed over the internet or localy.
+
+Written by:
+Erik Sköld
+Isak Wiberg
+***************************************/
+
+#include "./Messages.h"
 
 #include <SFML/Network.hpp>
 

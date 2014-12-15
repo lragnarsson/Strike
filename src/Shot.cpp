@@ -1,10 +1,12 @@
-//
-//  Shot.h
-//  Strike
-//
-//  Created by Rasmus Vilhelmsson on 2014-11-20.
-//  Copycopy (c) 2014 Rasmus Vilhelmsson. Alla rätter serverade.
-//
+/***************************************
+Shot.cpp
+
+Class for representing shots.
+
+Written by:
+Filip Östman
+Rasmus Vilhelmsson
+***************************************/
 
 #include "Shot.h"
 

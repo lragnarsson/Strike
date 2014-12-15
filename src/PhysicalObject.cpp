@@ -1,10 +1,22 @@
-#include "PhysicalObject.h"
-#include "GeomUtils.h"
+/***************************************
+PhysicalObject.cpp
+
+Class for representing shapes and check collisions between them.
+
+Written by:
+Jesper Otterholm
+***************************************/
+
+#include "./PhysicalObject.h"
+
+#include "./GeomUtils.h"
+
 #include <limits>
-#include <SFML/System.hpp>
 #include <stdlib.h>
 #include <cmath>
 #include <iostream>
+
+#include <SFML/System.hpp>
 
 /*
  * PHYSICAL_CIRCLE

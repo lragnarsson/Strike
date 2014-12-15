@@ -1,7 +1,17 @@
-//  Client.cpp
-//  Strike
+/***************************************
+Client.cpp
+
+Class for running the game client-side
+
+Written by:
+Lage Ragnarsson
+Isak Wiberg
+Jesper Otterholm
+Filip Östman
+***************************************/
 
 #include "./Client.h"
+
 #include "./GeomUtils.h"
 #include "./SysUtils.h"
 #include "./Team.h"
@@ -49,7 +59,7 @@ bool Client::connectToServer(std::string name,
 }
 
 void Client::roundRestart() {
-
+//TODO
 }
 
 void Client::readFromNetwork() {
