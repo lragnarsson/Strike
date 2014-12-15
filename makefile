@@ -69,12 +69,9 @@ Decal.o: $(SRC)/Decal.h $(SRC)/Decal.cpp
 SecureVector.o: $(SRC)/SecureVector.h $(SRC)/SecureVector.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/SecureVector.cpp
 
-<<<<<<< Updated upstream
 GameObject.o: $(SRC)/GameObject.h $(SRC)/GameObject.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/GameObject.cpp
 
-=======
->>>>>>> Stashed changes
 HUD.o: $(SRC)/HUD.h $(SRC)/HUD.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/HUD.cpp
 
