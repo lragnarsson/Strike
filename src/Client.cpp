@@ -46,7 +46,7 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     shotSound_.setBuffer(buffer);
 }
 
-Client::~Client() {
+Client::~Client() noexcept {
     for (auto texture : textures_)
         delete texture.second;
 }
@@ -60,9 +60,8 @@ void Client::networkFunction() {
 }
 
 void Client::run() {
-    
+
     boost::thread networkThread(&Client::networkFunction, this);
-    
 
     while (renderWindow_.isOpen()) {
         //nh_.update();
@@ -154,7 +153,8 @@ void Client::readFromNetwork() {
 
 void Client::writeToNetwork() {
     std::vector<Message*> outboundMessages;
-    outboundMessages.push_back(new PlayerUpdate(controller_.getPlayer()->getPosition().x,
+    outboundMessages.push_back(new PlayerUpdate(controller_.getPlayer()->getClientID(),
+                                                controller_.getPlayer()->getPosition().x,
                                                 controller_.getPlayer()->getPosition().y,
                                                 controller_.getPlayer()->getRotation(),
                                                 controller_.getPlayer()->getHealth(),
@@ -361,12 +361,12 @@ void Client::handleSounds() {
                 else if(distance < 1000.0f) {
                     shotSound_.setVolume(50);
                     shotSound_.play();
-                    shot->setSoundstatus();                    
+                    shot->setSoundstatus();
                 }
                 else {
                     shotSound_.setVolume(10);
                     shotSound_.play();
-                    shot->setSoundstatus(); 
+                    shot->setSoundstatus();
                 }
             }
         }

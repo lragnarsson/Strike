@@ -34,7 +34,7 @@ Filip Östman
 class Client: public Game {
 public:
     Client();
-    ~Client();
+    ~Client() noexcept;
 
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;

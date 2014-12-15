@@ -55,7 +55,7 @@ void NetworkHandler::update()
     processInternalMessages();
 
     std::vector<Message*> outboundMessages {outgoingMessages_.stealNewMessages()};
-    for (auto& outgoingMessage : outboundMessages)
+    for (auto outgoingMessage : outboundMessages)
     {
         sf::Packet pkt;
         pkt = outgoingMessage->asPacket(); // polymorph madness
@@ -76,6 +76,7 @@ void NetworkHandler::update()
         else         {
             std::cout << "I refuse to send via undefined protocol! (message protocol was not defined in update)" << std::endl;
         }
+        delete outgoingMessage;
     }
 }
 
@@ -89,6 +90,7 @@ void NetworkHandler::recieveUDPPackets()
     {
         //std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ? "PLAYER_UPDATE" : "ADD_SHOT") << std::endl;
         incomingMessages_.push_back(unpackPacket(recievePacket));
+        std::cout << incomingMessages_.size() << std::endl;
     }
 }
 
@@ -143,7 +145,7 @@ void NetworkHandler::broadcastUDPPacket(sf::Packet data)
 {
     for (auto& client : clients_)
     {
-        std::cout << "Skickar udp till klient " << client.ID << "på port " << client.UDPPort << std::endl;
+        //std::cout << "Skickar udp till klient " << client.ID << "på port " << client.UDPPort << std::endl;
         Usocket_.send(data, client.TCPSocket->getRemoteAddress(), client.UDPPort);
     }
 }
