@@ -69,7 +69,7 @@ void Client::readFromNetwork() {
             case PLAYER_UPDATE: {
                 PlayerUpdate* msg = static_cast<PlayerUpdate*>(message);
                 for (auto player : gameState_.getPlayers()) {
-                    if (player->getClientID() == clientID_) {
+                    if ((player->getClientID() == msg->playerID) && (player->getClientID() != controller_.getPlayer()->getClientID())) {
                         player->setHealth(msg->health);
                         player->setPosition(msg->xCoord, msg->yCoord);
                         player->setRotation(msg->rotation);
@@ -82,7 +82,17 @@ void Client::readFromNetwork() {
                 RoundRestart* rrmsg {static_cast<RoundRestart*>(message)};
                 gameState_.tTeam()->setScore(rrmsg->tTeamScore);
                 gameState_.ctTeam()->setScore(rrmsg->ctTeamScore);
-                gameState_.setplayerSpawnPoints();
+                int spawnpointIndex {rrmsg->spawnpointIndex};
+                
+                Player* myPlayer {controller_.getPlayer()};
+                if (myPlayer->getTeam()->getTeamID() == T_TEAM) {
+                    myPlayer->setPosition(gameState_.getTspawnpoints().at(spawnpointIndex));
+                    myPlayer->move();
+                }
+                else {
+                    myPlayer->setPosition(gameState_.getCTspawnpoints().at(spawnpointIndex));
+                    myPlayer->move();
+                }
                 break;
             }
             case ADD_PLAYER: {
