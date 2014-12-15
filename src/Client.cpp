@@ -19,6 +19,7 @@ Filip Östman
 #include "./Team.h"
 #include "./WeaponFactory.h"
 
+
 Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     renderWindow_.setFramerateLimit(120);
     renderWindow_.setMouseCursorVisible(false);
@@ -42,8 +43,8 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.addPlayer(p2);
 
     gameState_.setPlayerSpawnPoints();
-    buffer.loadFromFile(resourcePath("res/sounds/") + "pistol.wav");
-    shotSound_.setBuffer(buffer);
+    soundBuffer.loadFromFile(resourcePath("res/sounds/") + "pistol.wav");
+    shotSound_.setBuffer(soundBuffer);
 }
 
 Client::~Client() noexcept {
@@ -68,8 +69,8 @@ void Client::run() {
         readFromNetwork();
         handleInput();
         handleCollisions();
-        handleGameLogic();
         handleSounds();
+        handleGameLogic();
         writeToNetwork();
         draw();
     }
@@ -187,6 +188,7 @@ void Client::handleCollisions() {
 void Client::handleGameLogic() {
     hud_.setHealth(controller_.getPlayer()->getHealth());
     hud_.setAmmo(controller_.getPlayer()->getMagazineAmmo(), controller_.getPlayer()->getAdditionalAmmo());
+    hud_.setScore(gameState_.tTeam()->getScore(), gameState_.ctTeam()->getScore());
     hud_.setPositions(renderWindow_);
 }
 
@@ -347,27 +349,26 @@ void Client::handleVision() {
 }
 
 void Client::handleSounds() {
-    for (auto player : gameState_.getPlayers()) {
-        for (auto shot : gameState_.getHandledShots()) {
-            if (!shot->getSoundstatus()) {
-                sf::Vector2f distanceVector;
-                distanceVector = player->getPosition() - shot->getOrigin();
-                float distance = length(distanceVector);
-                if(distance < 100.0f) {
-                    shotSound_.setVolume(100);
-                    shotSound_.play();
-                    shot->setSoundstatus();
-                }
-                else if(distance < 1000.0f) {
-                    shotSound_.setVolume(50);
-                    shotSound_.play();
-                    shot->setSoundstatus();
-                }
-                else {
-                    shotSound_.setVolume(10);
-                    shotSound_.play();
-                    shot->setSoundstatus();
-                }
+
+    for (auto shot : gameState_.getHandledShots()) {
+        if (!shot->getSoundstatus()) {
+            sf::Vector2f distanceVector;
+            distanceVector = controller_.getPlayer()->getPosition() - shot->getOrigin();
+            float distance = length(distanceVector);
+            if(distance < 100.0f) {
+                shotSound_.setVolume(100);
+                shotSound_.play();
+                shot->setSoundstatus();
+            }
+            else if(distance < 1000.0f) {
+                shotSound_.setVolume(50);
+                shotSound_.play();
+                shot->setSoundstatus();                    
+            }
+            else {
+                shotSound_.setVolume(10);
+                shotSound_.play();
+                shot->setSoundstatus(); 
             }
         }
     }

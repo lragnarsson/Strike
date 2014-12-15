@@ -12,6 +12,7 @@
 !*.gif
 !*.ttf
 !*.md
+!*.wav
 !makefile
 libraries/
 !doc/

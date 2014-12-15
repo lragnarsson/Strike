@@ -69,7 +69,7 @@ private:
     std::string clientName_;
     sf::RenderWindow renderWindow_;
     Controller controller_;
-    sf::SoundBuffer buffer;
+    sf::SoundBuffer soundBuffer;
     sf::Sound shotSound_;
     sf::Clock clock_;
 };
