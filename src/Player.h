@@ -49,6 +49,8 @@ public:
     void reloadWeapon();
     void setSpeedMultiplier(float speed);
     void hasNotFired();
+    int getMagazineAmmo() const;
+    int getAdditionalAmmo() const;
 
     void lastSeenNow();
     int getLastSeen();

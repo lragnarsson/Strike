@@ -23,7 +23,9 @@ public:
     void reloadWeapon();
     virtual std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir);
     void hasNotFired();
-    float getCHDistance();
+    float getCHDistance() const;
+    int getMagazineAmmo() const;
+    int getAdditionalAmmo() const;
     bool isAnimating();
 
 private:
