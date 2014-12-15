@@ -30,13 +30,16 @@ void Server::networkFunction() {
 void Server::run() {
     sf::sleep(sf::milliseconds(1000));
     nh_.initServer();
+    
+    boost::thread networkThread(&Server::networkFunction, this);
+    
     acceptConnections();     // Loops until user presses enter
     //nh_.initRemotePlayers();
     std::cout << "Startar server" << std::endl;
     initRemotePlayers();
     roundRestart();
     
-    boost::thread networkThread(&Server::networkFunction, this);
+    
     
     while (true) {
         //nh_.update();
@@ -62,10 +65,12 @@ void Server::readFromNetwork() {
               if (ap->teamID == CT_TEAM) {
                   gameState_.addPlayer(new Player{ap->playerID, gameState_.ctTeam()});
                   std::cout << "added player to CT_TEAM with id: " << ap->playerID << std::endl;
+                  delete ap;
               }
               else if (ap->teamID == T_TEAM) {
                   gameState_.addPlayer(new Player{ap->playerID, gameState_.tTeam()});
                   std::cout << "added player to CT_TEAM with id: " << ap->playerID << std::endl;
+                  delete ap;
               }
               else
                   std::cout << "Team index did not match any of CT_TEAM or T_Team. No player was created." << std::endl;
@@ -73,7 +78,6 @@ void Server::readFromNetwork() {
           }
               
       }
-      delete message;
   }
 }
 
@@ -106,7 +110,7 @@ void Server::acceptConnections() {
     while(true)
     {
         nh_.checkForNewTcpConnections();
-        nh_.update();
+        //nh_.update();
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
             break;
     }
@@ -155,6 +159,7 @@ void Server::updatePlayer(PlayerUpdate* message) {
                                            message->yCoord));
           player->setRotation(message->rotation);
       }
+    delete message;
 }
 
 void Server::handleShot(AddShot* message) {
@@ -183,4 +188,5 @@ void Server::handleShot(AddShot* message) {
     }
     hitPlayer->decreaseHealth(shot->getDamage());
     gameState_.addHandledShot(shot);
+    delete message;
 }

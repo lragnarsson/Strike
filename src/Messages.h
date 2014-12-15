@@ -100,7 +100,7 @@ public:
     InitialInformation() = delete;
     InitialInformation(sf::Packet);
     InitialInformation(int clientID, int teamID, std::string clientName, int reciever = -1)
-    :  Message(INITIAL_INFORMATION, TCP, reciever), clientID(clientID) {}
+    :  Message(INITIAL_INFORMATION, TCP, reciever), clientID(clientID), teamID(teamID), clientName(clientName) {}
 
     sf::Packet asPacket();
 

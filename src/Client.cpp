@@ -19,7 +19,7 @@ Filip Östman
 #include "./Team.h"
 
 Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
-    renderWindow_.setFramerateLimit(120);
+    renderWindow_.setFramerateLimit(2);
     renderWindow_.setMouseCursorVisible(false);
 
     loadTextures();

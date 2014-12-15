@@ -55,6 +55,8 @@ void NetworkHandler::update()
     processInternalMessages();
 
     std::vector<Message*> outboundMessages {outgoingMessages_.stealNewMessages()};
+    std::cout << "Length of outgoingMessages: " << outboundMessages.size() <<
+    "\nLength of incomingMessages: " << incomingMessages_.size() << std::endl;
     for (auto& outgoingMessage : outboundMessages)
     {
         sf::Packet pkt;
@@ -76,6 +78,7 @@ void NetworkHandler::update()
         else         {
             std::cout << "I refuse to send via undefined protocol! (message protocol was not defined in update)" << std::endl;
         }
+        delete outgoingMessage;
     }
 }
 
@@ -87,7 +90,7 @@ void NetworkHandler::recieveUDPPackets()
 
     if (Usocket_.receive(recievePacket, remoteIP, remotePort) == sf::Socket::Done)
     {
-        //std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ? "PLAYER_UPDATE" : "ADD_SHOT") << std::endl;
+        std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ? "PLAYER_UPDATE" : "ADD_SHOT") << std::endl;
         incomingMessages_.push_back(unpackPacket(recievePacket));
     }
 }
