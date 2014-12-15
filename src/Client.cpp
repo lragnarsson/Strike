@@ -30,7 +30,9 @@ Client::~Client() {
 }
 
 void Client::run() {
+
     while (renderWindow_.isOpen()) {
+        nh_.update();
         readFromNetwork();
         handleInput();
         handleCollisions();
@@ -44,7 +46,6 @@ bool Client::connectToServer(std::string name,
                              int team,
                              sf::IpAddress ip) {
   return nh_.connectToServer(name, team, ip);
-  //return true;
 }
 
 void Client::roundRestart() {
@@ -72,6 +73,7 @@ void Client::readFromNetwork() {
                         player->setHealth(msg->health);
                         player->setPosition(msg->xCoord, msg->yCoord);
                         player->setRotation(msg->rotation);
+                        player->move();
                     }
                 }
                 break;
@@ -80,6 +82,7 @@ void Client::readFromNetwork() {
                 RoundRestart* rrmsg {static_cast<RoundRestart*>(message)};
                 gameState_.tTeam()->setScore(rrmsg->tTeamScore);
                 gameState_.ctTeam()->setScore(rrmsg->ctTeamScore);
+                gameState_.setplayerSpawnPoints();
                 break;
             }
             case ADD_PLAYER: {
@@ -100,6 +103,7 @@ void Client::writeToNetwork() {
     outboundMessages.push_back(new PlayerUpdate(controller_.getPlayer()->getPosition().x,
                                                 controller_.getPlayer()->getPosition().y,
                                                 controller_.getPlayer()->getRotation(),
+                                                controller_->getPlayer()->getHealth(),
                                                 0));
     for (auto shot : gameState_.getUnhandledShots())
         outboundMessages.push_back(new AddShot(shot->getClientID(),

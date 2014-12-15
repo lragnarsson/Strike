@@ -39,7 +39,7 @@ private:
     void writeToNetwork() override;
     void handleGameLogic() override;
     void handleInput();
-    void handleCollisions() override;
+    void handleCollisions();
     void draw();
     void collideMoveVector(sf::Vector2f position,
                            sf::Vector2f& moveVector,

@@ -14,6 +14,7 @@ char command;
 
 void startClient(std::string name, unsigned int team, std::string ip) {
     std::cout << name << "  " << team << "  " << ip << std::endl;
+
     Client client;
     if (client.connectToServer(name, team, sf::IpAddress(ip)))
         client.run();
@@ -28,8 +29,8 @@ void startLocalClient(std::string name, unsigned int team) {
 void startServer(unsigned int maxPlayers, std::string mapName) {
     std::cout << maxPlayers << "  " << mapName << "\nServer IP is: "
     << sf::IpAddress::getPublicAddress(sf::seconds(2.0f)) << std::endl;
-   // Server server;
-    //server.run();
+    Server server;
+    server.run();
 }
 
 bool validCommand() {

@@ -25,7 +25,7 @@ public:
     void checkForNewTcpConnections();
     bool connectToServer(std::string name, int teamID, sf::IpAddress);
     void initServer();
-    void initClient(sf::IpAddress serverAdress);
+    void initClient();
     void update();
 
     void initRemotePlayers();
@@ -60,14 +60,14 @@ private:
     std::vector<Message*> internalMessages_;
 
     std::map<int, int> playerLatestUpdate_;
-    
+
     void recieveUDPPackets();
     void recieveTCPPackets();
     void sendUDPPacket(sf::Packet, int recieverID);
     void broadcastUDPPacket(sf::Packet);
     void sendTCPPacket(sf::Packet, int recieverID);
     void broadcastTCPPacket(sf::Packet);
-    
+
     Message* unpackPacket(sf::Packet);
 };
 
