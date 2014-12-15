@@ -371,6 +371,7 @@ void Client::handleSounds() {
             }
         }
     }
+}
 
 void Client::handleGameObjects() {
   for (auto gameObject : *(gameState_.getMovingGameObjects())) {

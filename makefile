@@ -13,7 +13,7 @@ LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-aud
 
 # Objektkodsmoduler som ingår i den kompletta kalkylatorn.
 
-OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o NetworkHandler.o Messages.o Shot.o Team.o Weapon.o Decal.o SecureVector.o GameObject.o Strike.o
+OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o NetworkHandler.o Messages.o Shot.o Team.o Weapon.o Decal.o SecureVector.o GameObject.o HUD.o Strike.o
 
 # Huvudmål - skapas med kommandot 'make' eller 'make kalkylator'.
 strike: $(OBJECTS) makefile
@@ -70,6 +70,9 @@ SecureVector.o: $(SRC)/SecureVector.h $(SRC)/SecureVector.cpp
 
 GameObject.o: $(SRC)/GameObject.h $(SRC)/GameObject.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/GameObject.cpp
+
+HUD.o: $(SRC)/HUD.h $(SRC)/HUD.cpp
+	$(CCC) $(CCFLAGS) -c $(SRC)/HUD.cpp
 
 clean:
 	@ \rm -rf *.o *.gch core

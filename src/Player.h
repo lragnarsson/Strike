@@ -69,7 +69,7 @@ public:
     bool holdingGrenade();
     GameObject* throwEquipped();
     GameObject* throwGrenade();
-    bool emptyInventory();
+    bool emptyInventory() const;
     void equipAt(unsigned int index);
     void equipNext();
     void equipPrevious();

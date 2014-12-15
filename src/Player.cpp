@@ -90,11 +90,19 @@ void Player::reloadWeapon() {
 }
 
 int Player::getMagazineAmmo() const {
-    weapon_->getMagazineAmmo();
+    if(emptyInventory())
+        return 0;
+    if (Weapon* weapon = dynamic_cast<Weapon*>(inventory_.at(equippedIndex_)))
+        return weapon->getMagazineAmmo();
+    return 1;
 }
 
 int Player::getAdditionalAmmo() const {
-    weapon_->getAdditionalAmmo();
+    if(emptyInventory())
+        return 0;
+    if (Weapon* weapon = dynamic_cast<Weapon*>(inventory_.at(equippedIndex_)))
+        return weapon->getAdditionalAmmo();
+    return 0;
 }
 
 void Player::lastSeenNow() {
@@ -252,7 +260,7 @@ GameObject* Player::throwGrenade() {
     return throwed;
 }
 
-bool Player::emptyInventory() {
+bool Player::emptyInventory() const {
   return (inventory_.size() == 0);
 }
 

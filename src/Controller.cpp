@@ -80,7 +80,7 @@ void Controller::pickupObjects(std::vector<GameObject*>* gameObjects) {
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
       for (auto gameObject : *gameObjects) {
           sf::Vector2f tmp = gameObject->getPosition() - player_->getPosition();
-          if (dot(tmp, tmp) < 1000.f) {
+          if (dot(tmp, tmp) < 10000.f) {
               player_->pickUpObject(gameObject);
               return;
           }

@@ -69,7 +69,6 @@ private:
     std::string clientName_;
     sf::RenderWindow renderWindow_;
     Controller controller_;
-    std::map<std::string, sf::Texture*> textures_;
     sf::SoundBuffer buffer;
     sf::Sound shotSound_;
     sf::Clock clock_;
