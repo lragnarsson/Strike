@@ -19,6 +19,7 @@ void Server::run() {
     roundRestart();
 
     while (true) {
+        nh_.update();
         readFromNetwork();
         handleGameLogic();
         writeToNetwork();
@@ -63,12 +64,12 @@ void Server::handleGameLogic() {
 }
 
 void Server::acceptConnections() {
-    std::cout << "Waiting for players to connect. Press return when you want to start the game." << std::endl;
+    std::cout << "Waiting for players to connect. Press right shift when you want to start the game." << std::endl;
     while(true)
     {
         nh_.checkForNewTcpConnections();
-
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+        nh_.update();
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
             break;
     }
 }

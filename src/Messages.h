@@ -78,23 +78,22 @@ public:
 
     sf::Packet asPacket() override;
 };
-/*
-class InitialInformationFromClient : public Message
+
+class InitialInformation : public Message
 {
 public:
 
-    std::string name;
-    int teamID;
+    int clientID;
 
-    InitialInformationFromClient() = delete;
-    InitialInformationFromClient(sf::Packet);
-    InitialInformationFromClient(std::string name, int teamID, int reciever = -1)
-    :  Message(INITIAL_INFORMATION_FROM_CLIENT, TCP, reciever), name(name), teamID(teamID) {}
+    InitialInformation() = delete;
+    InitialInformation(sf::Packet);
+    InitialInformation(int clientID, int reciever = -1)
+    :  Message(INITIAL_INFORMATION, TCP, reciever), clientID(clientID) {}
 
     sf::Packet asPacket();
 
 };
- */
+
 
 class PlayerUpdate : public Message
 {

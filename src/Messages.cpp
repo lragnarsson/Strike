@@ -49,20 +49,20 @@ sf::Packet ConsolePrintString::asPacket()
     pkt << header << str;
     return pkt;
 }
-/*
-InitialInformationFromClient::InitialInformationFromClient(sf::Packet packet) :
-    Message(INITIAL_INFORMATION_FROM_CLIENT, TCP, -1)
+
+InitialInformation::InitialInformation(sf::Packet packet) :
+    Message(INITIAL_INFORMATION, TCP, -1)
 {
-    packet >> name >> teamID;
+    packet >> clientID;
 }
 
-sf::Packet InitialInformationFromClient::asPacket()
+sf::Packet InitialInformation::asPacket()
 {
     sf::Packet pkt;
-    pkt << header << name << teamID;
+    pkt << header << clientID;
     return pkt;
 }
- */
+
 
 PlayerUpdate::PlayerUpdate(sf::Packet packet) : Message(PLAYER_UPDATE, UDP, -1)
 {

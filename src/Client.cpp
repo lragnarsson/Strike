@@ -31,6 +31,7 @@ Client::~Client() {
 
 void Client::run() {
     while (renderWindow_.isOpen()) {
+        nh_.update();
         readFromNetwork();
         handleInput();
         handleCollisions();
@@ -87,6 +88,12 @@ void Client::readFromNetwork() {
                 if (msg->playerID == clientID_)
                     break;
                 gameState_.addPlayer(new Player(msg->playerID, (msg->teamID == T_TEAM ? gameState_.tTeam() : gameState_.ctTeam()), textures_["cage3.png"]));
+                break;
+            }
+            case INITIAL_INFORMATION: {
+                InitialInformation* msg = static_cast<InitialInformation*>(message);
+                controller_.getPlayer()->setClientID(msg->clientID);
+                std::cout << "ClientID of player updated to: " << msg->clientID << std::endl;
                 break;
             }
         }

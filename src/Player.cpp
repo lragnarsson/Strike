@@ -101,6 +101,10 @@ int Player::getClientID() const {
     return clientID_;
 }
 
+void Player::setClientID(int newClientID) {
+    clientID_ = newClientID;
+}
+
 Team* Player::getTeam() const {
     return team_;
 }

@@ -22,6 +22,7 @@ const int INTERNAL_MESSAGE_LIMIT = 1999;
 //
 const int ADD_PLAYER = 2001;
 const int CONSOLE_PRINT_STRING = 2002;
+const int INITIAL_INFORMATION = 2003;
 
 const int PLAYER_UPDATE = 3000;
 const int ADD_SHOT = 3001;

@@ -27,6 +27,7 @@ public:
     ~Player() noexcept {};
 
     int getClientID() const;
+    void setClientID(int newClientID);
     Team* getTeam() const;
     void setTeam(Team* team);
     std::string getClientName() const;

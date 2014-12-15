@@ -80,7 +80,8 @@ void NetworkHandler::recieveUDPPackets()
 
     if (Usocket_.receive(recievePacket, remoteIP, remotePort) == sf::Socket::Done)
     {
-        std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << std::endl;
+        std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << unpackPacket(recievePacket)->header << std::endl;
+        
         incomingMessages_.push_back(unpackPacket(recievePacket));
     }
 }
@@ -144,6 +145,7 @@ void NetworkHandler::sendTCPPacket(sf::Packet data, int clientID)
         if (client.ID == clientID)
         {
             client.TCPSocket->send(data);
+            recieverFound = true;
         }
 
     }
@@ -324,10 +326,11 @@ void NetworkHandler::processInternalMessages()
                 {
                     ClientNotifyUDPPort cnudpp{static_cast<ServerAcceptConnection*>(internalMessage)->playerID, Usocket_.getLocalPort(), 0};
                     sendTCPPacket(cnudpp.asPacket(), 0);
-                    std::cout << "Recieved server_accept_connection and returned ClientNotifyUDPPort. \n"
+                    std::cout << "Recieved server_accept_connection and returned ClientNotifyUDPPort. \nAdded InitialInformation-message to incoming.\n"
                     << "playerID, localPort: " << static_cast<ServerAcceptConnection*>(internalMessage)->playerID << ", " << Usocket_.getLocalPort() << "\n";
-
+                    
                     int myPlayerID = static_cast<ServerAcceptConnection*>(internalMessage)->playerID;
+                    incomingMessages_.push_back(new InitialInformation{myPlayerID});
                     
                     AddPlayer ap{myPlayerID, teamID, playerName, 0};
                     sendTCPPacket(ap.asPacket(), 0);
