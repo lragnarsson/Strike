@@ -125,7 +125,7 @@ void GameState::setPlayerSpawnPoints(){
             player->setPosition(tSpawns[ti++ % tSpawns.size()]);
             player->move();
         }
-        else if (ctSpawns.size() > 0)
+        else if (ctSpawns.size() > 0) {
             player->setPosition(ctSpawns[cti++ % ctSpawns.size()]);
             player->move();
         }
