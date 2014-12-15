@@ -21,6 +21,7 @@ Filip Östman
 #include "./Team.h"
 #include "./Weapon.h"
 #include "./NetworkHandler.h"
+#include "./HUD.h"
 
 #include <stdio.h>
 #include <string>
@@ -59,6 +60,7 @@ private:
     int clientID_ = 1337;
     NetworkHandler nh_;
     GameState gameState_;
+    HUD hud_;
     std::string clientName_;
     sf::RenderWindow renderWindow_;
     Controller controller_;

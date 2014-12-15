@@ -22,16 +22,19 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
 
     loadTextures();
 
-    Player* player = new Player(clientID_, gameState_.ctTeam(), textures_["cage3.png"]);
-    player->setTeam(gameState_.ctTeam());
+    Player* player = new Player(clientID_, gameState_.tTeam(), textures_["cage3.png"]);
     player->setWeapon(new Weapon(1000, 2000, 1000, 20, 500, 10, 500.f));
     gameState_.addPlayer(player);
-    gameState_.addHUDElement(player->getCrosshair());
     controller_.bindPlayer(player);
 
-    Player* p2 = new Player(42, gameState_.tTeam(), textures_["cage3.png"]);
+    hud_.setCrosshair(player->getCrosshair());
+
+    Player* p2 = new Player(2, gameState_.ctTeam(), textures_["cage3.png"]);
+    p2->setPosition(sf::Vector2f(500.f, 100.f));
+    p2->move();
     gameState_.addPlayer(p2);
-    gameState_.setplayerSpawnPoints();
+
+    gameState_.setPlayerSpawnPoints();
 }
 
 Client::~Client() {
@@ -93,7 +96,7 @@ void Client::readFromNetwork() {
                 gameState_.tTeam()->setScore(rrmsg->tTeamScore);
                 gameState_.ctTeam()->setScore(rrmsg->ctTeamScore);
                 int spawnpointIndex {rrmsg->spawnpointIndex};
-                
+
                 Player* myPlayer {controller_.getPlayer()};
                 if (myPlayer->getTeam()->getTeamID() == T_TEAM) {
                     myPlayer->setPosition(gameState_.getTspawnpoints().at(spawnpointIndex));
@@ -118,7 +121,7 @@ void Client::readFromNetwork() {
                 clientID_ = msg->clientID;
                 myPlayer->setClientID(msg->clientID);
                 myPlayer->setTeam((msg->teamID == T_TEAM ? gameState_.tTeam() : gameState_.ctTeam()));
-                
+
                 std::cout << "ClientID and TeamID (0 = T, 1 = CT) of player updated to: " << msg->clientID << ", " << msg->teamID << std::endl;
                 break;
             }
@@ -160,7 +163,9 @@ void Client::handleCollisions() {
 }
 
 void Client::handleGameLogic() {
-
+    hud_.setHealth(controller_.getPlayer()->getHealth());
+    hud_.setAmmo(controller_.getPlayer()->getMagazineAmmo(), controller_.getPlayer()->getAdditionalAmmo());
+    hud_.setPositions(renderWindow_);
 }
 
 void Client::handleInput() {
@@ -185,6 +190,7 @@ void Client::draw() {
     handleVision();
     createDecals();
     gameState_.draw(&renderWindow_);
+    renderWindow_.draw(hud_);
     renderWindow_.display();
 }
 
@@ -218,7 +224,7 @@ void Client::handleShots() {
         }
 
         for (auto player : gameState_.getPlayers()) {
-            if (player->intersectRay(shot->getRay(), centerAfterCollision))
+            if (player->getClientID() != clientID_ && player->intersectRay(shot->getRay(), centerAfterCollision))
                 if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
                     shot->setEndPoint(centerAfterCollision);
                     maxDistance = length(centerAfterCollision - shot->getOrigin());
@@ -231,21 +237,21 @@ void Client::handleShots() {
 
 void Client::createDecals() {
     for (auto shot : gameState_.getHandledShots()) {
-      if (shot->getTargetID() != -1) {
-          gameState_.addAnimatedDecal(
-              new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
-                                textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
-                                20, 16, false, 4));
-          gameState_.addAnimatedDecal(
-              new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
-                                sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
-                                sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
-      }
-      else
-          gameState_.addAnimatedDecal(
-              new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
-                                textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
-                                20, 25, false, 25));
+        if (shot->getTargetID() != -1) {
+            gameState_.addAnimatedDecal(
+                new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
+                                  textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
+                                  20, 16, false, 4));
+            gameState_.addAnimatedDecal(
+                new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
+                                  sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
+                                  sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
+        }
+        else
+            gameState_.addAnimatedDecal(
+                new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
+                                  textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                  20, 25, false, 25));
     }
 }
 

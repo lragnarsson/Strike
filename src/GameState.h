@@ -35,33 +35,28 @@ public:
     std::vector<PhysicalObject*> getPhysicalObjects() const;
     std::vector<sf::Vector2f> getTspawnpoints() const;
     std::vector<sf::Vector2f> getCTspawnpoints() const;
-    void setplayerSpawnPoints();
+    void setPlayerSpawnPoints();
     std::vector<Shot*> getHandledShots();
     std::vector<Shot*> getUnhandledShots() const;
     void removeOldShots(bool ignoreTime = false);
     std::vector<Player*> getPlayers();
     Team* ctTeam();
     Team* tTeam();
-    void addHUDElement(sf::Drawable* HUD);
     void addDecal(Decal* decal);
     void addAnimatedDecal(AnimatedDecal* decal);
     void handleDecals();
     void migrateShots();
 
 private:
-    Team ctTeam_{T_TEAM};
-    Team tTeam_{CT_TEAM};
+    Team ctTeam_{CT_TEAM};
+    Team tTeam_{T_TEAM};
     std::vector<Player*> players_;
-    sf::Texture mapTexture_;
-    sf::Sprite mapSprite_;
     Map map_;
     std::vector<Shot*> unhandledShots_;
     std::vector<Shot*> handledShots_;  // shots here have both timestamp and endpoint.
     sf::Clock gameTime_;
-    std::vector<sf::Drawable*> HUDElements_;
     std::vector<Decal*> unhandledDecals_;
     std::vector<AnimatedDecal*> animatedDecals_;
-    sf::Texture boomtexture;
 };
 
 #endif // _GAME_STATE_

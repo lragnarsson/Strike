@@ -70,8 +70,16 @@ void Weapon::hasNotFired() {
     hasFired_ = false;
 }
 
-float Weapon::getCHDistance() {
+float Weapon::getCHDistance() const {
     return CHDistance_;
+}
+
+int Weapon::getMagazineAmmo() const {
+    return ammo_;
+}
+
+int Weapon::getAdditionalAmmo() const {
+    return additionalAmmo_;
 }
 
 bool Weapon::isAnimating() {

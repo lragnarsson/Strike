@@ -22,8 +22,7 @@ Player::Player(int ClientID, Team* team, sf::Texture* spriteSheet)
 }
 
 Player::Player(int ClientID, Team* team)
-: PhysicalCircle(getPosition(), 40.0f), clientID_(ClientID), team_(team), crosshair_(5.f) {
-    
+    : PhysicalCircle(getPosition(), 40.0f), clientID_(ClientID), team_(team), crosshair_(5.f) {
 }
 
 void Player::initCrosshair() {
@@ -61,7 +60,7 @@ void Player::decreaseHealth(int amount) {
         health_ -= amount;
 }
 
-int Player::getHealth() { //För testning!
+int Player::getHealth() {
   return health_;
 }
 
@@ -79,6 +78,14 @@ void Player::hasNotFired() {
 
 void Player::reloadWeapon() {
     weapon_->reloadWeapon();
+}
+
+int Player::getMagazineAmmo() const {
+    weapon_->getMagazineAmmo();
+}
+
+int Player::getAdditionalAmmo() const {
+    weapon_->getAdditionalAmmo();
 }
 
 void Player::lastSeenNow() {

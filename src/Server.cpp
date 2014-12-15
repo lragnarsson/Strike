@@ -162,7 +162,7 @@ void Server::handleShot(AddShot* message) {
             }
     }
     for (auto player : gameState_.getPlayers()) {
-        if (player->intersectRay(shot->getRay(), centerAfterCollision))
+        if (player->getClientID() != shot->getClientID() && player->intersectRay(shot->getRay(), centerAfterCollision))
             if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
                 shot->setEndPoint(centerAfterCollision);
                 maxDistance = length(centerAfterCollision - shot->getOrigin());

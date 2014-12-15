@@ -30,9 +30,7 @@ GameState::~GameState() {
     for (auto shot : handledShots_)
         delete shot;
     for (auto player : players_)
-        delete player;/*
-    for (auto elem : HUDElements_)
-        delete elem;*/
+        delete player;
     for (auto decal : unhandledDecals_)
         delete decal;
     for (auto decal : animatedDecals_)
@@ -82,24 +80,24 @@ std::vector<Shot*> GameState::getHandledShots() {
 }
 
 void GameState::draw(sf::RenderWindow* window) {
-    window->draw(mapSprite_);
     map_.draw(window);
+
     for (auto player : players_) {
         if (player->getLastSeen() < 500) {
             player->setColor(sf::Color(255, 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 100, player->getLastSeen()))));
             window->draw(*player);
         }
     }
+
     for (auto shot : handledShots_) {
         window->draw(*shot);
     }
+
     for (auto decal : animatedDecals_) {
         decal->animate();
         window->draw(*decal);
     }
-    for (auto HUDElement : HUDElements_) {
-        window->draw(*HUDElement);
-    }
+
     handleDecals();
 }
 
@@ -116,18 +114,18 @@ std::vector<sf::Vector2f> GameState::getCTspawnpoints() const {
 }
 
 
-void GameState::setplayerSpawnPoints(){
+void GameState::setPlayerSpawnPoints(){
     std::vector<sf::Vector2f> tSpawns = getTspawnpoints();
     std::vector<sf::Vector2f> ctSpawns = getCTspawnpoints();
     int ti = 0;
     int cti = 0;
 
     for (Player* player : players_) {
-        if (player->getTeam()->getTeamID() == T_TEAM) {
+        if (player->getTeam()->getTeamID() == T_TEAM && tSpawns.size() > 0) {
             player->setPosition(tSpawns[ti++ % tSpawns.size()]);
             player->move();
         }
-        else {
+        else if (ctSpawns.size() > 0)
             player->setPosition(ctSpawns[cti++ % ctSpawns.size()]);
             player->move();
         }
@@ -149,10 +147,6 @@ void GameState::migrateShots() {
                          unhandledShots_.begin(),
                          unhandledShots_.end());
     unhandledShots_.clear();
-}
-
-void GameState::addHUDElement(sf::Drawable* HUD) {
-    HUDElements_.push_back(HUD);
 }
 
 void GameState::addDecal(Decal* decal) {
