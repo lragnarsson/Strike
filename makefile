@@ -2,14 +2,14 @@
 # Makefile for Strike, GNU GCC (g++)
 #
 
-CCC = g++
+CCC = gccfilter -a -c g++
 
 SRC = src
 TINY = libraries/tinyxml
 # Kompilatorflaggor, lägg till '-g' om kompilering för avlusning ska göras.
 CCFLAGS = -I$(SRC) -std=c++11 -Wpedantic -Wall -Wextra #-fpermissive
 
-LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -ltinyxml
+LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -ltinyxml -lboost_system -I/usr/include/boost/ -lboost_filesystem -lboost_thread
 
 # Objektkodsmoduler som ingår i den kompletta kalkylatorn.
 OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o NetworkHandler.o Messages.o Shot.o Team.o Weapon.o Decal.o SecureVector.o Strike.o
