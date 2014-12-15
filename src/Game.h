@@ -22,7 +22,7 @@ nobody knows
 class Game{
 public:
     virtual ~Game() = default;
-    GameState gameState_;
+    //GameState gameState_;
 
     virtual void run() = 0;
 

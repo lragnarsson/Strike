@@ -12,6 +12,8 @@ Filip Östman
 
 #include "./Client.h"
 
+#include <boost/thread.hpp>
+
 #include "./GeomUtils.h"
 #include "./SysUtils.h"
 #include "./Team.h"
@@ -39,10 +41,20 @@ Client::~Client() {
         delete texture.second;
 }
 
-void Client::run() {
-
-    while (renderWindow_.isOpen()) {
+void Client::networkFunction() {
+    while (true) {
         nh_.update();
+        sf::Time sleepTime {sf::milliseconds(10)};
+        sf::sleep(sleepTime);
+    }
+}
+
+void Client::run() {
+    
+    boost::thread networkThread(&Client::networkFunction, this);
+    
+    while (renderWindow_.isOpen()) {
+        //nh_.update();
         readFromNetwork();
         handleInput();
         handleCollisions();
@@ -174,11 +186,13 @@ void Client::handleInput() {
 }
 
 void Client::draw() {
+    /*
     std::cout << "\n\n\n\n";
     for (auto player : gameState_.getPlayers()) {
         std::cout << "Player info (id,xpos,ypos): (" << player->getClientID() << ", " << player->getPosition().x << ", " << player->getPosition().y << ")\n";
     }
     std::cout << std::endl;
+     */
     renderWindow_.clear();
     controller_.updateView();
     renderWindow_.setView(*controller_.getView());

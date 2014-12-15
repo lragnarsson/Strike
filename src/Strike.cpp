@@ -27,8 +27,9 @@ void startClient(std::string name, unsigned int team, std::string ip) {
     std::cout << name << "  " << team << "  " << ip << std::endl;
 
     Client client;
-    if (client.connectToServer(name, team, sf::IpAddress(ip)))
+    if (client.connectToServer(name, team, sf::IpAddress(ip))) {
         client.run();
+    }
     else
         std::cout << "Could not connect to IP: " << ip << std::endl;
 }
@@ -50,6 +51,12 @@ bool validCommand() {
       return false;
   }
     return true;
+}
+
+void networkFunction() {
+    while (true) {
+        
+    }
 }
 
 void printHelp() {

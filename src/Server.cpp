@@ -15,7 +15,17 @@ Erik Sköld
 #include "./NetworkHandler.h"
 #include "./MessageCodes.h"
 
+#include <boost/thread.hpp>
 #include <SFML/System.hpp>
+
+void Server::networkFunction() {
+    while (true) {
+        nh_.update();
+        sf::Time sleepTime {sf::milliseconds(10)};
+        sf::sleep(sleepTime);
+    }
+}
+
 
 void Server::run() {
     sf::sleep(sf::milliseconds(1000));
@@ -25,9 +35,11 @@ void Server::run() {
     std::cout << "Startar server" << std::endl;
     initRemotePlayers();
     roundRestart();
-
+    
+    boost::thread networkThread(&Server::networkFunction, this);
+    
     while (true) {
-        nh_.update();
+        //nh_.update();
         readFromNetwork();
         handleGameLogic();
         writeToNetwork();

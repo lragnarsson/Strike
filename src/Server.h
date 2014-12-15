@@ -31,6 +31,7 @@ public:
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
 
+    void networkFunction();
     void run() override;
     void readFromNetwork() override;
     void writeToNetwork() override;

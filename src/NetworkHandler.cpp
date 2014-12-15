@@ -87,7 +87,7 @@ void NetworkHandler::recieveUDPPackets()
 
     if (Usocket_.receive(recievePacket, remoteIP, remotePort) == sf::Socket::Done)
     {
-        std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ? "PLAYER_UPDATE" : "ADD_SHOT") << std::endl;
+        //std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ? "PLAYER_UPDATE" : "ADD_SHOT") << std::endl;
         incomingMessages_.push_back(unpackPacket(recievePacket));
     }
 }

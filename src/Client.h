@@ -38,6 +38,7 @@ public:
     Client& operator=(const Client&) = delete;
 
     bool connectToServer(std::string name, int team, sf::IpAddress ip);
+    void networkFunction();
     void run() override;
 
 private:
