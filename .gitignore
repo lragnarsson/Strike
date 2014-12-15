@@ -9,6 +9,7 @@
 !*.jpg
 !*.png
 !*.bmp
+!*.gif
 !*.ttf
 !*.md
 !makefile
