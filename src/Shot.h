@@ -12,7 +12,6 @@ Rasmus Vilhelmsson
 #define _SHOT_
 
 #include "./GeomUtils.h"
-
 #include <SFML/Graphics.hpp>
 
 class Shot: public sf::Drawable {

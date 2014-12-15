@@ -16,6 +16,7 @@ Filip Östman
 #include "./ResourcePath.h"
 #include "./PhysicalObject.h"
 #include "./Team.h"
+#include "./GameObject.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -28,6 +29,7 @@ class Player: public sf::Sprite, public PhysicalCircle {
 public:
     Player(int ClientID, Team* team); // Server only!
     explicit Player(int ClientID, Team* team, sf::Texture* spriteSheet);
+
     Player() = delete;
     ~Player() noexcept {};
 
@@ -38,6 +40,7 @@ public:
     std::string getClientName() const;
     void setClientName(std::string newName);
     void setWeapon(Weapon* weapon);
+    void addEquipment(GameObject* equipment);
     std::vector<Shot*> fire();
     sf::Vector2f& getMoveVector();
     void decreaseHealth(int amount);
@@ -61,6 +64,17 @@ public:
     void animate();
     int getHealth();
 
+    void addObject(GameObject* gameObject);
+    bool holdingFirearm();
+    bool holdingGrenade();
+    GameObject* throwEquipped();
+    GameObject* throwGrenade();
+    bool emptyInventory();
+    void equipAt(unsigned int index);
+    void equipNext();
+    void equipPrevious();
+    void pickUpObject(GameObject* gameObject);
+
 private:
     int health_ = 100;
     sf::Texture texture_;
@@ -72,11 +86,14 @@ private:
     float acceleration_ = 3000.0f;  // pixels per second^2
     sf::Clock lastSeen;
 
-    Weapon* weapon_;
+    std::vector<GameObject*> inventory_;
+    int equippedIndex_{0};
+    int inventorySize_{5};
+
     sf::Vector2f moveVector_;
     sf::Vector2f curSpeed_;
     sf::Vector2f aimVector_;
-    float radConversion_ = 57.29577951308232f;
+    float radConversion_ = 57.2957795f;
     sf::CircleShape crosshair_;
 
     unsigned int frameTime_{10};
@@ -88,7 +105,9 @@ private:
     sf::IntRect frameRect_;
     sf::Clock animClock_;
     sf::Texture spriteSheet_;
+    float CHDistance_;
 
+    bool inFireAnimation();
     void initCrosshair();
     void initAnimation(sf::Texture* texture);
 };

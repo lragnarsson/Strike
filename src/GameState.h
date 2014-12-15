@@ -1,5 +1,4 @@
 /***************************************
-GameState.h
 
 Holds information about the game. Map, players, team etc.
 
@@ -22,6 +21,7 @@ Filip Östman
 
 #include <stdio.h>
 #include <vector>
+#include "./GameObject.h"
 
 class GameState{
 public:
@@ -46,6 +46,13 @@ public:
     void addAnimatedDecal(AnimatedDecal* decal);
     void handleDecals();
     void migrateShots();
+    void addTeam(Team* team);
+    void addMovingGameObject(GameObject* gameObject);
+    void addStationaryGameObject(GameObject* gameObject);
+    void movingToStationaryObjects();
+    std::vector<GameObject*>* getMovingGameObjects();
+    std::vector<GameObject*>* getStationaryGameObjects();
+    void removeGameObjects();
 
 private:
     Team ctTeam_{CT_TEAM};
@@ -57,6 +64,8 @@ private:
     sf::Clock gameTime_;
     std::vector<Decal*> unhandledDecals_;
     std::vector<AnimatedDecal*> animatedDecals_;
+    std::vector<GameObject*> movingGameObjects_;
+    std::vector<GameObject*> stationaryGameObjects_;
 };
 
 #endif // _GAME_STATE_

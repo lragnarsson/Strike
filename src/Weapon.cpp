@@ -8,15 +8,15 @@ Filip Östman
 ***************************************/
 
 #include "./Weapon.h"
-
 #include <iostream>
 
 Weapon::Weapon(unsigned int newAmmo, unsigned int newAdditionalAmmo,
                unsigned int newMagazineSize, int newFireRate,
-               int newReloadTime, int newDamage, float newCHDistance)
-    : ammo_(newAmmo), additionalAmmo_(newAdditionalAmmo),
-      magazineSize_(newMagazineSize), fireRate_(newFireRate),
-      reloadTime_(newReloadTime), damage_(newDamage), CHDistance_(newCHDistance) {}
+               int newReloadTime, int newDamage, float newCHDistance,
+               sf::Texture* texture, sf::Vector2f position, float radius)
+    : GameObject(texture, position, radius, newCHDistance), ammo_(newAmmo),
+      additionalAmmo_(newAdditionalAmmo), magazineSize_(newMagazineSize),
+      fireRate_(newFireRate), reloadTime_(newReloadTime), damage_(newDamage) {}
 
 void Weapon::reloadWeapon() {
     if (ammo_ != magazineSize_) {
@@ -88,8 +88,10 @@ bool Weapon::isAnimating() {
 
 SemiAutomaticWeapon::SemiAutomaticWeapon(unsigned int ammo, unsigned int additionalAmmo,
                                          unsigned int magazineSize, int fireRate,
-                                         int reloadTime, int Damage, float CHDistance)
-    : Weapon{ammo, additionalAmmo, magazineSize, fireRate, reloadTime, Damage, CHDistance} {}
+                                         int reloadTime, int Damage, float CHDistance,
+                                         sf::Texture* texture, sf::Vector2f position, float radius)
+    : Weapon(ammo, additionalAmmo, magazineSize, fireRate, reloadTime,
+             Damage, CHDistance, texture, position, radius) {}
 
 std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& pos,
                                              const sf::Vector2f& dir) {
@@ -112,8 +114,11 @@ std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& p
 }
 
 Shotgun::Shotgun(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
-                 int fireRate, int reloadTime, int Damage, int numberOfBullets, float CHDistance)
-    : SemiAutomaticWeapon{ammo, additionalAmmo, magazineSize, fireRate, reloadTime, Damage, CHDistance},numberOfBullets_{numberOfBullets} {}
+                 int fireRate, int reloadTime, int Damage, int numberOfBullets, float CHDistance,
+                 sf::Texture* texture, sf::Vector2f position, float radius)
+    : SemiAutomaticWeapon(ammo, additionalAmmo, magazineSize, fireRate, reloadTime,
+                          Damage, CHDistance, texture, position, radius),
+      numberOfBullets_{numberOfBullets} {}
 
 std::vector<Shot*> Shotgun::fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) {
     std::vector<Shot*> shotVector;

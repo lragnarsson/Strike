@@ -26,7 +26,6 @@ public:
 
     virtual void run() = 0;
 
-
 protected:
     virtual void readFromNetwork() = 0;
     virtual void writeToNetwork() = 0;

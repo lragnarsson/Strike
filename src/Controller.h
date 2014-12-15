@@ -13,11 +13,11 @@ Isak Wiberg
 
 #include "./Player.h"
 #include "./Shot.h"
+#include "./GameObject.h"
 
 #include <math.h>
 #include <vector>
 #include <iostream>
-
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
@@ -38,14 +38,17 @@ public:
     void bindView(sf::View*);
     void updateView();
     std::vector<Shot*> playerFire();
+    GameObject* playerThrow();
     void reloadWeapon();
     void isSprinting();
+    void pickupObjects(std::vector<GameObject*>* gameObjects);
 
 private:
     sf::Vector2f inputVector_;
     Player* player_;
     sf::View* view_;
     sf::Clock clock_;
+    sf::Clock dropTimer_;
     float sqrt2 = 1.4142135;
 };
 

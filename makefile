@@ -12,8 +12,8 @@ CCFLAGS = -I$(SRC) -std=c++11 -Wpedantic -Wall -Wextra #-fpermissive
 LIBFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -ltinyxml -lboost_system -I/usr/include/boost/ -lboost_filesystem -lboost_thread
 
 # Objektkodsmoduler som ingår i den kompletta kalkylatorn.
-OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o NetworkHandler.o Messages.o Shot.o Team.o Weapon.o Decal.o SecureVector.o Strike.o
 
+OBJECTS = ResourcePath.o PhysicalObject.o Map.o GameState.o Client.o Controller.o Player.o Server.o NetworkHandler.o Messages.o Shot.o Team.o Weapon.o Decal.o SecureVector.o GameObject.o Strike.o
 
 # Huvudmål - skapas med kommandot 'make' eller 'make kalkylator'.
 strike: $(OBJECTS) makefile
@@ -26,7 +26,7 @@ Client.o: $(SRC)/Client.h $(SRC)/Client.cpp
 Controller.o: $(SRC)/Controller.h $(SRC)/Controller.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/Controller.cpp
 
-GameState.o: $(SRC)/GameState.h $(SRC)/GameState.cpp
+GameState.o: $(SRC)/GameState.h $(SRC)/GameState.cpp $(SRC)/WeaponFactory.h
 	$(CCC) $(CCFLAGS) -c $(SRC)/GameState.cpp
 
 Strike.o: $(SRC)/Strike.cpp
@@ -67,5 +67,9 @@ Decal.o: $(SRC)/Decal.h $(SRC)/Decal.cpp
 
 SecureVector.o: $(SRC)/SecureVector.h $(SRC)/SecureVector.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/SecureVector.cpp
+
+GameObject.o: $(SRC)/GameObject.h $(SRC)/GameObject.cpp
+	$(CCC) $(CCFLAGS) -c $(SRC)/GameObject.cpp
+
 clean:
 	@ \rm -rf *.o *.gch core

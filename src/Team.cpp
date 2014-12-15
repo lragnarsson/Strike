@@ -6,10 +6,8 @@ Simple class for keeping score of a team.
 Written by:
 Jesper Otterholm
 ***************************************/
-
 #include "Team.h"
 #include "Player.h"
-
 
 int Team::getTeamID() const {
     return teamID_;

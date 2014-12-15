@@ -17,6 +17,7 @@ Filip Östman
 #include "./GeomUtils.h"
 #include "./SysUtils.h"
 #include "./Team.h"
+#include "./WeaponFactory.h"
 
 Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     renderWindow_.setFramerateLimit(120);
@@ -25,9 +26,13 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     loadTextures();
 
     Player* player = new Player(clientID_, gameState_.tTeam(), textures_["cage3.png"]);
-    player->setWeapon(new Weapon(1000, 2000, 1000, 20, 500, 10, 500.f));
+
     gameState_.addPlayer(player);
     controller_.bindPlayer(player);
+    WeaponFactory w;
+    player->addObject(w.createFrag(sf::Vector2f()));
+    player->addObject(w.createFrag(sf::Vector2f()));
+    player->addObject(w.createAK47(sf::Vector2f()));
 
     hud_.setCrosshair(player->getCrosshair());
 
@@ -173,6 +178,7 @@ void Client::handleCollisions() {
                           controller_.getPlayer()->getMoveVector(),
                           controller_.getPlayer()->getRadius());
         controller_.playerMove();
+        handleGameObjects();
         handleShots();
         handleVision();
     }
@@ -190,6 +196,8 @@ void Client::handleInput() {
         controller_.handlePlayerActions();
         controller_.updatePlayerInputVector();
         controller_.setPlayerRotation(renderWindow_);
+        controller_.pickupObjects(gameState_.getStationaryGameObjects());
+        gameState_.addMovingGameObject(controller_.playerThrow());
         gameState_.addUnhandledShots(controller_.playerFire());
     }
 }
@@ -324,7 +332,6 @@ void Client::collideMoveVector(sf::Vector2f position,
 }
 
 void Client::handleVision() {
-    // Check player visibility
     for (auto player : gameState_.getPlayers()) {
         bool blocked = false;
 
@@ -364,4 +371,25 @@ void Client::handleSounds() {
             }
         }
     }
+
+void Client::handleGameObjects() {
+  for (auto gameObject : *(gameState_.getMovingGameObjects())) {
+    if (Grenade* grenade = dynamic_cast<Grenade*>(gameObject)) {
+        if (grenade->endOfFuse()) {
+            gameState_.addUnhandledShots(grenade->explode());
+            gameState_.addAnimatedDecal(
+                new AnimatedDecal(gameObject->getPosition(), sf::Vector2f(1.5f,1.5f),
+                                  textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                  20, 25, false, 25));
+        }
+    }
+    gameObject->calculateMoveVector(clock_.getElapsedTime().asMilliseconds());
+    collideMoveVector(gameObject->getPosition(),
+                      gameObject->getMoveVector(),
+                      gameObject->getRadius());
+    gameObject->move();
+  }
+  gameState_.movingToStationaryObjects();
+  gameState_.removeGameObjects();
+  clock_.restart();
 }

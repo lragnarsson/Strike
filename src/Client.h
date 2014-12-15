@@ -42,6 +42,8 @@ public:
     bool connectToServer(std::string name, int team, sf::IpAddress ip);
     void networkFunction();
     void run() override;
+    static void loadTextures();
+    static std::map<std::string, sf::Texture*> textures_;
 
 private:
     void readFromNetwork() override;
@@ -54,11 +56,11 @@ private:
                            sf::Vector2f& moveVector,
                            float radius);
     void handleShots();
-    void loadTextures();
     void handleVision();
     void createDecals();
     void roundRestart();
     void handleSounds();
+    void handleGameObjects();
 
     int clientID_ = 1337;
     NetworkHandler nh_;
@@ -70,6 +72,7 @@ private:
     std::map<std::string, sf::Texture*> textures_;
     sf::SoundBuffer buffer;
     sf::Sound shotSound_;
+    sf::Clock clock_;
 };
 
 #endif // _CLIENT_
