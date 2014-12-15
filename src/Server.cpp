@@ -1,12 +1,20 @@
-//
-//  Server.cpp
-//  Strike
-//
+/***************************************
+Server.cpp
 
-#include "Server.h"
-#include "Game.h"
-#include "NetworkHandler.h"
+Class for running the game server-side
+
+Written by:
+Lage Ragnarsson
+Isak Wiberg
+Erik Sköld
+***************************************/
+
+#include "./Server.h"
+
+#include "./Game.h"
+#include "./NetworkHandler.h"
 #include "./MessageCodes.h"
+
 #include <SFML/System.hpp>
 
 void Server::run() {

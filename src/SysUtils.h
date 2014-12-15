@@ -1,3 +1,14 @@
+/***************************************
+SysUtils.h
+
+System utilities
+
+Written by:
+Lage Ragnarsson
+***************************************/
+#ifndef _SYS_UTILS_
+#define _SYS_UTILS_
+
 #include <dirent.h>
 #include <string>
 #include <vector>
@@ -15,3 +26,5 @@ std::vector<std::string> listDir(std::string path = ".") {
 
     return files;
 }
+
+#endif // _SYS_UTILS_

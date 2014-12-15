@@ -1,13 +1,24 @@
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Network.hpp>
+/***************************************
+Strike.cpp
+
+Main entry to the game. Has a simple command line menu to start either a server or a client.
+
+Written by:
+Lage Ragnarsson
+***************************************/
+
+#include "./ResourcePath.h"
+#include "./Client.h"
+#include "./Server.h"
+
 #include <iostream>
 #include <exception>
 #include <sstream>
 #include <string>
-#include "./ResourcePath.h"
-#include "./Client.h"
-#include "Server.h"
+
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 
 const std::string valid_cmds("hcsql");
 char command;

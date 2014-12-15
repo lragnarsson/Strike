@@ -1,19 +1,24 @@
-//
-//  GameState.cpp
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-11-16.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+GameState.cpp
 
-#include <vector>
-#include "./ResourcePath.h"
+Holds information about the game. Map, players, team etc.
+
+Written by:
+Lage Ragnarsson
+Isak Wiberg
+Rasmus Vilhelmsson
+Filip Östman
+***************************************/
+
 #include "./GameState.h"
+
+#include "./ResourcePath.h"
 #include "./Player.h"
 #include "./Team.h"
 #include "./GeomUtils.h"
 #include "./Map.h"
 
+#include <vector>
 
 GameState::GameState()  {
     map_.load("map2.tmx");

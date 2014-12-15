@@ -1,23 +1,28 @@
-//
-//  Player.h
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-11-16.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+Player.h
 
-#ifndef __Strike__Player__
-#define __Strike__Player__
+Class for representing a player.
 
-#include <math.h>
-#include <SFML/Graphics.hpp>
-#include <stdio.h>
-#include <vector>
-#include <iostream>
+Written by:
+Lage Ragnarsson
+Jesper Otterholm
+Filip Östman
+***************************************/
+
+#ifndef _PLAYER_
+#define _PLAYER_
+
 #include "./Weapon.h"
 #include "./ResourcePath.h"
 #include "./PhysicalObject.h"
 #include "./Team.h"
+
+#include <math.h>
+#include <stdio.h>
+#include <vector>
+#include <iostream>
+
+#include <SFML/Graphics.hpp>
 
 class Player: public sf::Sprite, public PhysicalCircle {
 public:
@@ -52,7 +57,7 @@ public:
 
     sf::CircleShape* getCrosshair();
     void animate();
-    int getHealth(); //För testning!
+    int getHealth();
 
 private:
     int health_ = 100;
@@ -86,4 +91,4 @@ private:
     void initAnimation(sf::Texture* texture);
 };
 
-#endif /* defined(__Strike__Player__) */
+#endif // _PLAYER_

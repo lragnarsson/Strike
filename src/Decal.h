@@ -1,10 +1,16 @@
-// Decal.h
-#ifndef __Strike__Decal__
-#define __Strike__Decal__
+/***************************************
+Decal.h
+
+Extention of sf::Sprite. Describes things to be drawn on the screen.
+
+Written by:
+Lage Ragnarsson
+***************************************/
+
+#ifndef _DECAL_
+#define _DECAL_
+
 #include <SFML/Graphics.hpp>
-/*
- * 
- */
 
 class Decal: public sf::Sprite {
 public:
@@ -37,4 +43,4 @@ private:
     sf::Texture spriteSheet_;
 };
 
-#endif /* defined(__Strike__Decal__) */
+#endif // _DECAL_

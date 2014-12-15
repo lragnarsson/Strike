@@ -1,20 +1,25 @@
 /***************************************
-NetworkHandler - Klass för att hålla koll på anslutna klienter och att skicka och ta emot data.
+NetworkHandler.cpp
 
-Skriven av:
+Class for recieving and sending messages between server and client.
+Also Handles connections.
+
+Written by:
 Erik Sköld
+Isak Wiberg
 ***************************************/
 
-#include <SFML/Network.hpp>
+#include "./NetworkHandler.h"
 
-#include "NetworkHandler.h"
-#include "MessageCodes.h"
-#include "Messages.h"
+#include "./MessageCodes.h"
+#include "./Messages.h"
 
 #include <iostream>
 #include <string>
 #include <exception>
 #include <thread>
+
+#include <SFML/Network.hpp>
 
 
 NetworkHandler::NetworkHandler()
@@ -83,7 +88,6 @@ void NetworkHandler::recieveUDPPackets()
     if (Usocket_.receive(recievePacket, remoteIP, remotePort) == sf::Socket::Done)
     {
         std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ? "PLAYER_UPDATE" : "ADD_SHOT") << std::endl;
-        
         incomingMessages_.push_back(unpackPacket(recievePacket));
     }
 }
@@ -345,11 +349,19 @@ void NetworkHandler::processInternalMessages()
                     sendTCPPacket(cnudpp.asPacket(), 0);
                     std::cout << "Recieved server_accept_connection and returned ClientNotifyUDPPort. \nAdded InitialInformation-message to incoming.\n"
                     << "playerID, localPort: " << static_cast<ServerAcceptConnection*>(internalMessage)->playerID << ", " << Usocket_.getLocalPort() << "\n";
-                    
+<<<<<<< Updated upstream
+
                     int myClientID = static_cast<ServerAcceptConnection*>(internalMessage)->playerID;
                     incomingMessages_.push_back(new InitialInformation{myClientID, teamID, playerName});
-                    
+
                     AddPlayer ap{myClientID, teamID, playerName, 0};
+=======
+
+                    int myPlayerID = static_cast<ServerAcceptConnection*>(internalMessage)->playerID;
+                    incomingMessages_.push_back(new InitialInformation{myPlayerID});
+
+                    AddPlayer ap{myPlayerID, teamID, playerName, 0};
+>>>>>>> Stashed changes
                     sendTCPPacket(ap.asPacket(), 0);
 
                     std::cout << "Sent AddPlayer message to server." << std::endl;

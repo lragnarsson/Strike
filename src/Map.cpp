@@ -1,20 +1,25 @@
-//
-//  Map.cpp
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-11-24.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+Map.cpp
 
-#include "Map.h"
-#include <stdio.h>
-#define TIXML_USE_STL
+Representation of a map. Can parse a map from a (somewhat) modified .tmx-file
+
+Written by
+Rasmus Vilhelmsson
+Lage Ragnarsson
+***************************************/
+
+#include "./Map.h"
+
+#include "./ResourcePath.h"
+
 #include <iostream>
 #include <string>
 #include <cstring>
 #include <vector>
-#include "ResourcePath.h"
+#include <stdio.h>
 #include <sstream>
+
+#define TIXML_USE_STL
 
 Map::Map() {
     renderTexture_.create(3200, 3200);

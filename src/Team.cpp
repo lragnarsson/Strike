@@ -1,10 +1,11 @@
-//
-//  Team.cpp
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-11-19.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+Team.cpp
+
+Simple class for keeping score of a team.
+
+Written by:
+Jesper Otterholm
+***************************************/
 
 #include "Team.h"
 #include "Player.h"

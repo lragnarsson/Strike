@@ -1,12 +1,13 @@
-//
-//  SecureVector.cpp
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-12-10.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+SecureVector.cpp
 
-#include "SecureVector.h"
+Thread-safe class for vectors.
+
+Written by:
+Isak Wiberg
+***************************************/
+
+#include "./SecureVector.h"
 
 std::vector<Message*> SecureVector::stealNewMessages() {
     std::vector<Message*> tmp;

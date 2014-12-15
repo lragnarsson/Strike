@@ -1,12 +1,16 @@
-//
-//  Player.cpp
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-11-16.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+Player.cpp
+
+Class for representing a player.
+
+Written by:
+Lage Ragnarsson
+Jesper Otterholm
+Filip Östman
+***************************************/
 
 #include "./Player.h"
+
 #include <math.h>
 #include <vector>
 

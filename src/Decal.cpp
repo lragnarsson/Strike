@@ -1,4 +1,15 @@
+/***************************************
+Decal.cpp
+
+Extention of sf::Sprite. Describes things to be drawn on the screen.
+
+Written by:
+Lage Ragnarsson
+***************************************/
+
+
 #include "./Decal.h"
+
 #include <iostream>
 
 Decal::Decal(sf::Vector2f position, sf::Vector2f scale, sf::Texture* texture, sf::IntRect rect): sf::Sprite(*texture, rect) {

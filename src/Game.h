@@ -1,45 +1,40 @@
-//
-//  Game.h
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-11-20.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+Game.h
 
-#ifndef __Strike__Game__
-#define __Strike__Game__
+Abstract base class for Client and Server.
+
+Written by:
+nobody knows
+***************************************/
+
+#ifndef _GAME_
+#define _GAME_
+
+#include "./ResourcePath.h"
+#include "./Player.h"
+#include "./GameState.h"
+#include "./Controller.h"
+#include "./Team.h"
+#include "./Weapon.h"
 
 #include <stdio.h>
-#include "ResourcePath.h"
-#include "Player.h"
-#include "GameState.h"
-#include "Controller.h"
-#include "Team.h"
-#include "Weapon.h"
-
-
-/*  Game är en abstrakt klass som innehåller en run-funktion för att starta,
- *  ett GameState-objekt för att hålla reda på spelets tillstånd och ett
- *  NetworkHandler-objekt för att kommunicera med nätverket.
- */
 
 class Game{
 public:
     virtual ~Game() = default;
-    // NetworkHandler NetworkHandler; lägg till detta när NetworkHandler är implementerad.
     GameState gameState_;
 
-    virtual void run() = 0;  // gameloopen för server och klient.
+    virtual void run() = 0;
 
 
 protected:
-    virtual void readFromNetwork() = 0;  // ta emot data från nätverket och behandla den.
-    virtual void writeToNetwork() = 0;  // skicka data på nätverket.
-    virtual void handleGameLogic() = 0;  // sköter logiken hos klient resp. server.
+    virtual void readFromNetwork() = 0;
+    virtual void writeToNetwork() = 0;
+    virtual void handleGameLogic() = 0;
 
     Game() = default;
-    Game(const Game&) = delete;             // borttagen kopieringskonstruktor
-    Game& operator=(const Game&) = delete;  // borttagen kopieringstilldelning
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
 };
 
-#endif /* defined(__Strike__Game__) */
+#endif // _GAME_

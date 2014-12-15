@@ -1,25 +1,28 @@
-//
-//  Map.h
-//  Strike
-//
-//  Created by Isak Wiberg on 2014-11-24.
-//  Copyright (c) 2014 Isak Wiberg. All rights reserved.
-//
+/***************************************
+Map.h
 
-#ifndef __Strike__Map__
-#define __Strike__Map__
+Representation of a map. Can parse a map from a (somewhat) modified .tmx-file
+
+Written by
+Rasmus Vilhelmsson
+Lage Ragnarsson
+***************************************/
+
+#ifndef _MAP_
+#define _MAP_
+
+#include "./PhysicalObject.h"
+
+#include <vector>
 
 #include <SFML/Graphics.hpp>
 #include <tinyxml.h>
-
-#include "PhysicalObject.h"
-#include <vector>
 
 class Map {
 public:
     Map();
     ~Map();
-    Map(std::string filename); // skapa utifrån kartfil
+    Map(std::string filename);
     Map(const Map&);
 
     std::vector<PhysicalObject*> getPhysicalObjects() const;
@@ -34,11 +37,10 @@ private:
     std::vector<PhysicalObject*> physicalObjects_;
     std::vector<sf::Vector2f> Tspawnpoints_;
     std::vector<sf::Vector2f> CTspawnpoints_;
-  //std::vector<??> objectpoints_;
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
     sf::RenderTexture renderTexture_;
 };
 
 
-#endif /* defined(__Strike__Map__) */
+#endif // _MAP_

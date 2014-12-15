@@ -1,13 +1,25 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+/***************************************
+Controller.h
 
-#include <math.h>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <vector>
-#include <iostream>
+Controls the local player
+
+Written by:
+Lage Ragnarsson
+Isak Wiberg
+***************************************/
+
+#ifndef _CONTROLLER_
+#define _CONTROLLER_
+
 #include "./Player.h"
 #include "./Shot.h"
+
+#include <math.h>
+#include <vector>
+#include <iostream>
+
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 
 class Controller{
 public:
@@ -37,4 +49,4 @@ private:
     float sqrt2 = 1.4142135;
 };
 
-#endif // CONTROLLER_H
+#endif // _CONTROLLER_

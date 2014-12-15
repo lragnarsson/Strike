@@ -1,11 +1,14 @@
 /***************************************
-MessageCodes - Definition av olika meddelandens header
+MessageCodes.h
 
-Skriven av:
+Defines headers for messages
+
+Written by:
 Erik Sköld
 ***************************************/
-#ifndef MESSAGECODES_H
-#define MESSAGECODES_H
+
+#ifndef _MESSAGECODES_
+#define _MESSAGECODES_
 
 //protocol defines
 const int TCP = 10;
@@ -29,4 +32,4 @@ const int ADD_SHOT = 3001;
 const int ROUND_RESTART = 3002;
 
 
-#endif // MESSAGECODES_H
+#endif // _MESSAGECODES_
