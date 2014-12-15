@@ -23,6 +23,7 @@ Filip Östman
 #include "./NetworkHandler.h"
 #include "./HUD.h"
 
+
 #include <stdio.h>
 #include <string>
 
@@ -57,6 +58,7 @@ private:
     void handleVision();
     void createDecals();
     void roundRestart();
+    void handleSounds();
 
     int clientID_ = 1337;
     NetworkHandler nh_;
@@ -66,6 +68,8 @@ private:
     sf::RenderWindow renderWindow_;
     Controller controller_;
     std::map<std::string, sf::Texture*> textures_;
+    sf::SoundBuffer buffer;
+    sf::Sound shotSound_;
 };
 
 #endif // _CLIENT_

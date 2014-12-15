@@ -34,6 +34,8 @@ public:
     int getClientID() const;
     int getTargetID();
     void setTargetID(int id);
+    bool getSoundstatus() const;
+    void setSoundstatus();
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 private:
@@ -44,6 +46,7 @@ private:
     sf::Vector2f endPoint_;
     int damage_;
     int targetID_{-1};
+    bool soundHasPlayed_{false};
 };
 
 #endif // _SHOT_

@@ -47,7 +47,7 @@ std::vector<Shot*> Weapon::fire(int clientID, const sf::Vector2f& pos,
     }
     if (ammo_ > 0 && clock_.getElapsedTime().asMilliseconds() >= fireRate_) {
         ammo_ -= 1;
-        if (clock_.getElapsedTime().asMilliseconds() >= 100 * fireRate_)
+        if (clock_.getElapsedTime().asMilliseconds() >= 10 * fireRate_)
           sprayMultiplier_ = 0.0f;
         else
             sprayMultiplier_ = ((float)fireRate_ / (float)clock_.getElapsedTime().asMilliseconds()) * sprayMultiplier_;

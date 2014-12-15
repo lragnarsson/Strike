@@ -68,3 +68,11 @@ void Shot::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     line[1].color = sf::Color::Green;
     target.draw(line, 2, sf::Lines);
 }
+
+bool Shot::getSoundstatus() const {
+    return soundHasPlayed_;
+}
+
+void Shot::setSoundstatus() {
+    soundHasPlayed_ = true;
+}

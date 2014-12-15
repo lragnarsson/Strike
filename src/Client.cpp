@@ -37,6 +37,8 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.addPlayer(p2);
 
     gameState_.setPlayerSpawnPoints();
+    buffer.loadFromFile(resourcePath("res/sounds/") + "pistol.wav");
+    shotSound_.setBuffer(buffer);
 }
 
 Client::~Client() {
@@ -56,12 +58,14 @@ void Client::run() {
     
     boost::thread networkThread(&Client::networkFunction, this);
     
+
     while (renderWindow_.isOpen()) {
         //nh_.update();
         readFromNetwork();
         handleInput();
         handleCollisions();
         handleGameLogic();
+        handleSounds();
         writeToNetwork();
         draw();
     }
@@ -332,5 +336,32 @@ void Client::handleVision() {
 
         if (!blocked)
             player->lastSeenNow();
+    }
+}
+
+void Client::handleSounds() {
+    for (auto player : gameState_.getPlayers()) {
+        for (auto shot : gameState_.getHandledShots()) {
+            if (!shot->getSoundstatus()) {
+                sf::Vector2f distanceVector;
+                distanceVector = player->getPosition() - shot->getOrigin();
+                float distance = length(distanceVector);
+                if(distance < 100.0f) {
+                    shotSound_.setVolume(100);
+                    shotSound_.play();
+                    shot->setSoundstatus();
+                }
+                else if(distance < 1000.0f) {
+                    shotSound_.setVolume(50);
+                    shotSound_.play();
+                    shot->setSoundstatus();                    
+                }
+                else {
+                    shotSound_.setVolume(10);
+                    shotSound_.play();
+                    shot->setSoundstatus(); 
+                }
+            }
+        }
     }
 }
