@@ -13,11 +13,15 @@ Rasmus Vilhelmsson
 
 #include "./GeomUtils.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
-class Shot: public sf::Drawable {
+class Shot: public sf::Drawable, public sf::Sound {
 public:
     Shot() = default;
-    Shot(int clientID, sf::Vector2f origin, sf::Vector2f direction, sf::Vector2f endPoint, int damage);
+    Shot(int clientID, sf::Vector2f origin, sf::Vector2f direction,
+         sf::Vector2f endPoint, int damage, sf::SoundBuffer* soundBuffer);
+    Shot(int clientID, sf::Vector2f origin, sf::Vector2f direction,
+         sf::Vector2f endPoint, int damage);
     Shot(int clientID, Ray ray_, sf::Vector2f endPoint, int damage);
     Shot(const Shot& shot) = default;
     virtual ~Shot() = default;
@@ -34,9 +38,10 @@ public:
     int getTargetID();
     void setTargetID(int id);
     bool getSoundstatus() const;
-    void setSoundstatus();
+    void setSoundstatus(bool status);
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    void play();
 private:
     int timestamp_;  // in milliseconds
     int clientID_;

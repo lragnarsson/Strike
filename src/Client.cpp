@@ -25,15 +25,21 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     renderWindow_.setMouseCursorVisible(false);
 
     loadTextures();
+    loadSoundBuffers();
 
     Player* player = new Player(clientID_, gameState_.tTeam(), textures_["cage3.png"]);
 
     gameState_.addPlayer(player);
     controller_.bindPlayer(player);
     WeaponFactory w;
-    player->addObject(w.createFrag(sf::Vector2f()));
-    player->addObject(w.createFrag(sf::Vector2f()));
-    player->addObject(w.createAK47(sf::Vector2f()));
+
+    player->addEquipment(w.createFrag(sf::Vector2f()));
+    player->addEquipment(w.createAK47(sf::Vector2f()));
+    player->addEquipment(w.createNova(sf::Vector2f()));
+    player->addEquipment(w.createFrag(sf::Vector2f()));
+    player->addEquipment(w.createM4(sf::Vector2f()));
+
+    gameState_.addStationaryGameObject(w.createFrag(sf::Vector2f(2700.f, 3000.f)));
 
     hud_.setCrosshair(player->getCrosshair());
 
@@ -43,8 +49,6 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.addPlayer(p2);
 
     gameState_.setPlayerSpawnPoints();
-    soundBuffer.loadFromFile(resourcePath("res/sounds/") + "pistol.wav");
-    shotSound_.setBuffer(soundBuffer);
 }
 
 Client::~Client() noexcept {
@@ -61,7 +65,6 @@ void Client::networkFunction() {
 }
 
 void Client::run() {
-
     boost::thread networkThread(&Client::networkFunction, this);
 
     while (renderWindow_.isOpen()) {
@@ -97,7 +100,8 @@ void Client::readFromNetwork() {
                                                    sf::Vector2f(msg->originXPos, msg->originYPos),
                                                    sf::Vector2f(msg->directionXPos, msg->directionYPos),
                                                    sf::Vector2f(msg->endPointXPos, msg->endPointYPos),
-                                                   msg->damage));
+                                                   msg->damage,
+                                                   soundBuffers_["ak47.wav"]));
                 break;
             }
             case PLAYER_UPDATE: {
@@ -195,11 +199,10 @@ void Client::handleGameLogic() {
 void Client::handleInput() {
     controller_.handleKeyEvents(&renderWindow_);
     if (!controller_.getPlayer()->isDead()) {
-        controller_.handlePlayerActions();
         controller_.updatePlayerInputVector();
         controller_.setPlayerRotation(renderWindow_);
-        controller_.pickupObjects(gameState_.getStationaryGameObjects());
-        gameState_.addMovingGameObject(controller_.playerThrow());
+        gameState_.addMovingGameObject(
+            controller_.handleObjects(gameState_.getStationaryGameObjects()));
         gameState_.addUnhandledShots(controller_.playerFire());
     }
 }
@@ -238,6 +241,22 @@ void Client::loadTextures() {
     }
 }
 
+void Client::loadSoundBuffers() {
+    auto fileNames = listDir(resourcePath("res/sounds/"));
+    try {
+        for (auto fileName : fileNames) {
+            if (fileName.length() > 3) {
+                soundBuffers_[fileName] = new sf::SoundBuffer();
+                soundBuffers_[fileName]->loadFromFile(resourcePath("res/sounds/") + fileName);
+                std::cout << "Loaded file: " << fileName << std::endl;
+            }
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what();
+    }
+}
+
 void Client::handleShots() {
     for (auto shot : gameState_.getUnhandledShots()) {
         float maxDistance = 100000.f;
@@ -265,21 +284,23 @@ void Client::handleShots() {
 
 void Client::createDecals() {
     for (auto shot : gameState_.getHandledShots()) {
-        if (shot->getTargetID() != -1) {
-            gameState_.addAnimatedDecal(
-                new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
-                                  textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
-                                  20, 16, false, 4));
-            gameState_.addAnimatedDecal(
-                new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
-                                  sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
-                                  sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
+        if (!shot->getSoundstatus()) {
+            if (shot->getTargetID() != -1) {
+                gameState_.addAnimatedDecal(
+                    new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
+                                      textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
+                                      20, 16, false, 4));
+                gameState_.addAnimatedDecal(
+                    new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
+                                      sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
+                                      sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
+            }
+            else
+              gameState_.addAnimatedDecal(
+                  new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
+                                    textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                    20, 25, false, 25));
         }
-        else
-            gameState_.addAnimatedDecal(
-                new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
-                                  textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
-                                  20, 25, false, 25));
     }
 }
 
@@ -349,28 +370,19 @@ void Client::handleVision() {
 }
 
 void Client::handleSounds() {
-
+  std::vector<int> IDs;
     for (auto shot : gameState_.getHandledShots()) {
-        if (!shot->getSoundstatus()) {
-            sf::Vector2f distanceVector;
-            distanceVector = controller_.getPlayer()->getPosition() - shot->getOrigin();
-            float distance = length(distanceVector);
-            if(distance < 100.0f) {
-                shotSound_.setVolume(100);
-                shotSound_.play();
-                shot->setSoundstatus();
-            }
-            else if(distance < 1000.0f) {
-                shotSound_.setVolume(50);
-                shotSound_.play();
-                shot->setSoundstatus();                    
-            }
-            else {
-                shotSound_.setVolume(10);
-                shotSound_.play();
-                shot->setSoundstatus(); 
-            }
-        }
+      if (!shot->getSoundstatus()) {
+          if (std::find(IDs.begin(), IDs.end(), shot->getClientID()) != IDs.end())
+              shot->setSoundstatus(true);
+          else {
+              sf::Vector2f distanceVector;
+              distanceVector = controller_.getPlayer()->getPosition() - shot->getOrigin();
+              //shot->setVolume(100 / (1 + (int) length(distanceVector)));
+              shot->play();
+              IDs.push_back(shot->getClientID());
+          }
+      }
     }
 }
 

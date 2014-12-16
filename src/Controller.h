@@ -26,8 +26,7 @@ public:
     Controller();
     ~Controller();
 
-    void handleKeyEvents(sf::RenderWindow*);
-    void handlePlayerActions();
+    void handleKeyEvents(sf::RenderWindow* window);
     void playerMove();
     void setPlayerRotation(const sf::RenderWindow&);
     void updatePlayerInputVector();
@@ -38,10 +37,9 @@ public:
     void bindView(sf::View*);
     void updateView();
     std::vector<Shot*> playerFire();
-    GameObject* playerThrow();
+    GameObject* handleObjects(std::vector<GameObject*>* gameObjects);
     void reloadWeapon();
     void isSprinting();
-    void pickupObjects(std::vector<GameObject*>* gameObjects);
 
 private:
     sf::Vector2f inputVector_;

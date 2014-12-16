@@ -64,15 +64,15 @@ public:
     void animate();
     int getHealth();
 
-    void addObject(GameObject* gameObject);
     bool holdingFirearm();
     bool holdingGrenade();
     GameObject* throwEquipped();
     GameObject* throwGrenade();
     bool emptyInventory() const;
+    bool fullInventory() const;
     void equipAt(unsigned int index);
-    void equipNext();
-    void equipPrevious();
+    void equipDelta(int delta);
+    void lastEquipped();
     void pickUpObject(GameObject* gameObject);
 
 private:
@@ -89,6 +89,7 @@ private:
     std::vector<GameObject*> inventory_;
     int equippedIndex_{0};
     int inventorySize_{5};
+    int lastEquipped_{0};
 
     sf::Vector2f moveVector_;
     sf::Vector2f curSpeed_;

@@ -43,7 +43,9 @@ public:
     void networkFunction();
     void run() override;
     static void loadTextures();
+    static void loadSoundBuffers();
     static std::map<std::string, sf::Texture*> textures_;
+    static std::map<std::string, sf::SoundBuffer*> soundBuffers_;
 
 private:
     void readFromNetwork() override;
@@ -69,7 +71,6 @@ private:
     std::string clientName_;
     sf::RenderWindow renderWindow_;
     Controller controller_;
-    std::map<std::string, sf::Texture*> textures_;
     sf::SoundBuffer soundBuffer;
     sf::Sound shotSound_;
     sf::Clock clock_;

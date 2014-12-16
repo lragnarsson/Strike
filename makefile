@@ -21,13 +21,13 @@ strike: $(OBJECTS) makefile
 	$(CCC) $(CCFLAGS) -o strike $(OBJECTS) $(LIBFLAGS)
 
 # Delmål (flaggan -c avbryter innan länkning, objektkodsfil erhålls)
-Client.o: $(SRC)/Client.h $(SRC)/Client.cpp
+Client.o: $(SRC)/Client.h $(SRC)/Client.cpp $(SRC)/WeaponFactory.h
 	$(CCC) $(CCFLAGS) -c $(SRC)/Client.cpp
 
 Controller.o: $(SRC)/Controller.h $(SRC)/Controller.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/Controller.cpp
 
-GameState.o: $(SRC)/GameState.h $(SRC)/GameState.cpp $(SRC)/WeaponFactory.h
+GameState.o: $(SRC)/GameState.h $(SRC)/GameState.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/GameState.cpp
 
 Strike.o: $(SRC)/Strike.cpp
@@ -69,12 +69,9 @@ Decal.o: $(SRC)/Decal.h $(SRC)/Decal.cpp
 SecureVector.o: $(SRC)/SecureVector.h $(SRC)/SecureVector.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/SecureVector.cpp
 
-<<<<<<< Updated upstream
 GameObject.o: $(SRC)/GameObject.h $(SRC)/GameObject.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/GameObject.cpp
 
-=======
->>>>>>> Stashed changes
 HUD.o: $(SRC)/HUD.h $(SRC)/HUD.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/HUD.cpp
 

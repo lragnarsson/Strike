@@ -42,17 +42,6 @@ void Player::initAnimation(sf::Texture* spriteSheet) {
     setOrigin(80.f, 80.f);
 }
 
-void Player::addEquipment(GameObject* equipment) {
-    if (inventory_.size() < inventorySize_) {
-        inventory_.push_back(equipment);
-        equippedIndex_ = inventory_.size() - 1;
-    } else {
-        throwEquipped();
-        inventory_.insert(inventory_.begin() + ++equippedIndex_, equipment);
-    }
-    CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
-}
-
 void Player::setSpeedMultiplier(float speed) {
     if (health_ <=50)
         speedMultiplier_ = 0.5f;
@@ -205,21 +194,23 @@ bool Player::inFireAnimation() {
 }
 
 void Player::equipAt(unsigned int index) {
-  if (index < inventory_.size())
+  if (index < inventory_.size()) {
+      lastEquipped_ = equippedIndex_;
       equippedIndex_ = index;
-  CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
+  }
+  if (!emptyInventory())
+      CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
 }
 
-void Player::equipNext() {
-    equippedIndex_++;
+void Player::equipDelta(int delta) {
+    lastEquipped_ = equippedIndex_;
+    equippedIndex_ += delta;
     equippedIndex_ %= inventory_.size();
     CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
 }
 
-void Player::equipPrevious() {
-    equippedIndex_--;
-    equippedIndex_ %= inventory_.size();
-    CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
+void Player::lastEquipped() {
+    equipAt(lastEquipped_);
 }
 
 bool Player::holdingFirearm() {
@@ -231,14 +222,14 @@ bool Player::holdingGrenade() {
 }
 
 GameObject* Player::throwEquipped() {
-    inventory_.at(equippedIndex_)->unEquip(getPosition() + aimVector_ * (getRadius() + 10.f),
+    inventory_.at(equippedIndex_)->unEquip(getPosition() + aimVector_ * (getRadius() + 50.f),
                                            aimVector_ * 50.f);
     auto throwed = inventory_.at(equippedIndex_);
     inventory_.erase(inventory_.begin() + equippedIndex_);
-    if (emptyInventory()) {
-      equippedIndex_ = 0;
+    if (emptyInventory()) 
       CHDistance_ = 100.f;
-    } else {
+    else {
+        lastEquipped_ = equippedIndex_;
         equippedIndex_ %= inventory_.size();
         CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
     }
@@ -248,12 +239,12 @@ GameObject* Player::throwEquipped() {
 GameObject* Player::throwGrenade() {
     auto throwed = inventory_.at(equippedIndex_);
     inventory_.at(equippedIndex_)->unEquip(getPosition() + aimVector_ * (getRadius() + 50.f),
-                                         aimVector_ * 350.f);
+                                         aimVector_ * 250.f);
     inventory_.erase(inventory_.begin() + equippedIndex_);
-    if (emptyInventory()) {
-      equippedIndex_ = 0;
+    if (emptyInventory())
       CHDistance_ = 100.f;
-    } else {
+    else {
+        lastEquipped_ = equippedIndex_;
         equippedIndex_ %= inventory_.size();
         CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
     }
@@ -264,14 +255,13 @@ bool Player::emptyInventory() const {
   return (inventory_.size() == 0);
 }
 
-void Player::addObject(GameObject* gameObject) {
-    inventory_.push_back(gameObject);
-    CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();  
+bool Player::fullInventory() const {
+  return (inventory_.size() > inventorySize_);
 }
 
-void Player::pickUpObject(GameObject* gameObject) {
-  if (inventory_.size() == inventorySize_)
-      throwEquipped();
-  addObject(gameObject);
-  gameObject->equip(clientID_);
+
+void Player::addEquipment(GameObject* equipment) {
+    inventory_.push_back(equipment);
+    equipment->equip(clientID_);
+    CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
 }
