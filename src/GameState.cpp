@@ -60,6 +60,7 @@ void GameState::addUnhandledShots(std::vector<Shot*> newShots) {
 }
 
 void GameState::addHandledShot(Shot* shot) {
+    shot->setTimestamp(gameTime_.getElapsedTime());
     handledShots_.push_back(shot);
 }
 
