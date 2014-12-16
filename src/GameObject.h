@@ -9,7 +9,7 @@
 class GameObject : public sf::Sprite, public PhysicalCircle {
 public:
   GameObject(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-             sf::Vector2f position,float radius, float CHDistance);
+             sf::Vector2f position,float radius, float CHDistance, std::string name);
     ~GameObject() noexcept {}
 
     void equip(int clientID);
@@ -22,8 +22,10 @@ public:
     float getCHDistance();
     void markForRemoval();
     bool isMarkedForRemoval();
+    std::string getName();
     
 protected:
+    std::string weaponName_{"Granat"};
     bool equipped_{false};
     int clientID_;
     sf::Vector2f moveVector_;
@@ -37,7 +39,7 @@ protected:
 class Grenade : public GameObject {
 public:
     Grenade(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-            sf::Vector2f position, float radius, float CHDistance);
+            sf::Vector2f position, float radius, float CHDistance, std::string name);
     ~Grenade() noexcept {}
 
     bool isStationary() override;

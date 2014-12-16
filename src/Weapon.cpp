@@ -14,8 +14,8 @@ Weapon::Weapon(unsigned int newAmmo, unsigned int newAdditionalAmmo,
                unsigned int newMagazineSize, int newFireRate,
                int newReloadTime, int newDamage, float newCHDistance,
                sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-               sf::Vector2f position, float radius)
-    : GameObject(texture, soundBuffer, position, radius, newCHDistance), ammo_(newAmmo),
+               sf::Vector2f position, float radius, std::string name)
+    : GameObject(texture, soundBuffer, position, radius, newCHDistance, name), ammo_(newAmmo),
       additionalAmmo_(newAdditionalAmmo), magazineSize_(newMagazineSize),
       fireRate_(newFireRate), reloadTime_(newReloadTime), damage_(newDamage) {}
 
@@ -36,7 +36,11 @@ void Weapon::reloadWeapon() {
         }
     }
 }
-
+/*
+std::string Weapon::getName() override {
+    return weaponName_;
+}
+*/
 std::vector<Shot*> Weapon::fire(int clientID, const sf::Vector2f& pos,
                                 const sf::Vector2f& dir) {
     std::vector<Shot*> shotVector;
@@ -48,10 +52,10 @@ std::vector<Shot*> Weapon::fire(int clientID, const sf::Vector2f& pos,
     }
     if (ammo_ > 0 && clock_.getElapsedTime().asMilliseconds() >= fireRate_) {
         ammo_ -= 1;
-        if (clock_.getElapsedTime().asMilliseconds() >= 10 * fireRate_)
+        if (clock_.getElapsedTime().asMilliseconds() >= 2 * fireRate_)
           sprayMultiplier_ = 0.0f;
         else
-            sprayMultiplier_ = ((float)fireRate_ / (float)clock_.getElapsedTime().asMilliseconds()) * sprayMultiplier_;
+            sprayMultiplier_ = ((float)fireRate_ / (float)clock_.getElapsedTime().asMilliseconds()) * sprayMultiplier_ * 1000.0f;
 
         clock_.restart();
         animTimer_.restart();
@@ -60,7 +64,7 @@ std::vector<Shot*> Weapon::fire(int clientID, const sf::Vector2f& pos,
         randomVector.x = (-20 + (std::rand() % 41) + dir.x*100) * sprayMultiplier_;
         randomVector.y = (-20 + (std::rand() % 41) + dir.y*100) * sprayMultiplier_;
         shotVector.push_back(new Shot{clientID, pos, dir + randomVector,
-                                      pos + dir * 10000.f + randomVector, damage_, soundBuffer_});
+                                      pos + dir * 1000.f + randomVector, damage_, soundBuffer_});
         sprayMultiplier_ += 20.0f;
         return shotVector;
     } else {
@@ -92,9 +96,9 @@ SemiAutomaticWeapon::SemiAutomaticWeapon(unsigned int ammo, unsigned int additio
                                          unsigned int magazineSize, int fireRate,
                                          int reloadTime, int Damage, float CHDistance,
                                          sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-                                         sf::Vector2f position, float radius)
+                                         sf::Vector2f position, float radius, std::string name)
     : Weapon(ammo, additionalAmmo, magazineSize, fireRate, reloadTime,
-             Damage, CHDistance, texture, soundBuffer, position, radius) {}
+             Damage, CHDistance, texture, soundBuffer, position, radius, name) {}
 
 std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& pos,
                                              const sf::Vector2f& dir) {
@@ -106,11 +110,20 @@ std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& p
             return shotVector;
     }
     if (ammo_ > 0 && clock_.getElapsedTime().asMilliseconds() >= fireRate_ && hasFired_ == false) {
+        if (clock_.getElapsedTime().asMilliseconds() >= 2 * fireRate_)
+          sprayMultiplier_ = 0.0f;
+        else
+            sprayMultiplier_ = ((float)fireRate_ / (float)clock_.getElapsedTime().asMilliseconds()) * sprayMultiplier_;
+
         ammo_ -= 1;
         clock_.restart();
         hasFired_ = true;
-        shotVector.push_back(new Shot{clientID, pos, dir, pos + dir * 10000.f,
+        sf::Vector2f randomVector;
+        randomVector.x = (-20 + (std::rand() % 41) + dir.x*100) * sprayMultiplier_;
+        randomVector.y = (-20 + (std::rand() % 41) + dir.y*100) * sprayMultiplier_;
+        shotVector.push_back(new Shot{clientID, pos, dir + randomVector, pos + 1000.f * dir + randomVector,
                                       damage_, soundBuffer_});
+        sprayMultiplier_ += 20.0f;
         return shotVector;
     } else {
         return shotVector;
@@ -120,9 +133,9 @@ std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& p
 Shotgun::Shotgun(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
                  int fireRate, int reloadTime, int Damage, int numberOfBullets, float CHDistance,
                  sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-                 sf::Vector2f position, float radius)
+                 sf::Vector2f position, float radius, std::string name)
     : SemiAutomaticWeapon(ammo, additionalAmmo, magazineSize, fireRate, reloadTime,
-                          Damage, CHDistance, texture, soundBuffer, position, radius),
+                          Damage, CHDistance, texture, soundBuffer, position, radius, name),
       numberOfBullets_{numberOfBullets} {}
 
 std::vector<Shot*> Shotgun::fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) {
@@ -143,7 +156,7 @@ std::vector<Shot*> Shotgun::fire(int clientID, const sf::Vector2f& pos, const sf
             randomVector.y = -20 + (std::rand() % 41) + dir.y*100;
 
             shotVector.push_back(new Shot{clientID, pos, randomVector,
-                                          pos + randomVector * 10000.f, damage_, soundBuffer_});
+                                          pos + randomVector * 10000.0f, damage_, soundBuffer_});
         }
         return shotVector;
     } else {
