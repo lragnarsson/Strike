@@ -2,12 +2,14 @@
 #define __Strike__GameObject__
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "./PhysicalObject.h"
 #include "./Shot.h"
 
 class GameObject : public sf::Sprite, public PhysicalCircle {
 public:
-    GameObject(sf::Texture* texture, sf::Vector2f position, float radius, float CHDistance);
+  GameObject(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
+             sf::Vector2f position,float radius, float CHDistance);
     ~GameObject() noexcept {}
 
     void equip(int clientID);
@@ -20,20 +22,22 @@ public:
     float getCHDistance();
     void markForRemoval();
     bool isMarkedForRemoval();
-
+    
 protected:
-    bool equipped_;
+    bool equipped_{false};
     int clientID_;
     sf::Vector2f moveVector_;
     sf::Vector2f currentVelocity_;
-    float deceleration_{0.10f};
+    float deceleration_{0.02f};
     float CHDistance_;
     bool markedForRemoval_{false};
+    sf::SoundBuffer* soundBuffer_;
 };
 
 class Grenade : public GameObject {
 public:
-    Grenade(sf::Texture* texture, sf::Vector2f position, float radius, float CHDistance);
+    Grenade(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
+            sf::Vector2f position, float radius, float CHDistance);
     ~Grenade() noexcept {}
 
     bool isStationary() override;
@@ -45,9 +49,9 @@ protected:
     sf::Clock fuse_;
     int fuseTime_{1000};
     bool triggered_;
-    int shrapnelCount_{15};
+    int shrapnelCount_{20};
     int shrapnelDamage_{50};
-    float shrapnelDistance_{500.f};
+    float shrapnelDistance_{300.f};
     bool exploaded_{false};
 };
 

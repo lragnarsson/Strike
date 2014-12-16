@@ -27,15 +27,28 @@ std::vector<Shot*> Controller::playerFire() {
     return shotVector;
 }
 
-GameObject* Controller::playerThrow() {
+GameObject* Controller::handleObjects(std::vector<GameObject*>* gameObjects) {
   if (dropTimer_.getElapsedTime().asMilliseconds() > 500) {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && !player_->emptyInventory()) {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) &&
+          !player_->emptyInventory()) {
           dropTimer_.restart();
           return player_->throwEquipped();
-      }
-      else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && player_->holdingGrenade()) {
+      } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) &&
+                 player_->holdingGrenade()) {
           dropTimer_.restart();
           return player_->throwGrenade();
+      } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+          for (auto gameObject : *gameObjects) {
+              sf::Vector2f tmp = gameObject->getPosition() - player_->getPosition();
+              if (lengthsq(tmp) < 10000.f && !gameObject->isEquipped()) {
+                  player_->addEquipment(gameObject);
+                  if (player_->fullInventory()) {
+                      dropTimer_.restart();
+                      return player_->throwEquipped();
+                  }
+                  return nullptr;
+              }
+          }
       }
   }
   return nullptr;
@@ -54,40 +67,39 @@ void Controller::handleKeyEvents(sf::RenderWindow* window) {
         if (event.type == sf::Event::Closed)
             window->close();
 
-        // Escape pressed : exit
-        if (event.type == sf::Event::KeyPressed &&
-            event.key.code == sf::Keyboard::Escape)
-            window->close();
+        if (event.type == sf::Event::KeyPressed)
+            switch (event.key.code) {
+                case sf::Keyboard::Escape : window->close();
+                    break;
+                case sf::Keyboard::Num1 : player_->equipAt(0);
+                    break;
+                case sf::Keyboard::Num2 : player_->equipAt(1);
+                    break;
+                case sf::Keyboard::Num3 : player_->equipAt(2);
+                    break;
+                case sf::Keyboard::Num4 : player_->equipAt(3);
+                    break;
+                case sf::Keyboard::Num5 : player_->equipAt(4);
+                    break;
+                case sf::Keyboard::Q : player_->lastEquipped();
+                    break;
+                case sf::Keyboard::R : player_->reloadWeapon();
+                    break;
+                default:
+                    break;
+            }
+
+        if (event.type == sf::Event::MouseWheelMoved)
+            player_->equipDelta(-event.mouseWheel.delta);
     }
 }
 
-void Controller::handlePlayerActions() {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-        player_->reloadWeapon();
+void Controller::updatePlayerInputVector() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         player_->setSpeedMultiplier(2.0f);
     else
         player_->setSpeedMultiplier(1.0f);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
-      player_->equipAt(0);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
-      player_->equipAt(1);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
-      player_->equipAt(2);
-}
 
-void Controller::pickupObjects(std::vector<GameObject*>* gameObjects) {
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-      for (auto gameObject : *gameObjects) {
-          sf::Vector2f tmp = gameObject->getPosition() - player_->getPosition();
-          if (dot(tmp, tmp) < 10000.f) {
-              player_->pickUpObject(gameObject);
-              return;
-          }
-      }
-}
-
-void Controller::updatePlayerInputVector() {
     inputVector_.x = 0;
     inputVector_.y = 0;
 

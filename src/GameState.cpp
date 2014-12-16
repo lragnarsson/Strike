@@ -63,7 +63,7 @@ void GameState::addHandledShot(Shot* shot) {
 void GameState::removeOldShots(bool ignoreTime) {
     int elapsed = gameTime_.getElapsedTime().asMilliseconds();
     auto f = [ignoreTime, elapsed](Shot* s) {
-        bool tooOld = ignoreTime || (elapsed - s->getTimestamp().asMilliseconds() > 1000);
+        bool tooOld = ignoreTime || (elapsed - s->getTimestamp().asMilliseconds() > 2000);
         if (tooOld)
             delete s;
         return tooOld;

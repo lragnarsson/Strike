@@ -20,7 +20,8 @@ public:
     virtual ~Weapon() noexcept {}
     Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
            int fireRate, int reloadTime, int Damage, float CHDistance,
-           sf::Texture* texture, sf::Vector2f position, float radius);
+           sf::Texture* texture, sf::SoundBuffer* soundBuffer,
+           sf::Vector2f position, float radius);
     Weapon(const Weapon& weapon) = default;
     void reloadWeapon();
     virtual std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir);
@@ -55,7 +56,8 @@ public:
     ~SemiAutomaticWeapon() noexcept {}
     SemiAutomaticWeapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
                         int fireRate, int reloadTime, int Damage, float CHDistance,
-                        sf::Texture* texture, sf::Vector2f position, float radius);
+                        sf::Texture* texture, sf::SoundBuffer* soundBuffer,
+                        sf::Vector2f position, float radius);
     virtual std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) override;
 private:
     friend class Shotgun;
@@ -67,7 +69,8 @@ public:
     ~Shotgun() noexcept {};
     Shotgun(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
             int fireRate, int reloadTime, int Damage, int numberOfBullets, float CHDistance,
-            sf::Texture* texture, sf::Vector2f position, float radius);
+            sf::Texture* texture, sf::SoundBuffer* soundBuffer,
+            sf::Vector2f position, float radius);
     std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) override;
 private:
     int numberOfBullets_;

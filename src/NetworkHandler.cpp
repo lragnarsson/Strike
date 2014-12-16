@@ -133,11 +133,11 @@ void NetworkHandler::sendUDPPacket(sf::Packet data, int clientID)
         }
     }
     if (!recieverFound) {
-        std::cout << "No matching client with ID: " << clientID << "found for reciever of message.\n" << "Known clientID's: " ;
+      //std::cout << "No matching client with ID: " << clientID << "found for reciever of message.\n" << "Known clientID's: " ;
         for (auto client : clients_) {
             std::cout << client.ID << ", ";
         }
-        std::cout << std::endl;
+        //std::cout << std::endl;
     }
 }
 

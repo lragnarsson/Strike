@@ -21,13 +21,13 @@ strike: $(OBJECTS) makefile
 	$(CCC) $(CCFLAGS) -o strike $(OBJECTS) $(LIBFLAGS)
 
 # Delmål (flaggan -c avbryter innan länkning, objektkodsfil erhålls)
-Client.o: $(SRC)/Client.h $(SRC)/Client.cpp
+Client.o: $(SRC)/Client.h $(SRC)/Client.cpp $(SRC)/WeaponFactory.h
 	$(CCC) $(CCFLAGS) -c $(SRC)/Client.cpp
 
 Controller.o: $(SRC)/Controller.h $(SRC)/Controller.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/Controller.cpp
 
-GameState.o: $(SRC)/GameState.h $(SRC)/GameState.cpp $(SRC)/WeaponFactory.h
+GameState.o: $(SRC)/GameState.h $(SRC)/GameState.cpp
 	$(CCC) $(CCFLAGS) -c $(SRC)/GameState.cpp
 
 Strike.o: $(SRC)/Strike.cpp

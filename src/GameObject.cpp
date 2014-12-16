@@ -5,8 +5,10 @@
 #include <iostream>
 
 // GameObject
-GameObject::GameObject(sf::Texture* texture, sf::Vector2f position, float radius, float CHDistance)
-    : sf::Sprite(*texture), PhysicalCircle(position, radius), CHDistance_(CHDistance) {
+GameObject::GameObject(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
+                       sf::Vector2f position, float radius, float CHDistance)
+    : sf::Sprite(*texture), PhysicalCircle(position, radius),
+      CHDistance_(CHDistance), soundBuffer_(soundBuffer) {
     setPosition(position);
     setOrigin(radius, radius);
 }
@@ -58,8 +60,9 @@ float GameObject::getCHDistance() {
 }
 
 // Grenade
-Grenade::Grenade(sf::Texture* texture, sf::Vector2f position, float radius, float CHDistance)
-    : GameObject(texture, position, radius, CHDistance) {}
+Grenade::Grenade(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
+                 sf::Vector2f position, float radius, float CHDistance)
+    : GameObject(texture, soundBuffer, position, radius, CHDistance) {}
 
 void Grenade::unEquip(sf::Vector2f position, sf::Vector2f velocity) {
     GameObject::unEquip(position, velocity);
@@ -85,7 +88,8 @@ std::vector<Shot*> Grenade::explode() {
     for (int i = 0; i < shrapnelCount_; i++) {
         dir = normalize(sf::Vector2f(std::rand() % 100 - 50, std::rand() % 100 - 50));
         shrapnel.push_back(new Shot(clientID_, getPosition(), dir,
-                                    getPosition() + dir * shrapnelDistance_, shrapnelDamage_));
+                                    getPosition() + dir * shrapnelDistance_, shrapnelDamage_,
+                                    soundBuffer_));
     }
     return shrapnel;
 }
