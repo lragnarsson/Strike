@@ -162,4 +162,11 @@ public:
 
     sf::Packet asPacket() override;
 };
+/*
+class GameObjUpdate : public Message
+{
+public:
+    
+    int 
+};*/
 #endif // _MESSAGES_

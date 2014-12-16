@@ -94,16 +94,20 @@ void Client::readFromNetwork() {
                                                    msg->damage,
                                                    soundBuffers_["ak47.wav"]));
                 break;
+                delete msg;
             }
             case PLAYER_UPDATE: {
                 PlayerUpdate* msg = static_cast<PlayerUpdate*>(message);
                 for (auto player : gameState_.getPlayers()) {
-                    if ((player->getClientID() == msg->playerID) && (player->getClientID() != controller_.getPlayer()->getClientID())) {
+                    if (player->getClientID() == msg->playerID) {
                         player->setHealth(msg->health);
-                        player->setRotation(msg->rotation);
-                        player->move(msg->xCoord, msg->yCoord);
+                        if (player->getClientID() != controller_.getPlayer()->getClientID()) {
+                            player->setRotation(msg->rotation);
+                            player->move(msg->xCoord, msg->yCoord);
+                        }
                     }
                 }
+                delete message;
                 break;
             }
             case ROUND_RESTART: {
@@ -121,6 +125,7 @@ void Client::readFromNetwork() {
                     myPlayer->setPosition(gameState_.getCTspawnpoints().at(spawnpointIndex));
                     myPlayer->move();
                 }
+                delete message;
                 break;
             }
             case ADD_PLAYER: {
@@ -128,6 +133,7 @@ void Client::readFromNetwork() {
                 if (msg->playerID == controller_.getPlayer()->getClientID())
                     break;
                 gameState_.addPlayer(new Player(msg->playerID, (msg->teamID == T_TEAM ? gameState_.tTeam() : gameState_.ctTeam()), textures_["cage3.png"]));
+                delete message;
                 break;
             }
             case INITIAL_INFORMATION: {
@@ -138,11 +144,12 @@ void Client::readFromNetwork() {
                 myPlayer->setTeam((msg->teamID == T_TEAM ? gameState_.tTeam() : gameState_.ctTeam()));
 
                 std::cout << "ClientID and TeamID (0 = T, 1 = CT) of player updated to: " << msg->clientID << ", " << msg->teamID << std::endl;
+                delete message;
                 break;
             }
         }
 
-        delete message;
+        //delete message;
     }
 }
 

@@ -18,6 +18,12 @@ Erik Sköld
 #include <boost/thread.hpp>
 #include <SFML/System.hpp>
 
+Server::Server() {
+    Client::loadTextures();
+    Client::loadSoundBuffers();
+    gameState_.initWorld();
+}
+
 void Server::networkFunction() {
     while (true) {
         nh_.update();
@@ -86,15 +92,15 @@ void Server::readFromNetwork() {
 }
 
 void Server::writeToNetwork() {
-    std::vector<Message*> outboundMessages;
+    //std::vector<Message*> outboundMessages;
     for (auto player : gameState_.getPlayers())
-        outboundMessages.push_back(new PlayerUpdate(player->getClientID(),
+        outboundMessages_.push_back(new PlayerUpdate(player->getClientID(),
                                                     player->getPosition().x,
                                                     player->getPosition().y,
                                                     player->getRotation(),
                                                     player->getHealth()));
     for (auto shot : gameState_.getHandledShots())
-        outboundMessages.push_back(new AddShot(shot->getClientID(),
+        outboundMessages_.push_back(new AddShot(shot->getClientID(),
                                                shot->getOrigin().x,
                                                shot->getOrigin().y,
                                                shot->getDirection().x,
@@ -102,12 +108,16 @@ void Server::writeToNetwork() {
                                                shot->getEndPoint().x,
                                                shot->getEndPoint().y,
                                                shot->getDamage()));
-    nh_.addToOutbox(outboundMessages);
+    nh_.addToOutbox(outboundMessages_);
+    outboundMessages_.clear();
     gameState_.removeOldShots(true);
 }
 
 void Server::handleGameLogic() {
-
+    for (auto player : gameState_.getPlayers()) {
+        if (player->getHealth() <= 0)
+            roundRestart();
+    }
 }
 
 void Server::acceptConnections() {
@@ -147,40 +157,41 @@ void Server::initRemotePlayers() {
 }
 
 void Server::roundRestart() {
-    std::vector<Message*> outboundMessages;
+    //std::vector<Message*> outboundMessages;
 
     int ti = 0;
     int cti = 0;
     for (auto player : gameState_.getPlayers()) {
         player->setHealth(100);
-        outboundMessages.push_back(new RoundRestart(gameState_.ctTeam()->getScore(), gameState_.tTeam()->getScore(), (player->getTeam()->getTeamID() == T_TEAM ? ti++ : cti++), player->getClientID()));
+        outboundMessages_.push_back(new RoundRestart(gameState_.ctTeam()->getScore(), gameState_.tTeam()->getScore(), (player->getTeam()->getTeamID() == T_TEAM ? ti++ : cti++), player->getClientID()));
     }
 
-    nh_.addToOutbox(outboundMessages);
+    //nh_.addToOutbox(outboundMessages);
 }
 
 void Server::updatePlayer(PlayerUpdate* message) {
   for (auto player : gameState_.getPlayers())
       if (player->getClientID() == message->playerID) {
-          player->setPosition(sf::Vector2f(message->xCoord,
-                                           message->yCoord));
+          player->move(message->xCoord, message->yCoord);
           player->setRotation(message->rotation);
       }
       delete message;
 }
 
 void Server::handleShot(AddShot* message) {
+    float maxDistance = 100000.f;
     Shot* shot = new Shot(message->clientID,
                           sf::Vector2f(message->originXPos, message->originYPos),
                           sf::Vector2f(message->directionXPos, message->directionYPos),
-                          sf::Vector2f(message->endPointXPos, message->endPointYPos),
+                          sf::Vector2f(message->originXPos, message->originYPos) + sf::Vector2f(message->directionXPos, message->directionYPos) * maxDistance,
                           message->damage);
-    Player* hitPlayer;
-    float maxDistance = 100000.f;
+    Player* hitPlayer {nullptr};
+    
     sf::Vector2f centerAfterCollision = {shot->getEndPoint()};
     for (auto physObj : gameState_.getPhysicalObjects()) {
         if (physObj->intersectRay(shot->getRay(), centerAfterCollision))
             if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
+                std::cout << "Hej, ett skott fick ny endpoint" << std::endl;
                 shot->setEndPoint(centerAfterCollision);
                 maxDistance = length(centerAfterCollision - shot->getOrigin());
             }
@@ -191,9 +202,15 @@ void Server::handleShot(AddShot* message) {
                 shot->setEndPoint(centerAfterCollision);
                 maxDistance = length(centerAfterCollision - shot->getOrigin());
                 hitPlayer = player;
+                int ralleTest = shot->getDamage();
+                std::cout << "skada: " << ralleTest << std::endl;
             }
     }
-    hitPlayer->decreaseHealth(shot->getDamage());
+    //std::cout << "Shot damage: " << ralleTest << std::endl;
+    if (hitPlayer != nullptr)
+        hitPlayer->decreaseHealth(shot->getDamage());
+    
+        //std::cout << "Handleshot without any player hit." << std::endl;
     gameState_.addHandledShot(shot);
     delete message;
 }

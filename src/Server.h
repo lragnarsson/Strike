@@ -13,6 +13,7 @@ Erik Sköld
 #define _SERVER_
 
 #include "./Game.h"
+#include "./Client.h"
 #include "./ResourcePath.h"
 #include "./Player.h"
 #include "./GameState.h"
@@ -25,7 +26,7 @@ Erik Sköld
 
 class Server: public Game{
 public:
-    Server() = default;
+    Server();
 
     ~Server() noexcept {};
 
@@ -42,7 +43,7 @@ public:
     void initRemotePlayers();
 
 private:
-    std::vector<Message*> outboundMessages;
+    std::vector<Message*> outboundMessages_;
     
     NetworkHandler nh_;
     GameState gameState_;

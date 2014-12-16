@@ -30,6 +30,7 @@ const int INITIAL_INFORMATION = 2003;
 const int PLAYER_UPDATE = 3000;
 const int ADD_SHOT = 3001;
 const int ROUND_RESTART = 3002;
+const int GAME_OBJ_UPDATE = 3003;
 
 
 #endif // _MESSAGECODES_
