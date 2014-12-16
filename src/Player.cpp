@@ -163,6 +163,15 @@ void Player::move() {
     PhysicalCircle::setCenter(getPosition());
 }
 
+void Player::move(sf::Vector2f absolutePosition) {
+    setPosition(absolutePosition);
+    PhysicalCircle::setCenter(absolutePosition);
+}
+void Player::move(float newXPos, float newYPos) {
+    setPosition(newXPos, newYPos);
+    PhysicalCircle::setCenter(getPosition());
+}
+
 sf::CircleShape* Player::getCrosshair() {
     return &crosshair_;
 }

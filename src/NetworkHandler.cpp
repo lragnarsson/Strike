@@ -55,8 +55,8 @@ void NetworkHandler::update()
     processInternalMessages();
 
     std::vector<Message*> outboundMessages {outgoingMessages_.stealNewMessages()};
-    std::cout << "Length of outgoingMessages: " << outboundMessages.size() <<
-    "\nLength of incomingMessages: " << incomingMessages_.size() << std::endl;
+    //std::cout << "Length of outgoingMessages: " << outboundMessages.size() <<
+    //"\nLength of incomingMessages: " << incomingMessages_.size() << std::endl;
     for (auto& outgoingMessage : outboundMessages)
     {
         sf::Packet pkt;
@@ -90,7 +90,9 @@ void NetworkHandler::recieveUDPPackets()
 
     if (Usocket_.receive(recievePacket, remoteIP, remotePort) == sf::Socket::Done)
     {
-        std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ? "PLAYER_UPDATE" : "ADD_SHOT") << std::endl;
+      /*  std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ?
+                                                                                                        ("PLAYER_UPDATE " + std::string(std::to_string(static_cast<PlayerUpdate*>((unpackPacket(recievePacket)))->playerID) )) : "ADD_SHOT") << std::endl;
+       */
         incomingMessages_.push_back(unpackPacket(recievePacket));
         std::cout << incomingMessages_.size() << std::endl;
     }
@@ -135,11 +137,11 @@ void NetworkHandler::sendUDPPacket(sf::Packet data, int clientID)
         }
     }
     if (!recieverFound) {
-      //std::cout << "No matching client with ID: " << clientID << "found for reciever of message.\n" << "Known clientID's: " ;
+      std::cout << "No matching client with ID: " << clientID << "found for reciever of message.\n" << "Known clientID's: " ;
         for (auto client : clients_) {
             std::cout << client.ID << ", ";
         }
-        //std::cout << std::endl;
+        std::cout << std::endl;
     }
 }
 

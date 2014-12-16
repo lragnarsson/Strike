@@ -49,6 +49,9 @@ public:
                              float elapsedSeconds);
     void handleRotation(const sf::Vector2f& aimVector);
     void move();
+    void move(sf::Vector2f absolutePosition);
+    void move(float newXPos, float newYPos);
+    
     void reloadWeapon();
     void setSpeedMultiplier(float speed);
     void hasNotFired();

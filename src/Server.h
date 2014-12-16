@@ -41,6 +41,8 @@ public:
     void initRemotePlayers();
 
 private:
+    std::vector<Message*> outboundMessages;
+    
     NetworkHandler nh_;
     GameState gameState_;
 

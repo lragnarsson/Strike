@@ -109,9 +109,8 @@ void Client::readFromNetwork() {
                 for (auto player : gameState_.getPlayers()) {
                     if ((player->getClientID() == msg->playerID) && (player->getClientID() != controller_.getPlayer()->getClientID())) {
                         player->setHealth(msg->health);
-                        player->setPosition(msg->xCoord, msg->yCoord);
                         player->setRotation(msg->rotation);
-                        player->move();
+                        player->move(msg->xCoord, msg->yCoord);
                     }
                 }
                 break;

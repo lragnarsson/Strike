@@ -21,7 +21,7 @@ Erik Sköld
 void Server::networkFunction() {
     while (true) {
         nh_.update();
-        sf::Time sleepTime {sf::milliseconds(10)};
+        sf::Time sleepTime {sf::milliseconds(100)};
         sf::sleep(sleepTime);
     }
 }
@@ -30,17 +30,14 @@ void Server::networkFunction() {
 void Server::run() {
     sf::sleep(sf::milliseconds(1000));
     nh_.initServer();
-    
-    boost::thread networkThread(&Server::networkFunction, this);
-    
     acceptConnections();     // Loops until user presses enter
     //nh_.initRemotePlayers();
     std::cout << "Startar server" << std::endl;
     initRemotePlayers();
     roundRestart();
-    
-    
-    
+
+    boost::thread networkThread(&Server::networkFunction, this);
+
     while (true) {
         //nh_.update();
         readFromNetwork();
@@ -54,8 +51,8 @@ void Server::readFromNetwork() {
   for (auto message : resMess) {
       switch (message->header) {
           case PLAYER_UPDATE: {
-              updatePlayer(static_cast<PlayerUpdate*>(message));
               std::cout << "got player update from " << static_cast<PlayerUpdate*>(message)->playerID << std::endl;
+              updatePlayer(static_cast<PlayerUpdate*>(message));
               break;
           }
           case ADD_SHOT: {
@@ -84,13 +81,14 @@ void Server::readFromNetwork() {
 }
 
 void Server::writeToNetwork() {
-    std::vector<Message*> outboundMessages;
-    for (auto player : gameState_.getPlayers())
+    //std::vector<Message*> outboundMessages;
+    /*for (auto player : gameState_.getPlayers())
         outboundMessages.push_back(new PlayerUpdate(player->getClientID(),
                                                     player->getPosition().x,
                                                     player->getPosition().y,
                                                     player->getRotation(),
                                                     player->getHealth()));
+     */
     for (auto shot : gameState_.getHandledShots())
         outboundMessages.push_back(new AddShot(shot->getClientID(),
                                                shot->getOrigin().x,
@@ -137,6 +135,8 @@ void Server::initRemotePlayers() {
             msg->reciever = -1; // set message to broadcastmode
             newPlayerMessages.push_back(msg);
         }
+        else
+            delete msg;
     }
 
     nh_.addToOutbox(newPlayerMessages);
@@ -158,11 +158,16 @@ void Server::roundRestart() {
 void Server::updatePlayer(PlayerUpdate* message) {
   for (auto player : gameState_.getPlayers())
       if (player->getClientID() == message->playerID) {
-          player->setPosition(sf::Vector2f(message->xCoord,
-                                           message->yCoord));
           player->setRotation(message->rotation);
+          player->move(message->xCoord, message->yCoord);
+          message->reciever = -1; // set to broadcast-mode
+          message->health = player->getHealth();
+          outboundMessages.push_back(message);
       }
-    delete message;
+      else {
+          std::cout << "Recieved a PLAYER_UPDATE with ID not matching. ID: " << message->playerID << std::endl;
+          delete message;
+      }
 }
 
 void Server::handleShot(AddShot* message) {
