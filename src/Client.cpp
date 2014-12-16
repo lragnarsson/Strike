@@ -34,6 +34,8 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
 
     gameState_.initWorld();
 
+    hud_.setCrosshair(player->getCrosshair());
+    player->setHealth(30);
 
     hud_.setCrosshair(player->getCrosshair());
 
@@ -291,6 +293,12 @@ void Client::createDecals() {
                                     20, 25, false, 25));
         }
     }
+    for (auto player : gameState_.getPlayers()) {
+      if (player->dropBlood()) {
+        gameState_.addDecal(new Decal(player->getPosition() - 0.01f * sf::Vector2f((float)(std::rand() % 10), (float)(std::rand() % 10)),
+                                      sf::Vector2f(0.05f,0.05f), textures_["blood_drop_1.png"], sf::IntRect(0, 0, 388, 388)));
+      }
+    }
 }
 
 void Client::collideMoveVector(sf::Vector2f position,
@@ -367,7 +375,7 @@ void Client::handleSounds() {
           else {
               sf::Vector2f distanceVector;
               distanceVector = controller_.getPlayer()->getPosition() - shot->getOrigin();
-              //shot->setVolume(100 / (1 + (int) length(distanceVector)));
+              //shot->setVolume(100 / (1 + (int) 0.001f * length(distanceVector)));
               shot->play();
               IDs.push_back(shot->getClientID());
           }

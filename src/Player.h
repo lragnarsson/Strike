@@ -66,6 +66,7 @@ public:
     sf::CircleShape* getCrosshair();
     void animate();
     int getHealth();
+    bool dropBlood();
 
     bool holdingFirearm();
     bool holdingGrenade();
@@ -109,6 +110,7 @@ private:
     unsigned int columns_{10};
     sf::IntRect frameRect_;
     sf::Clock animClock_;
+    sf::Clock bloodClock_;
     sf::Texture spriteSheet_;
     float CHDistance_;
 

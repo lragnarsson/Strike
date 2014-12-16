@@ -63,6 +63,14 @@ void Player::setHealth(int health) {
     health_ = health;
 }
 
+bool Player::dropBlood() {
+    if (health_ < 40 && bloodClock_.getElapsedTime().asMilliseconds() > 200 + rand() % 1500) {
+        bloodClock_.restart();
+        return true;
+    }
+    return false;
+}
+
 bool Player::isDead() {
     return health_ == 0;
 }
