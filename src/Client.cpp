@@ -17,7 +17,6 @@ Filip Östman
 #include "./GeomUtils.h"
 #include "./SysUtils.h"
 #include "./Team.h"
-#include "./WeaponFactory.h"
 
 
 Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
@@ -31,15 +30,8 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
 
     gameState_.addPlayer(player);
     controller_.bindPlayer(player);
-    WeaponFactory w;
 
-    player->addEquipment(w.createFrag(sf::Vector2f()));
-    player->addEquipment(w.createAK47(sf::Vector2f()));
-    player->addEquipment(w.createNova(sf::Vector2f()));
-    player->addEquipment(w.createFrag(sf::Vector2f()));
-    player->addEquipment(w.createM4(sf::Vector2f()));
-
-    gameState_.addStationaryGameObject(w.createFrag(sf::Vector2f(2700.f, 3000.f)));
+    gameState_.initWorld();
 
     hud_.setCrosshair(player->getCrosshair());
 
