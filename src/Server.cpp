@@ -133,6 +133,8 @@ void Server::initRemotePlayers() {
             msg->reciever = -1; // set message to broadcastmode
             newPlayerMessages.push_back(msg);
         }
+        else
+            delete msg;
     }
 
     nh_.addToOutbox(newPlayerMessages);
