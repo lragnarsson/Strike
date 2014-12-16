@@ -37,11 +37,6 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
 
     hud_.setCrosshair(player->getCrosshair());
 
-    Player* p2 = new Player(2, gameState_.ctTeam(), textures_["cage3.png"]);
-    p2->setPosition(sf::Vector2f(500.f, 100.f));
-    p2->move();
-    gameState_.addPlayer(p2);
-
     gameState_.setPlayerSpawnPoints();
 }
 

@@ -20,7 +20,7 @@ public:
     }
     Weapon* createM4(sf::Vector2f position) {
         return new Weapon(30, 60, 30, 90, 3000, 30, 600.f,
-                          Client::textures_["ak47_placeholder.png"],
+                          Client::textures_["m4_placeholder.png"],
                           Client::soundBuffers_["m4.wav"],
                           position, 20.f, "M4");
     }
@@ -34,7 +34,7 @@ public:
 
     Weapon* createNova(sf::Vector2f position) {
         return new Shotgun(6, 18, 6, 1800, 3000, 10, 8, 300.f,
-                          Client::textures_["ak47_placeholder.png"],
+                          Client::textures_["nova_placeholder.png"],
                           Client::soundBuffers_["nova.wav"],
                           position, 20.f, "Nova");
     }
