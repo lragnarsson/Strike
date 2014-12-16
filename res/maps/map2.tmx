@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="background" value="map2.png"/>
+ </properties>
+ <tileset firstgid="1" name="walls" tilewidth="32" tileheight="32">
+  <tile id="0">
+   <image width="32" height="32" source="../../../../Tiles/map/black.png"/>
+  </tile>
+  <tile id="1">
+   <image width="32" height="32" source="../../../../Tiles/map/circle1.png"/>
+  </tile>
+  <tile id="2">
+   <image width="32" height="32" source="../../../../Tiles/map/circle2.png"/>
+  </tile>
+  <tile id="3">
+   <image width="32" height="32" source="../../../../Tiles/map/circle3.png"/>
+  </tile>
+  <tile id="4">
+   <image width="32" height="32" source="../../../../Tiles/map/circle4.png"/>
+  </tile>
+  <tile id="5">
+   <image width="32" height="32" source="../../../../Tiles/map/side1.png"/>
+  </tile>
+  <tile id="6">
+   <image width="32" height="32" source="../../../../Tiles/map/side2.png"/>
+  </tile>
+  <tile id="7">
+   <image width="32" height="32" source="../../../../Tiles/map/side3.png"/>
+  </tile>
+  <tile id="8">
+   <image width="32" height="32" source="../../../../Tiles/map/side4.png"/>
+  </tile>
+  <tile id="9">
+   <image width="32" height="32" source="../../../../Tiles/map/white.png"/>
+  </tile>
+  <tile id="10">
+   <image width="32" height="32" source="../../../../Tiles/map/white.png"/>
+  </tile>
+  <tile id="11">
+   <image width="32" height="32" source="../../../../Tiles/map/white.png"/>
+  </tile>
+  <tile id="12">
+   <image width="32" height="32" source="../../../../Tiles/map/white.png"/>
+  </tile>
+  <tile id="13">
+   <image width="32" height="32" source="../../../../Tiles/map/white.png"/>
+  </tile>
+  <tile id="14">
+   <image width="32" height="32" source="../../../../Tiles/map/white.png"/>
+  </tile>
+  <tile id="15">
+   <image width="32" height="32" source="../../../../Tiles/map/rectangle.png"/>
+  </tile>
+  <tile id="16">
+   <image width="32" height="32" source="../../../../Tiles/map/polygon1.png"/>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   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
+  </data>
+ </layer>
+ <objectgroup name="Collision">
+  <object x="1600" y="3168" width="1600" height="32"/>
+  <object x="3168" y="1600" width="32" height="1568"/>
+  <object x="2592" y="3168">
+   <polyline points="0,0 0,-192 -32,-192 -32,0"/>
+  </object>
+  <object x="2560" y="2848">
+   <polyline points="0,0 32,0 32,-96 192,-256 288,-256 288,-288 192,-288 0,-96 0,0"/>
+  </object>
+  <object x="3168" y="2560">
+   <polyline points="0,0 -192,0 -192,32 0,32"/>
+  </object>
+  <object x="1600" y="3168">
+   <polyline points="0,0 -736,-736 -749,-761 -748.5,-775 -736,-800 -576,-960 -578.5,-974 -585.5,-983.5 -597,-991 -608,-992 -769.5,-832 -791.5,-823 -809,-823.5 -832,-832 -1568,-1568"/>
+  </object>
+  <object x="0" y="0" width="32" height="1600"/>
+  <object x="32" y="0" width="1568" height="32"/>
+  <object x="608" y="32">
+   <polyline points="0,0 0,224 32,224 32,0"/>
+  </object>
+  <object x="352" y="640">
+   <polyline points="0,0 96,0 256,-160 256,-256 288,-256 288,-160 96,32 0,32 0,0"/>
+  </object>
+  <object x="32" y="672">
+   <polyline points="0,0 192,0 192,-32 0,-32"/>
+  </object>
+  <object x="3168" y="1600">
+   <polyline points="0,0 -736,-736 -758.667,-748 -778.667,-748 -800,-736 -960,-576 -976.75,-580 -984.25,-586.25 -989.5,-595 -992,-608 -832,-768 -819,-789.5 -818.5,-807.5 -832,-832 -1568,-1568"/>
+  </object>
+  <object x="1952" y="2208">
+   <polyline points="0,0 -352,352 -416,288 -436,274 -456.667,274 -480,288 -608,416 -623.333,412.667 -638,398.667 -640.667,382 -512,256 -501.333,238 -500.667,219.333 -512,192 -704,0 -672,0 -352,320 -32,0 0,0"/>
+  </object>
+  <object x="2208" y="1952">
+   <polyline points="0,0 352,-352 0,-704 0,-672 320,-352 0,-32 0,0"/>
+  </object>
+  <object x="2112" y="1760">
+   <polyline points="0,0 -352,352 -352,320 -32,0 0,0"/>
+  </object>
+  <object x="1440" y="2112">
+   <polyline points="0,0 -384,-384 -352,-384 0,-32 0,0"/>
+  </object>
+  <object x="960" y="1920">
+   <polyline points="0,0 -352,-352 0,-704 0,-672 -320,-352 0,-32 0,0"/>
+  </object>
+  <object x="1056" y="1408">
+   <polyline points="0,0 352,-352 352,-320 32,0 0,0"/>
+  </object>
+  <object x="1568" y="608">
+   <polyline points="0,0 128,128 146.667,139.333 168,140 192,128 320,0 333.333,1.33333 346.667,12.6667 350.667,22 351.333,33.3333 224,160 211.333,181.333 211.333,197.333 224,224 352,352 320,352 0,32 -320,352 -352,352 0,0"/>
+  </object>
+  <object x="1728" y="1056">
+   <polyline points="0,0 384,384 352,384 0,32 0,0"/>
+  </object>
+  <object x="736" y="544">
+   <polygon points="0,0 0,32 288,32 288,0"/>
+  </object>
+  <object x="352" y="1152">
+   <polygon points="0,0 0,32 288,32 288,0"/>
+  </object>
+  <object x="2016" y="3168">
+   <polyline points="0,0 0,-359.5 6.5,-372.5 15.5,-380 25,-383.5 39.5,-383.5 50,-379 57.5,-371 64,-358 64,0"/>
+  </object>
+  <object x="3136" y="2176" width="32" height="32"/>
+  <object x="3113" y="2176" width="14" height="32"/>
+  <object x="3080.75" y="2176" width="14" height="32"/>
+  <object x="3049" y="2176" width="14" height="32"/>
+  <object x="3016.88" y="2176" width="14" height="32"/>
+  <object x="2984.88" y="2175.88" width="14" height="32"/>
+  <object x="2945" y="2212.91">
+   <polygon points="0,0 -1,13.9091 12,27.0909 26,26.0909 29.9091,22.0909 30.9091,8.09091 17.9091,-4.81818 4.09091,-3.90909"/>
+  </object>
+  <object x="2913" y="2245">
+   <polygon points="0,0 -1,13.9091 12,27.0909 26,26.0909 29.9091,22.0909 30.9091,8.09091 17.9091,-4.81818 4.09091,-3.90909"/>
+  </object>
+  <object x="2881" y="2276.73">
+   <polygon points="0,0 -1,13.9091 12,27.0909 26,26.0909 29.9091,22.0909 30.9091,8.09091 17.9091,-4.81818 4.09091,-3.90909"/>
+  </object>
+  <object x="2849.09" y="2308.73">
+   <polygon points="0,0 -1,13.9091 12,27.0909 26,26.0909 29.9091,22.0909 30.9091,8.09091 17.9091,-4.81818 4.09091,-3.90909"/>
+  </object>
+  <object x="2817" y="2340.91">
+   <polygon points="0,0 -1,13.9091 12,27.0909 26,26.0909 29.9091,22.0909 30.9091,8.09091 17.9091,-4.81818 4.09091,-3.90909"/>
+  </object>
+  <object x="1242.18" y="1472">
+   <polygon points="0,0 -14.9091,7.27273 -22.3636,16 -26,25.0909 -26,69.2727 -20.3636,82.9091 -9.27273,92.9091 -0.363636,95.8182 43.6364,96 53.8182,92 62.5455,85.0909 67.6364,77.0909 69.6364,69.8182 70.1818,26 65.6364,15.6364 60.7273,9.09091 54.7273,4 44.7273,0"/>
+  </object>
+  <object x="1882" y="1600">
+   <polygon points="0,0 -12.9091,6 -22,15.2727 -26,25.0909 -26,69.6364 -20,82.9091 -12,90.9091 0.181818,95.8182 43.8182,96.1818 55.0909,90.9091 64.9091,81.8182 70.1818,69.8182 70,26.1818 66,15.8182 59.0909,7.09091 44.7273,0.181818"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="Spawnpoint">
+  <object name="CTspawn" x="352" y="96" width="64" height="64">
+   <ellipse/>
+  </object>
+  <object name="CTspawn" x="96" y="448" width="64" height="64">
+   <ellipse/>
+  </object>
+  <object name="CTspawn" x="384" y="416" width="64" height="64">
+   <ellipse/>
+  </object>
+  <object name="Tspawn" x="3040" y="2656" width="64" height="64">
+   <ellipse/>
+  </object>
+  <object name="Tspawn" x="2688" y="3040" width="64" height="64">
+   <ellipse/>
+  </object>
+  <object name="Tspawn" x="2976" y="3008" width="64" height="64">
+   <ellipse/>
+  </object>
+  <object name="CTspawn" x="96" y="96" width="64" height="64">
+   <ellipse/>
+  </object>
+  <object name="Tspawn" x="2752" y="2720" width="64" height="64">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="Gameobject">
+  <object name="M4" x="672" y="64" width="128" height="32"/>
+  <object name="M4" x="672" y="128" width="128" height="32"/>
+  <object name="M4" x="832" y="64" width="128" height="32"/>
+  <object name="M4" x="832" y="128" width="128" height="32"/>
+  <object name="Nova" x="64" y="704" width="96" height="32"/>
+  <object name="Nova" x="64" y="768" width="96" height="32"/>
+  <object name="AK47" x="2400" y="3104" width="128" height="32"/>
+  <object name="AK47" x="2400" y="3040" width="128" height="32"/>
+  <object name="AK47" x="2240" y="3040" width="128" height="32"/>
+  <object name="AK47" x="2240" y="3104" width="128" height="32"/>
+  <object name="Nova" x="3008" y="2496" width="96" height="32"/>
+  <object name="Nova" x="3008" y="2432" width="96" height="32"/>
+  <object name="Frag" x="1504" y="1504" width="32" height="32"/>
+  <object name="Frag" x="1600" y="1504" width="32" height="32"/>
+  <object name="Frag" x="1504" y="1568" width="32" height="32"/>
+  <object name="Frag" x="1600" y="1568" width="32" height="32"/>
+  <object name="PPK" x="2816" y="2848" width="64" height="32"/>
+  <object name="PPK" x="2816" y="2912" width="64" height="32"/>
+  <object name="PPK" x="224" y="224" width="64" height="32"/>
+  <object name="PPK" x="224" y="288" width="64" height="32"/>
+ </objectgroup>
+</map>
