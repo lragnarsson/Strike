@@ -56,7 +56,7 @@ void Server::readFromNetwork() {
   for (auto message : resMess) {
       switch (message->header) {
           case PLAYER_UPDATE: {
-              std::cout << "got player update from " << static_cast<PlayerUpdate*>(message)->playerID << std::endl;
+              //std::cout << "got player update from " << static_cast<PlayerUpdate*>(message)->playerID << std::endl;
               updatePlayer(static_cast<PlayerUpdate*>(message));
               break;
           }
@@ -86,14 +86,13 @@ void Server::readFromNetwork() {
 }
 
 void Server::writeToNetwork() {
-    //std::vector<Message*> outboundMessages;
-    /*for (auto player : gameState_.getPlayers())
+    std::vector<Message*> outboundMessages;
+    for (auto player : gameState_.getPlayers())
         outboundMessages.push_back(new PlayerUpdate(player->getClientID(),
                                                     player->getPosition().x,
                                                     player->getPosition().y,
                                                     player->getRotation(),
                                                     player->getHealth()));
-     */
     for (auto shot : gameState_.getHandledShots())
         outboundMessages.push_back(new AddShot(shot->getClientID(),
                                                shot->getOrigin().x,
@@ -116,7 +115,7 @@ void Server::acceptConnections() {
     while(true)
     {
         nh_.checkForNewTcpConnections();
-        //nh_.update();
+        nh_.update();
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
             break;
     }
@@ -163,16 +162,11 @@ void Server::roundRestart() {
 void Server::updatePlayer(PlayerUpdate* message) {
   for (auto player : gameState_.getPlayers())
       if (player->getClientID() == message->playerID) {
+          player->setPosition(sf::Vector2f(message->xCoord,
+                                           message->yCoord));
           player->setRotation(message->rotation);
-          player->move(message->xCoord, message->yCoord);
-          message->reciever = -1; // set to broadcast-mode
-          message->health = player->getHealth();
-          outboundMessages.push_back(message);
       }
-      else {
-          std::cout << "Recieved a PLAYER_UPDATE with ID not matching. ID: " << message->playerID << std::endl;
-          delete message;
-      }
+      delete message;
 }
 
 void Server::handleShot(AddShot* message) {

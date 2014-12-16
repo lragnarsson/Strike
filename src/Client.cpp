@@ -20,7 +20,7 @@ Filip Östman
 
 
 Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
-    renderWindow_.setFramerateLimit(2);
+    renderWindow_.setFramerateLimit(50);
     renderWindow_.setMouseCursorVisible(false);
 
     loadTextures();

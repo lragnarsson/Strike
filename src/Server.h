@@ -27,7 +27,7 @@ class Server: public Game{
 public:
     Server() = default;
 
-    ~Server() noexcept;
+    ~Server() noexcept {};
 
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
