@@ -264,3 +264,9 @@ void Player::addEquipment(GameObject* equipment) {
     equipment->equip(clientID_);
     CHDistance_ = inventory_.at(equippedIndex_)->getCHDistance();
 }
+
+std::string Player::getEquippedWeapon() {
+  if (!emptyInventory())
+    return inventory_.at(equippedIndex_)->getName();
+  return "";
+}

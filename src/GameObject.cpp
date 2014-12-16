@@ -6,9 +6,9 @@
 
 // GameObject
 GameObject::GameObject(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-                       sf::Vector2f position, float radius, float CHDistance)
+                       sf::Vector2f position, float radius, float CHDistance, std::string name)
     : sf::Sprite(*texture), PhysicalCircle(position, radius),
-      CHDistance_(CHDistance), soundBuffer_(soundBuffer) {
+      CHDistance_(CHDistance), soundBuffer_(soundBuffer), weaponName_(name) {
     setPosition(position);
     setOrigin(radius, radius);
 }
@@ -61,8 +61,12 @@ float GameObject::getCHDistance() {
 
 // Grenade
 Grenade::Grenade(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-                 sf::Vector2f position, float radius, float CHDistance)
-    : GameObject(texture, soundBuffer, position, radius, CHDistance) {}
+                 sf::Vector2f position, float radius, float CHDistance, std::string name)
+    : GameObject(texture, soundBuffer, position, radius, CHDistance, name) {}
+
+std::string GameObject::getName() {
+    return weaponName_;
+}
 
 void Grenade::unEquip(sf::Vector2f position, sf::Vector2f velocity) {
     GameObject::unEquip(position, velocity);
@@ -93,3 +97,4 @@ std::vector<Shot*> Grenade::explode() {
     }
     return shrapnel;
 }
+

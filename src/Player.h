@@ -74,6 +74,7 @@ public:
     void equipDelta(int delta);
     void lastEquipped();
     void pickUpObject(GameObject* gameObject);
+    std::string getEquippedWeapon();
 
 private:
     int health_ = 100;

@@ -31,7 +31,9 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.addPlayer(player);
     controller_.bindPlayer(player);
 
+
     gameState_.initWorld();
+
 
     hud_.setCrosshair(player->getCrosshair());
 
@@ -185,6 +187,7 @@ void Client::handleGameLogic() {
     hud_.setHealth(controller_.getPlayer()->getHealth());
     hud_.setAmmo(controller_.getPlayer()->getMagazineAmmo(), controller_.getPlayer()->getAdditionalAmmo());
     hud_.setScore(gameState_.tTeam()->getScore(), gameState_.ctTeam()->getScore());
+    hud_.setEquippedWeapon(controller_.getPlayer()->getEquippedWeapon());
     hud_.setPositions(renderWindow_);
 }
 
