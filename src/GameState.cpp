@@ -173,7 +173,11 @@ void GameState::handleDecals() {
     unhandledDecals_.clear();
     animatedDecals_.erase(std::remove_if(animatedDecals_.begin(),
                                          animatedDecals_.end(),
-                                         [](AnimatedDecal* d) { return d->animationComplete(); }),
+                                         [](AnimatedDecal* d) { bool complete = d->animationComplete();
+                                                                if (complete)
+                                                                    delete d;
+                                                                return complete;
+                                                                 }),
                           animatedDecals_.end());
 }
 
