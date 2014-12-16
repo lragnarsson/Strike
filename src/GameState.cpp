@@ -19,8 +19,11 @@ Filip Östman
 #include "./Map.h"
 #include "./WeaponFactory.h"
 
-GameState::GameState()  {
+GameState::GameState() {}
+
+void GameState::initWorld(){
     map_.load("map2.tmx");
+    stationaryGameObjects_ = map_.getSpawnedObjects();
 }
 
 GameState::~GameState() {

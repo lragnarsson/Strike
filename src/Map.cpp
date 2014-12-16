@@ -8,6 +8,7 @@ Rasmus Vilhelmsson
 Lage Ragnarsson
 ***************************************/
 
+#include "./WeaponFactory.h"
 #include "./Map.h"
 #include "./ResourcePath.h"
 #include <iostream>
@@ -151,7 +152,7 @@ void Map::load(std::string filename){
                         std::cerr << "can't find: " << TorCT << std::endl;
                 }
             }
-         /*   else if (whatobject == "Gameobject"){
+            else if (whatobject == "Gameobject"){
                 for (TiXmlElement* elem1 = elem->FirstChildElement(); elem1 != nullptr; elem1 = elem1->NextSiblingElement()){
                     std::string whatWeapon = elem1->Attribute("name");
                     std::string weaponspawnX = elem1->Attribute("x");
@@ -161,17 +162,19 @@ void Map::load(std::string filename){
                     sf::Vector2f weaponCoords{weaponspawnXf, weaponspawnYf};
                     WeaponFactory w;
                     if (whatWeapon == "AK47")
-                        w.createAK47(weaponCoords);
-                    if (whatWeapon == "Glock")
-                        w.createGlock(weaponCoords);
-                    if (whatWeapon == "M4")
-                        w.createM4(weaponCoords);
-                    if (whatWeapon == "Nova")
-                        w.createNova(weaponCoords);
+                        spawnedObjects_.push_back (w.createAK47(weaponCoords));
+                    else if (whatWeapon == "M4")
+                        spawnedObjects_.push_back (w.createM4(weaponCoords));
+                    else if (whatWeapon == "Nova")
+                        spawnedObjects_.push_back (w.createNova(weaponCoords));
+                    else if (whatWeapon == "Frag")
+                        spawnedObjects_.push_back (w.createFrag(weaponCoords));
+                    else if (whatWeapon == "PPK")
+                        spawnedObjects_.push_back (w.createPPK(weaponCoords));
                     else
                         std::cerr << "can't find: " << whatWeapon << std::endl;
                 }
-            } */
+            }
         }
     }
 }
@@ -186,6 +189,10 @@ std::vector<sf::Vector2f> Map::getTspawnpoints() const {
 
 std::vector<sf::Vector2f> Map::getCTspawnpoints() const {
     return CTspawnpoints_;
+}
+
+std::vector<GameObject*> Map::getSpawnedObjects() const{
+    return spawnedObjects_;
 }
 
 void Map::drawToMap(const sf::Drawable& drawable) {

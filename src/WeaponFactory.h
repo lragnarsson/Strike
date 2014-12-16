@@ -9,7 +9,7 @@
 
 class WeaponFactory {
 public:
-     WeaponFactory() {};
+     WeaponFactory() {}
     ~WeaponFactory() = default;
 
     Weapon* createAK47(sf::Vector2f position) {

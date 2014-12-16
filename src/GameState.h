@@ -28,6 +28,7 @@ public:
     GameState();
     ~GameState();
 
+    void initWorld();
     void addPlayer(Player* player);
     void draw(sf::RenderWindow* window);
     void addUnhandledShots(std::vector<Shot*>);
