@@ -36,13 +36,18 @@ void Server::run() {
     initRemotePlayers();
     roundRestart();
 
-    boost::thread networkThread(&Server::networkFunction, this);
-
+    //boost::thread networkThread(&Server::networkFunction, this);
+    sf::Clock tickrate;
     while (true) {
-        //nh_.update();
+        nh_.update();
         readFromNetwork();
         handleGameLogic();
-        writeToNetwork();
+        if(tickrate.getElapsedTime().asMilliseconds() > 60)
+        {
+            writeToNetwork();
+            tickrate.restart();
+        }
+
     }
 }
 

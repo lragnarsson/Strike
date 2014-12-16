@@ -30,6 +30,7 @@ public:
     void load(std::string filename);
     void draw(sf::RenderWindow* window);
     void drawToMap(const sf::Drawable& drawable);
+    std::vector<GameObject*> getSpawnedObjects() const;
 
 private:
     std::vector<sf::Vector2f> makePolygonVector(std::string rawVector, float xpos, float ypos, bool forceClosedShape = false);
@@ -39,6 +40,7 @@ private:
     sf::Texture mapTexture_;
     sf::Sprite mapSprite_;
     sf::RenderTexture renderTexture_;
+    std::vector<GameObject*> spawnedObjects_;
 };
 
 

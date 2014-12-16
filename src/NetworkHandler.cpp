@@ -94,7 +94,7 @@ void NetworkHandler::recieveUDPPackets()
                                                                                                         ("PLAYER_UPDATE " + std::string(std::to_string(static_cast<PlayerUpdate*>((unpackPacket(recievePacket)))->playerID) )) : "ADD_SHOT") << std::endl;
        */
         incomingMessages_.push_back(unpackPacket(recievePacket));
-        std::cout << incomingMessages_.size() << std::endl;
+        //std::cout << incomingMessages_.size() << std::endl;
     }
 }
 

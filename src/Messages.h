@@ -32,6 +32,7 @@ public:
 protected:
     Message(int header, int protocol, int reciever) : header(header), protocol(protocol), reciever(reciever) {}
     Message(const Message&) = delete;
+    Message& operator=(const Message&) = delete;
 };
 
 class ServerAcceptConnection : public Message
