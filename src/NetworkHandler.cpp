@@ -90,7 +90,7 @@ void NetworkHandler::recieveUDPPackets()
     {
         //std::cout << "Recieved one UDP packet from: " << remoteIP.toString() << "\n Message type: " << (unpackPacket(recievePacket)->header ==  PLAYER_UPDATE ? "PLAYER_UPDATE" : "ADD_SHOT") << std::endl;
         incomingMessages_.push_back(unpackPacket(recievePacket));
-        std::cout << incomingMessages_.size() << std::endl;
+        //std::cout << incomingMessages_.size() << std::endl;
     }
 }
 
