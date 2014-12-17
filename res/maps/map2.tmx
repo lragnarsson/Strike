@@ -198,5 +198,6 @@
   <object name="PPK" x="2816" y="2912" width="64" height="32"/>
   <object name="PPK" x="224" y="224" width="64" height="32"/>
   <object name="PPK" x="224" y="288" width="64" height="32"/>
+  <object name="Awp" x="1472" y="1664" width="224" height="32"/>
  </objectgroup>
 </map>

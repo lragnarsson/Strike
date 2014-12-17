@@ -21,7 +21,7 @@ Lage Ragnarsson
 #define TIXML_USE_STL
 
 Map::Map() {
-    renderTexture_.create(5120, 2880);
+    renderTexture_.create(3200, 3200);
     renderTexture_.clear();
     renderTexture_.display();
 }
@@ -171,6 +171,8 @@ void Map::load(std::string filename){
                         spawnedObjects_.push_back (w.createFrag(weaponCoords));
                     else if (whatWeapon == "PPK")
                         spawnedObjects_.push_back (w.createPPK(weaponCoords));
+                    else if (whatWeapon == "Awp")
+                        spawnedObjects_.push_back (w.createAwp(weaponCoords));
                     else
                         std::cerr << "can't find: " << whatWeapon << std::endl;
                 }
