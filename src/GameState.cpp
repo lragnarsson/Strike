@@ -41,7 +41,21 @@ GameState::~GameState() {
 
 void GameState::addPlayer(Player* playerP) {
     players_.push_back(playerP);
-}
+}if (shot->getTargetID() != -1) {
+                gameState_.addAnimatedDecal(
+                    new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
+                                      textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
+                                      20, 16, false, 4));
+                gameState_.addAnimatedDecal(
+                    new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
+                                      sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
+                                      sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
+            }
+            else
+              gameState_.addAnimatedDecal(
+                  new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
+                                    textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                    20, 25, false, 25));
 
 Team* GameState::ctTeam() {
     return &ctTeam_;
@@ -66,7 +80,21 @@ void GameState::addHandledShot(Shot* shot) {
 
 void GameState::removeOldShots(bool ignoreTime) {
     int elapsed = gameTime_.getElapsedTime().asMilliseconds();
-    auto f = [ignoreTime, elapsed](Shot* s) {
+    auto f = [ignoreTime, elapsed](Shot* s) {if (shot->getTargetID() != -1) {
+                gameState_.addAnimatedDecal(
+                    new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
+                                      textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
+                                      20, 16, false, 4));
+                gameState_.addAnimatedDecal(
+                    new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
+                                      sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
+                                      sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
+            }
+            else
+              gameState_.addAnimatedDecal(
+                  new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
+                                    textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
+                                    20, 25, false, 25));
         bool tooOld = ignoreTime || (elapsed - s->getTimestamp().asMilliseconds() > 2000);
         if (tooOld)
             delete s;
@@ -92,13 +120,14 @@ void GameState::draw(sf::RenderWindow* window) {
     }
     for (auto player : players_) {
         if (player->getLastSeen() < 500) {
-            player->setColor(sf::Color(255, 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 100, player->getLastSeen()))));
+            player->setColor(sf::Color((player->getTeam()->getTeamID() == T_TEAM ? 255 : 0 ), 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 100, player->getLastSeen()))));
             window->draw(*player);
         }
     }
 
     for (auto shot : handledShots_) {
-        window->draw(*shot);
+        if (gameTime_.getElapsedTime().asMilliseconds() - shot->getTimestamp().asMilliseconds() < 50)
+            window->draw(*shot);
     }
 
     for (auto decal : animatedDecals_) {
