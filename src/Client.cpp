@@ -90,6 +90,7 @@ void Client::readFromNetwork() {
                                                    sf::Vector2f(msg->endPointXPos, msg->endPointYPos),
                                                    msg->damage,
                                                    soundBuffers_["ak47.wav"]));
+                createDecals();
                 break;
                 delete msg;
             }
@@ -110,13 +111,13 @@ void Client::readFromNetwork() {
             case GAME_OBJ_UPDATE: {
                 GameObjUpdate* goumsg {static_cast<GameObjUpdate*>(message)};
                 // Do some stuff to handle the game object update...
-                
-                
+
+
                 std::cout << "I recieved a GAME_OBJECT_UPDATE! It had the following members: \n"
                             << "(xpos, yPos): (" << goumsg->xPos << ", " << goumsg->yPos << ")\n"
                             << "(isEquipped, ownerID (Probalby yibberish if not equipped)): ("
                 << goumsg->isEquipped << ", " << goumsg->ownerID << ")" << std::endl;
-                
+
                 // ... finished with updating the state of gameObjects =)
                 delete message;
                 break;
