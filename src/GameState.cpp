@@ -41,21 +41,7 @@ GameState::~GameState() {
 
 void GameState::addPlayer(Player* playerP) {
     players_.push_back(playerP);
-}if (shot->getTargetID() != -1) {
-                gameState_.addAnimatedDecal(
-                    new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
-                                      textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
-                                      20, 16, false, 4));
-                gameState_.addAnimatedDecal(
-                    new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
-                                      sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
-                                      sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
-            }
-            else
-              gameState_.addAnimatedDecal(
-                  new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
-                                    textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
-                                    20, 25, false, 25));
+}
 
 Team* GameState::ctTeam() {
     return &ctTeam_;
@@ -80,21 +66,7 @@ void GameState::addHandledShot(Shot* shot) {
 
 void GameState::removeOldShots(bool ignoreTime) {
     int elapsed = gameTime_.getElapsedTime().asMilliseconds();
-    auto f = [ignoreTime, elapsed](Shot* s) {if (shot->getTargetID() != -1) {
-                gameState_.addAnimatedDecal(
-                    new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(1.f, 1.f),
-                                      textures_["blood_hit_07.png"], sf::IntRect(0, 0, 128, 128),
-                                      20, 16, false, 4));
-                gameState_.addAnimatedDecal(
-                    new AnimatedDecal(shot->getEndPoint() + shot->getDirection() * 128.f,
-                                      sf::Vector2f(1.f, 1.f), textures_["blood_hit_02.png"],
-                                      sf::IntRect(0, 0, 128, 128), 20, 16, false, 4));
-            }
-            else
-              gameState_.addAnimatedDecal(
-                  new AnimatedDecal(shot->getEndPoint(), sf::Vector2f(0.4f,0.4f),
-                                    textures_["explosion1.png"], sf::IntRect(0, 0, 192, 195),
-                                    20, 25, false, 25));
+    auto f = [ignoreTime, elapsed](Shot* s) {
         bool tooOld = ignoreTime || (elapsed - s->getTimestamp().asMilliseconds() > 2000);
         if (tooOld)
             delete s;
