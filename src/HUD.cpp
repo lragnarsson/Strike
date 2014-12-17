@@ -1,3 +1,12 @@
+/***************************************
+HUD.cpp
+
+Heads up Display
+
+Written by
+Jesper Otterholm
+Filip Östman
+***************************************/
 #include "./HUD.h"
 
 HUD::HUD()  {

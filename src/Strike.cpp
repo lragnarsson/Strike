@@ -25,11 +25,16 @@ char command;
 std::map<std::string, sf::Texture*> Client::textures_;
 std::map<std::string, sf::SoundBuffer*> Client::soundBuffers_;
 
-void startClient(std::string name, unsigned int team, std::string ip) {
+void startClient(std::string name, std::string team, std::string ip) {
     std::cout << name << "  " << team << "  " << ip << std::endl;
 
     Client client;
-    if (client.connectToServer(name, team, sf::IpAddress(ip))) {
+    unsigned int intteam;
+    if (team == "T")
+        intteam = 0;
+    else
+        intteam = 1;
+    if (client.connectToServer(name, intteam, sf::IpAddress(ip))) {
         client.run();
     }
     else
@@ -63,10 +68,10 @@ void networkFunction() {
 
 void printHelp() {
     std::cout << "  h                            Print this help messsage\n";
-    std::cout << "  c <name> <team> <ip>         Start a game client\n";
-    std::cout << "  s <maxplayers> <mapname>     Start a game server\n";
-    std::cout << "  q                            Quit Strike\n";
+    std::cout << "  c <name> <T or CT> <ip>      Start a game client and connect to server\n";
+    std::cout << "  s                            Start a game server\n";
     std::cout << "  l                            Start local client\n";
+    std::cout << "  q                            Quit Strike\n";
 }
 
 void getCommand() {
@@ -85,7 +90,7 @@ void getCommand() {
             printHelp();
         else if (command == 'c') {
             std::string name;
-            unsigned int team;
+            std::string team;
             std::string ip;
             ss >> name >> team >> ip;
             startClient(name, team, ip);
@@ -111,7 +116,7 @@ void getCommand() {
 }
 
 void runMenu() {
-    std::cout << "Strike: Local Defensive\ntype h for help." << std::endl;
+    std::cout << "\n\nWelcome to Strike: Local Defensive\n\nA game created by:\nJesper Otterholm\nLage Ragnarsson\nErik Sköld\nRasmus Vilhelmsson\nIsak Wiberg\nFilip Östman\n\nType h for help." << std::endl;
     std::istringstream args;
     do {
         try {

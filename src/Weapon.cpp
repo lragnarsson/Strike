@@ -5,6 +5,7 @@ Polymorph class structure representing different weapons and types.
 
 Written by:
 Filip Östman
+Lage Ragnarsson
 ***************************************/
 
 #include "./Weapon.h"

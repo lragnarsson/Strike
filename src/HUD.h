@@ -1,3 +1,12 @@
+/***************************************
+HUD.h
+
+Heads up Display
+
+Written by
+Jesper Otterholm
+Filip Östman
+***************************************/
 #ifndef _HUD_
 #define _HUD_
 
