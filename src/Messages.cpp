@@ -76,27 +76,27 @@ sf::Packet InitialInformation::asPacket()
 
 PlayerUpdate::PlayerUpdate(sf::Packet packet) : Message(PLAYER_UPDATE, UDP, -1)
 {
-    packet >> playerID >> xCoord >> yCoord >> rotation >> health;
+    packet >> playerID >> xCoord >> yCoord >> rotation >> health >> speed;
 }
 
 sf::Packet PlayerUpdate::asPacket()
 {
     sf::Packet pkt;
-    pkt << header << playerID << xCoord << yCoord << rotation << health;
+    pkt << header << playerID << xCoord << yCoord << rotation << health << speed;
     return pkt;
 }
 
 AddShot::AddShot(sf::Packet packet) : Message(ADD_SHOT, UDP, -1)
 {
     packet >> clientID >> originXPos >> originYPos >> directionXPos
-    >> directionYPos >> endPointXPos >> endPointYPos >> damage;
+           >> directionYPos >> endPointXPos >> endPointYPos >> damage >> sound;
 }
 
 sf::Packet AddShot::asPacket()
 {
     sf::Packet pkt;
     pkt << header << clientID << originXPos << originYPos << directionXPos
-    << directionYPos << endPointXPos << endPointYPos << damage;
+        << directionYPos << endPointXPos << endPointYPos << damage << sound;
     return pkt;
 }
 

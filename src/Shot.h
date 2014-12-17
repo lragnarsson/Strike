@@ -19,10 +19,10 @@ class Shot: public sf::Drawable, public sf::Sound {
 public:
     Shot() = default;
     Shot(int clientID, sf::Vector2f origin, sf::Vector2f direction,
-         sf::Vector2f endPoint, int damage, sf::SoundBuffer* soundBuffer);
+         sf::Vector2f endPoint, int damage, sf::SoundBuffer* soundBuffer, int soundID);
     Shot(int clientID, sf::Vector2f origin, sf::Vector2f direction,
-         sf::Vector2f endPoint, int damage);
-    Shot(int clientID, Ray ray_, sf::Vector2f endPoint, int damage);
+         sf::Vector2f endPoint, int damage, int soundID);
+    Shot(int clientID, Ray ray_, sf::Vector2f endPoint, int damage, int soundID);
     Shot(const Shot& shot) = default;
     virtual ~Shot() = default;
 
@@ -39,6 +39,7 @@ public:
     void setTargetID(int id);
     bool getSoundstatus() const;
     void setSoundstatus(bool status);
+    int getSoundID();
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void play();
@@ -51,6 +52,7 @@ private:
     int damage_;
     int targetID_{-1};
     bool soundHasPlayed_{false};
+    int soundID_;
 };
 
 #endif // _SHOT_

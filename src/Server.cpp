@@ -113,19 +113,21 @@ void Server::writeToNetwork() {
     //std::vector<Message*> outboundMessages;
     for (auto player : gameState_.getPlayers())
         outboundMessages_.push_back(new PlayerUpdate(player->getClientID(),
-                                                    player->getPosition().x,
-                                                    player->getPosition().y,
-                                                    player->getRotation(),
-                                                    player->getHealth()));
+                                                     player->getPosition().x,
+                                                     player->getPosition().y,
+                                                     player->getRotation(),
+                                                     player->getHealth(),
+                                                     player->getSpeed()));
     for (auto shot : gameState_.getHandledShots())
         outboundMessages_.push_back(new AddShot(shot->getClientID(),
-                                               shot->getOrigin().x,
-                                               shot->getOrigin().y,
-                                               shot->getDirection().x,
-                                               shot->getDirection().y,
-                                               shot->getEndPoint().x,
-                                               shot->getEndPoint().y,
-                                               shot->getDamage()));
+                                                shot->getOrigin().x,
+                                                shot->getOrigin().y,
+                                                shot->getDirection().x,
+                                                shot->getDirection().y,
+                                                shot->getEndPoint().x,
+                                                shot->getEndPoint().y,
+                                                shot->getDamage(),
+                                                shot->getSoundID()));
     nh_.addToOutbox(outboundMessages_);
     outboundMessages_.clear();
     gameState_.removeOldShots(true);
@@ -210,6 +212,7 @@ void Server::updatePlayer(PlayerUpdate* message) {
       if (player->getClientID() == message->playerID) {
           player->move(message->xCoord, message->yCoord);
           player->setRotation(message->rotation);
+          player->setSpeed(message->speed);
       }
       //delete message;
 }
@@ -220,7 +223,8 @@ void Server::handleShot(AddShot* message) {
                           sf::Vector2f(message->originXPos, message->originYPos),
                           sf::Vector2f(message->directionXPos, message->directionYPos),
                           sf::Vector2f(message->originXPos, message->originYPos) + sf::Vector2f(message->directionXPos, message->directionYPos) * maxDistance,
-                          message->damage);
+                          message->damage,
+                          message->sound);
     Player* hitPlayer {nullptr};
     
     sf::Vector2f centerAfterCollision = {shot->getEndPoint()};

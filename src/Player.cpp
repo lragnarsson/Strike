@@ -155,6 +155,7 @@ void Player::calculateMoveVector(const sf::Vector2f& inputVector,
     if (sgn(targetSpeed.y - curSpeed_.y) != direction.y)
         curSpeed_.y = targetSpeed.y;
     moveVector_ = curSpeed_ * elapsedSeconds;
+    speed_ = length(curSpeed_);
 }
 
 void Player::handleRotation(const sf::Vector2f& aimVector) {
@@ -185,9 +186,7 @@ sf::CircleShape* Player::getCrosshair() {
 
 void Player::animate() {
       if (animClock_.getElapsedTime().asMilliseconds() >= frameTime_) {
-          if (length(curSpeed_) > 400)
-              currentRow_ = 4;
-          else if (length(curSpeed_) > 0)
+          if (speed_ > 0)
               currentRow_ = 2;
           else
               currentRow_ = 0;
@@ -202,6 +201,17 @@ void Player::animate() {
               currentFrame_++;
           animClock_.restart();
       }
+}
+
+AnimatedDecal* Player::getDeathAnimation() {
+    deathAnimationStarted_ = true;
+    return new AnimatedDecal(getPosition(), sf::Vector2f(1.f, 1.f), &spriteSheet_,
+                             sf::IntRect(0, frameHeight_ * 4, frameWidth_, frameHeight_),
+                             50, 6, true, 6);
+}
+
+bool Player::deathAnimationStarted() {
+    return deathAnimationStarted_;
 }
 
 bool Player::inFireAnimation() {
@@ -293,4 +303,12 @@ GameObject* Player::getEquippedGameobject() const {
     if (inventory_.size() != 0)
         obj = inventory_.at(equippedIndex_);
     return obj;
+}
+
+void Player::setSpeed(float s) {
+    speed_ = s;
+}
+
+float Player::getSpeed() {
+    return speed_;
 }

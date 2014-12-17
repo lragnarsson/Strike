@@ -125,7 +125,6 @@ void Controller::updatePlayerInputVector() {
 }
 
 void Controller::playerMove() {
-    player_->animate();
     player_->move();
 }
 

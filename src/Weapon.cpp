@@ -16,11 +16,11 @@ Weapon::Weapon(unsigned int newAmmo, unsigned int newAdditionalAmmo,
                int newReloadTime, int newDamage, float newCHDistance,
                sf::Texture* texture, sf::SoundBuffer* soundBuffer,
                sf::Vector2f position, float radius, std::string name,
-               float viewDistanceMultiplier)
+               float viewDistanceMultiplier, int soundID)
     : GameObject(texture, soundBuffer, position, radius, newCHDistance, name,
                  viewDistanceMultiplier), ammo_(newAmmo),
       additionalAmmo_(newAdditionalAmmo), magazineSize_(newMagazineSize),
-      fireRate_(newFireRate), reloadTime_(newReloadTime), damage_(newDamage) {}
+      fireRate_(newFireRate), reloadTime_(newReloadTime), damage_(newDamage), soundID_(soundID) {}
 
 void Weapon::reloadWeapon() {
     if (ammo_ != magazineSize_) {
@@ -67,7 +67,7 @@ std::vector<Shot*> Weapon::fire(int clientID, const sf::Vector2f& pos,
         randomVector.x = (-20 + (std::rand() % 41) + dir.x*100) * sprayMultiplier_;
         randomVector.y = (-20 + (std::rand() % 41) + dir.y*100) * sprayMultiplier_;
         shotVector.push_back(new Shot{clientID, pos, dir + randomVector,
-                                      pos + dir * 1000.f + randomVector, damage_, soundBuffer_});
+                             pos + dir * 1000.f + randomVector, damage_, soundBuffer_, soundID_});
         sprayMultiplier_ += 20.0f;
         return shotVector;
     } else {
@@ -101,10 +101,10 @@ SemiAutomaticWeapon::SemiAutomaticWeapon(unsigned int ammo, unsigned int additio
                                          int reloadTime, int Damage, float CHDistance,
                                          sf::Texture* texture, sf::SoundBuffer* soundBuffer,
                                          sf::Vector2f position, float radius, std::string name,
-                                         float viewDistanceMultiplier)
+                                         float viewDistanceMultiplier, int soundID)
     : Weapon(ammo, additionalAmmo, magazineSize, fireRate, reloadTime,
              Damage, CHDistance, texture, soundBuffer, position, radius, name,
-             viewDistanceMultiplier) {}
+             viewDistanceMultiplier, soundID) {}
 
 std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& pos,
                                              const sf::Vector2f& dir) {
@@ -128,7 +128,7 @@ std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& p
         randomVector.x = (-20 + (std::rand() % 41) + dir.x*100) * sprayMultiplier_;
         randomVector.y = (-20 + (std::rand() % 41) + dir.y*100) * sprayMultiplier_;
         shotVector.push_back(new Shot{clientID, pos, dir + randomVector, pos + 1000.f * dir + randomVector,
-                                      damage_, soundBuffer_});
+                             damage_, soundBuffer_, soundID_});
         sprayMultiplier_ += 20.0f;
         return shotVector;
     } else {
@@ -140,10 +140,10 @@ Shotgun::Shotgun(unsigned int ammo, unsigned int additionalAmmo, unsigned int ma
                  int fireRate, int reloadTime, int Damage, int numberOfBullets, float CHDistance,
                  sf::Texture* texture, sf::SoundBuffer* soundBuffer,
                  sf::Vector2f position, float radius, std::string name,
-                 float viewDistanceMultiplier)
+                 float viewDistanceMultiplier, int soundID)
     : SemiAutomaticWeapon(ammo, additionalAmmo, magazineSize, fireRate, reloadTime,
                           Damage, CHDistance, texture, soundBuffer, position, radius, name,
-                          viewDistanceMultiplier),
+                          viewDistanceMultiplier, soundID),
       numberOfBullets_{numberOfBullets} {}
 
 std::vector<Shot*> Shotgun::fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) {
@@ -164,7 +164,7 @@ std::vector<Shot*> Shotgun::fire(int clientID, const sf::Vector2f& pos, const sf
             randomVector.y = -20 + (std::rand() % 41) + dir.y*100;
 
             shotVector.push_back(new Shot{clientID, pos, randomVector,
-                                          pos + randomVector * 10000.0f, damage_, soundBuffer_});
+                                 pos + randomVector * 10000.0f, damage_, soundBuffer_, soundID_});
         }
         return shotVector;
     } else {

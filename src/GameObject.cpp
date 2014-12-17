@@ -72,9 +72,9 @@ void GameObject::setViewDistanceMultiplier(float newConstant) {
 // Grenade
 Grenade::Grenade(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
                  sf::Vector2f position, float radius, float CHDistance, std::string name,
-                 float viewDistanceMultiplier)
+                 float viewDistanceMultiplier, int soundID)
     : GameObject(texture, soundBuffer, position, radius, CHDistance, name,
-                 viewDistanceMultiplier) {}
+                 viewDistanceMultiplier), soundID_(soundID) {}
 
 std::string GameObject::getName() {
     return weaponName_;
@@ -105,7 +105,7 @@ std::vector<Shot*> Grenade::explode() {
         dir = normalize(sf::Vector2f(std::rand() % 100 - 50, std::rand() % 100 - 50));
         shrapnel.push_back(new Shot(clientID_, getPosition(), dir,
                                     getPosition() + dir * shrapnelDistance_, shrapnelDamage_,
-                                    soundBuffer_));
+                                    soundBuffer_, soundID_));
     }
     return shrapnel;
 }

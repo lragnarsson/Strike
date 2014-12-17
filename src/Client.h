@@ -63,6 +63,7 @@ private:
     void roundRestart();
     void handleSounds();
     void handleGameObjects();
+    std::string getSoundName(int ID);
 
     int clientID_ = 1337; // this changes after you connect to a server and recieve a new one.
     

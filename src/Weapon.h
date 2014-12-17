@@ -23,7 +23,7 @@ public:
            int fireRate, int reloadTime, int Damage, float CHDistance,
            sf::Texture* texture, sf::SoundBuffer* soundBuffer,
            sf::Vector2f position, float radius, std::string name,
-           float viewDistanceMultiplier);
+           float viewDistanceMultiplier, int soundID);
     Weapon(const Weapon& weapon) = default;
     void reloadWeapon();
     virtual std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir);
@@ -33,7 +33,6 @@ public:
     int getMagazineAmmo() const;
     int getAdditionalAmmo() const;
     bool isAnimating();
-    
 
 private:
     unsigned int ammo_;
@@ -50,7 +49,8 @@ private:
     bool hasFired_;
     int fireAnimationTime_{100};
     float viewDistanceMultiplier_ = 1;
-    
+    int soundID_;
+
     friend class SemiAutomaticWeapon;
     friend class Shotgun;
 };
@@ -63,7 +63,7 @@ public:
                         int fireRate, int reloadTime, int Damage, float CHDistance,
                         sf::Texture* texture, sf::SoundBuffer* soundBuffer,
                         sf::Vector2f position, float radius, std::string name,
-                        float viewDistanceMultiplier);
+                        float viewDistanceMultiplier, int soundID);
     virtual std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) override;
 private:
     friend class Shotgun;
@@ -77,7 +77,7 @@ public:
             int fireRate, int reloadTime, int Damage, int numberOfBullets, float CHDistance,
             sf::Texture* texture, sf::SoundBuffer* soundBuffer,
             sf::Vector2f position, float radius, std::string name,
-            float viewDistanceMultiplier);
+            float viewDistanceMultiplier, int soundID);
     std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) override;
 private:
     int numberOfBullets_;

@@ -44,7 +44,7 @@ class Grenade : public GameObject {
 public:
     Grenade(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
             sf::Vector2f position, float radius, float CHDistance, std::string name,
-            float viewDistanceMultiplier);
+            float viewDistanceMultiplier, int soundID);
     ~Grenade() noexcept {}
 
     bool isStationary() override;
@@ -60,6 +60,7 @@ protected:
     int shrapnelDamage_{50};
     float shrapnelDistance_{300.f};
     bool exploaded_{false};
+    int soundID_;
 };
 
 #endif

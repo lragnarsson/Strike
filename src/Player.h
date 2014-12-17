@@ -17,6 +17,7 @@ Filip Östman
 #include "./PhysicalObject.h"
 #include "./Team.h"
 #include "./GameObject.h"
+#include "./Decal.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -51,7 +52,7 @@ public:
     void move();
     void move(sf::Vector2f absolutePosition);
     void move(float newXPos, float newYPos);
-    
+
     void reloadWeapon();
     void setSpeedMultiplier(float speed);
     void hasNotFired();
@@ -67,6 +68,8 @@ public:
     void animate();
     int getHealth();
     bool dropBlood();
+    AnimatedDecal* getDeathAnimation();
+    bool deathAnimationStarted();
 
     bool holdingFirearm();
     bool holdingGrenade();
@@ -80,6 +83,8 @@ public:
     void pickUpObject(GameObject* gameObject);
     std::string getEquippedWeapon();
     GameObject* getEquippedGameobject() const;
+    void setSpeed(float s);
+    float getSpeed();
 
 private:
     int health_ = 100;
@@ -91,6 +96,7 @@ private:
     float maxSpeed_ = 400.0f;  // pixels per second
     float acceleration_ = 3000.0f;  // pixels per second^2
     sf::Clock lastSeen;
+    float speed_;
 
     std::vector<GameObject*> inventory_;
     int equippedIndex_{0};
@@ -118,6 +124,7 @@ private:
     bool inFireAnimation();
     void initCrosshair();
     void initAnimation(sf::Texture* texture);
+    bool deathAnimationStarted_{false};
 };
 
 #endif // _PLAYER_

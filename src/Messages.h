@@ -117,11 +117,12 @@ public:
     float yCoord;
     float rotation;
     int health;
+    float speed;
 
     PlayerUpdate() = delete;
     PlayerUpdate(sf::Packet);
-    PlayerUpdate(int pID, float x, float y, float r, int h, int reciever = -1) : Message(PLAYER_UPDATE, UDP, reciever),
-        playerID(pID), xCoord(x), yCoord(y), rotation(r), health(h) {}
+PlayerUpdate(int pID, float x, float y, float r, int h, float s, int reciever = -1) : Message(PLAYER_UPDATE, UDP, reciever),
+        playerID(pID), xCoord(x), yCoord(y), rotation(r), health(h), speed(s) {}
 
     sf::Packet asPacket() override;
 };
@@ -138,12 +139,13 @@ public:
     float endPointXPos;
     float endPointYPos;
     int damage;
+    int sound;
 
     AddShot() = delete;
     AddShot(sf::Packet);
-    AddShot(int cID, float origXP, float origYP, float dirXP, float dirYP, float endPXP, float endPYP, int dmg, int reciever = -1) :
+    AddShot(int cID, float origXP, float origYP, float dirXP, float dirYP, float endPXP, float endPYP, int dmg, int s, int reciever = -1) :
         Message(ADD_SHOT, UDP, reciever), clientID(cID), originXPos(origXP), originYPos(origYP), directionXPos(dirXP),
-            directionYPos(dirYP), endPointXPos(endPXP), endPointYPos(endPYP), damage(dmg) {}
+            directionYPos(dirYP), endPointXPos(endPXP), endPointYPos(endPYP), damage(dmg), sound(s) {}
 
     sf::Packet asPacket() override;
 };

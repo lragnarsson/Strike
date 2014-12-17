@@ -11,14 +11,14 @@ Rasmus Vilhelmsson
 #include "Shot.h"
 
 Shot::Shot(int newClientID, sf::Vector2f newOrigin, sf::Vector2f newDirection,
-           sf::Vector2f newEnd, int newDamage, sf::SoundBuffer* soundBuffer)
+           sf::Vector2f newEnd, int newDamage, sf::SoundBuffer* soundBuffer, int soundID)
     : sf::Sound(*soundBuffer), clientID_(newClientID), origin_(newOrigin),
-      direction_(newDirection), endPoint_(newEnd), damage_(newDamage) {}
+      direction_(newDirection), endPoint_(newEnd), damage_(newDamage), soundID_(soundID) {}
 
 Shot::Shot(int newClientID, sf::Vector2f newOrigin, sf::Vector2f newDirection,
-           sf::Vector2f newEnd, int newDamage)
+           sf::Vector2f newEnd, int newDamage, int soundID)
     : sf::Sound(), clientID_(newClientID), origin_(newOrigin),
-      direction_(newDirection), endPoint_(newEnd), damage_(newDamage) {}
+      direction_(newDirection), endPoint_(newEnd), damage_(newDamage), soundID_(soundID) {}
 
 void Shot::setEndPoint(sf::Vector2f newEndPoint) {
     endPoint_ = newEndPoint;
@@ -85,4 +85,8 @@ bool Shot::getSoundstatus() const {
 
 void Shot::setSoundstatus(bool status) {
     soundHasPlayed_ = status;
+}
+
+int Shot::getSoundID() {
+    return soundID_;
 }

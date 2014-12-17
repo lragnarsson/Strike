@@ -92,6 +92,7 @@ void GameState::draw(sf::RenderWindow* window) {
     }
     for (auto player : players_) {
         if (player->getLastSeen() < 500) {
+            player->animate();
             player->setColor(sf::Color((player->getTeam()->getTeamID() == T_TEAM ? 255 : 0 ), 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 100, player->getLastSeen()))));
             window->draw(*player);
         }

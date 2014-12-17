@@ -19,7 +19,7 @@ Filip Östman
 #include "./Team.h"
 
 
-Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike", sf::Style::Fullscreen) {
+Client::Client() : renderWindow_(sf::VideoMode(1366, 768), "Strike", sf::Style::Fullscreen) {
     renderWindow_.setFramerateLimit(50);
     renderWindow_.setMouseCursorVisible(false);
 
@@ -91,7 +91,8 @@ void Client::readFromNetwork() {
                                                    sf::Vector2f(msg->directionXPos, msg->directionYPos),
                                                    sf::Vector2f(msg->endPointXPos, msg->endPointYPos),
                                                    msg->damage,
-                                                   soundBuffers_["ak47.wav"]));
+                                                   soundBuffers_[getSoundName(msg->sound)],
+                                                   msg->sound));
                 createDecals();
                 break;
                 delete msg;
@@ -104,6 +105,7 @@ void Client::readFromNetwork() {
                         if (player->getClientID() != controller_.getPlayer()->getClientID()) {
                             player->setRotation(msg->rotation);
                             player->move(msg->xCoord, msg->yCoord);
+                            player->setSpeed(msg->speed);
                         }
                     }
                 }
@@ -173,6 +175,7 @@ void Client::writeToNetwork() {
                                                 controller_.getPlayer()->getPosition().y,
                                                 controller_.getPlayer()->getRotation(),
                                                 controller_.getPlayer()->getHealth(),
+                                                controller_.getPlayer()->getSpeed(),
                                                 0));
     for (auto shot : gameState_.getUnhandledShots())
         outboundMessages.push_back(new AddShot(shot->getClientID(),
@@ -182,7 +185,8 @@ void Client::writeToNetwork() {
                                                shot->getDirection().y,
                                                shot->getEndPoint().x,
                                                shot->getEndPoint().y,
-                                               shot->getDamage()));
+                                               shot->getDamage(),
+                                               shot->getSoundID()));
     nh_.addToOutbox(outboundMessages);
     gameState_.migrateShots();
 }
@@ -314,10 +318,12 @@ void Client::createDecals() {
         }
     }
     for (auto player : gameState_.getPlayers()) {
-      if (player->dropBlood()) {
-        gameState_.addDecal(new Decal(player->getPosition() - 0.01f * sf::Vector2f((float)(std::rand() % 10), (float)(std::rand() % 10)),
-                                      sf::Vector2f(0.05f,0.05f), textures_["blood_drop_1.png"], sf::IntRect(0, 0, 388, 388)));
-      }
+        if (!player->deathAnimationStarted()) {
+            gameState_.addAnimatedDecal(player->getDeathAnimation());
+        } else if (player->dropBlood()) {
+            gameState_.addDecal(new Decal(player->getPosition() - 0.01f * sf::Vector2f((float)(std::rand() % 10), (float)(std::rand() % 10)),
+                                          sf::Vector2f(0.05f,0.05f), textures_["blood_drop_1.png"], sf::IntRect(0, 0, 388, 388)));
+        }
     }
 }
 
@@ -423,4 +429,21 @@ void Client::handleGameObjects() {
   gameState_.movingToStationaryObjects();
   gameState_.removeGameObjects();
   clock_.restart();
+}
+
+std::string Client::getSoundName(int ID) {
+    switch (ID) {
+      case 0: return "ak47.wav";
+        break;
+      case 1: return "m4.wav";
+        break;
+      case 2: return "ppk.wav";
+        break;
+      case 3: return "nova.wav";
+        break;
+      case 4: return "grenade.wav";
+          break;
+      default: return "ak47.wav";
+        break;
+    }
 }
