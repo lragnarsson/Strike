@@ -79,6 +79,7 @@ public:
     void lastEquipped();
     void pickUpObject(GameObject* gameObject);
     std::string getEquippedWeapon();
+    GameObject* getEquippedGameobject() const;
 
 private:
     int health_ = 100;

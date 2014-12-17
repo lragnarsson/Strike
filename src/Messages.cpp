@@ -111,3 +111,13 @@ sf::Packet RoundRestart::asPacket()
     pkt << header << tTeamScore << ctTeamScore << spawnpointIndex;
     return pkt;
 }
+
+GameObjUpdate::GameObjUpdate(sf::Packet packet) : Message(GAME_OBJ_UPDATE, UDP, -1) {
+    packet >> xPos >> yPos >> isEquipped >> ownerID;
+}
+
+sf::Packet GameObjUpdate::asPacket() {
+    sf::Packet pkt;
+    pkt << header << xPos << yPos << isEquipped << ownerID;
+    return pkt;
+}

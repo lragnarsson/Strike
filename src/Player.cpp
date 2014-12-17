@@ -287,3 +287,10 @@ std::string Player::getEquippedWeapon() {
     return inventory_.at(equippedIndex_)->getName();
   return "";
 }
+
+GameObject* Player::getEquippedGameobject() const {
+    GameObject* obj = nullptr;
+    if (inventory_.size() != 0)
+        obj = inventory_.at(equippedIndex_);
+    return obj;
+}

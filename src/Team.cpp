@@ -17,6 +17,9 @@ void Team::setTeamID(int teamID) {
 	teamID_ = teamID;
 }
 
+void Team::increaseScore() {
+    score_++;
+}
 int Team::getScore() const{
     return score_;
 }

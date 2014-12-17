@@ -21,7 +21,8 @@ public:
     Weapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
            int fireRate, int reloadTime, int Damage, float CHDistance,
            sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-           sf::Vector2f position, float radius, std::string name);
+           sf::Vector2f position, float radius, std::string name,
+           float viewDistanceMultiplier);
     Weapon(const Weapon& weapon) = default;
     void reloadWeapon();
     virtual std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir);
@@ -47,6 +48,8 @@ private:
     sf::Clock animTimer_;
     bool hasFired_;
     int fireAnimationTime_{100};
+    float viewDistanceMultiplier_ = 1;
+    
     friend class SemiAutomaticWeapon;
     friend class Shotgun;
 };
@@ -58,7 +61,8 @@ public:
     SemiAutomaticWeapon(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
                         int fireRate, int reloadTime, int Damage, float CHDistance,
                         sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-                        sf::Vector2f position, float radius, std::string name);
+                        sf::Vector2f position, float radius, std::string name,
+                        float viewDistanceMultiplier);
     virtual std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) override;
 private:
     friend class Shotgun;
@@ -71,7 +75,8 @@ public:
     Shotgun(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
             int fireRate, int reloadTime, int Damage, int numberOfBullets, float CHDistance,
             sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-            sf::Vector2f position, float radius, std::string name);
+            sf::Vector2f position, float radius, std::string name,
+            float viewDistanceMultiplier);
     std::vector<Shot*> fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) override;
 private:
     int numberOfBullets_;

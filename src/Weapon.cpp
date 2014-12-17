@@ -14,8 +14,10 @@ Weapon::Weapon(unsigned int newAmmo, unsigned int newAdditionalAmmo,
                unsigned int newMagazineSize, int newFireRate,
                int newReloadTime, int newDamage, float newCHDistance,
                sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-               sf::Vector2f position, float radius, std::string name)
-    : GameObject(texture, soundBuffer, position, radius, newCHDistance, name), ammo_(newAmmo),
+               sf::Vector2f position, float radius, std::string name,
+               float viewDistanceMultiplier)
+    : GameObject(texture, soundBuffer, position, radius, newCHDistance, name,
+                 viewDistanceMultiplier), ammo_(newAmmo),
       additionalAmmo_(newAdditionalAmmo), magazineSize_(newMagazineSize),
       fireRate_(newFireRate), reloadTime_(newReloadTime), damage_(newDamage) {}
 
@@ -72,6 +74,7 @@ std::vector<Shot*> Weapon::fire(int clientID, const sf::Vector2f& pos,
     }
 }
 
+
 void Weapon::hasNotFired() {
     hasFired_ = false;
 }
@@ -96,9 +99,11 @@ SemiAutomaticWeapon::SemiAutomaticWeapon(unsigned int ammo, unsigned int additio
                                          unsigned int magazineSize, int fireRate,
                                          int reloadTime, int Damage, float CHDistance,
                                          sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-                                         sf::Vector2f position, float radius, std::string name)
+                                         sf::Vector2f position, float radius, std::string name,
+                                         float viewDistanceMultiplier)
     : Weapon(ammo, additionalAmmo, magazineSize, fireRate, reloadTime,
-             Damage, CHDistance, texture, soundBuffer, position, radius, name) {}
+             Damage, CHDistance, texture, soundBuffer, position, radius, name,
+             viewDistanceMultiplier) {}
 
 std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& pos,
                                              const sf::Vector2f& dir) {
@@ -133,9 +138,11 @@ std::vector<Shot*> SemiAutomaticWeapon::fire(int clientID, const sf::Vector2f& p
 Shotgun::Shotgun(unsigned int ammo, unsigned int additionalAmmo, unsigned int magazineSize,
                  int fireRate, int reloadTime, int Damage, int numberOfBullets, float CHDistance,
                  sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-                 sf::Vector2f position, float radius, std::string name)
+                 sf::Vector2f position, float radius, std::string name,
+                 float viewDistanceMultiplier)
     : SemiAutomaticWeapon(ammo, additionalAmmo, magazineSize, fireRate, reloadTime,
-                          Damage, CHDistance, texture, soundBuffer, position, radius, name),
+                          Damage, CHDistance, texture, soundBuffer, position, radius, name,
+                          viewDistanceMultiplier),
       numberOfBullets_{numberOfBullets} {}
 
 std::vector<Shot*> Shotgun::fire(int clientID, const sf::Vector2f& pos, const sf::Vector2f& dir) {

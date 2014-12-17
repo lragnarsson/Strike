@@ -162,11 +162,20 @@ public:
 
     sf::Packet asPacket() override;
 };
-/*
+
 class GameObjUpdate : public Message
 {
 public:
     
-    int 
-};*/
+    float xPos;
+    float yPos;
+    bool isEquipped;
+    int ownerID;
+    
+    GameObjUpdate() = delete;
+    GameObjUpdate(sf::Packet);
+    GameObjUpdate(float newXPos, float newYPos, bool equippedStatus, int ownerID, int reciever = -1) : Message(GAME_OBJ_UPDATE, UDP, reciever), xPos(newXPos), yPos(newYPos), isEquipped(equippedStatus) , ownerID(ownerID) {}
+    
+    sf::Packet asPacket() override;
+};
 #endif // _MESSAGES_

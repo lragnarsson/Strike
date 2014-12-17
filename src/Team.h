@@ -21,6 +21,7 @@ public:
     Team(int teamID) : teamID_(teamID) {}
     void setTeamID(int teamID);
     int getTeamID() const;
+    void increaseScore();
     void setScore(int score);
     int getScore() const;
 

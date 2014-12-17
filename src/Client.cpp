@@ -19,7 +19,7 @@ Filip Östman
 #include "./Team.h"
 
 
-Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
+Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike", sf::Style::Fullscreen) {
     renderWindow_.setFramerateLimit(50);
     renderWindow_.setMouseCursorVisible(false);
 
@@ -35,7 +35,7 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike") {
     gameState_.initWorld();
 
     hud_.setCrosshair(player->getCrosshair());
-    player->setHealth(30);
+    //player->setHealth(30);
 
     hud_.setCrosshair(player->getCrosshair());
 
@@ -110,6 +110,20 @@ void Client::readFromNetwork() {
                 delete message;
                 break;
             }
+            case GAME_OBJ_UPDATE: {
+                GameObjUpdate* goumsg {static_cast<GameObjUpdate*>(message)};
+                // Do some stuff to handle the game object update...
+                
+                
+                std::cout << "I recieved a GAME_OBJECT_UPDATE! It had the following members: \n"
+                            << "(xpos, yPos): (" << goumsg->xPos << ", " << goumsg->yPos << ")\n"
+                            << "(isEquipped, ownerID (Probalby yibberish if not equipped)): ("
+                << goumsg->isEquipped << ", " << goumsg->ownerID << ")" << std::endl;
+                
+                // ... finished with updating the state of gameObjects =)
+                delete message;
+                break;
+            }
             case ROUND_RESTART: {
                 RoundRestart* rrmsg {static_cast<RoundRestart*>(message)};
                 gameState_.tTeam()->setScore(rrmsg->tTeamScore);
@@ -118,12 +132,10 @@ void Client::readFromNetwork() {
 
                 Player* myPlayer {controller_.getPlayer()};
                 if (myPlayer->getTeam()->getTeamID() == T_TEAM) {
-                    myPlayer->setPosition(gameState_.getTspawnpoints().at(spawnpointIndex));
-                    myPlayer->move();
+                    myPlayer->move(gameState_.getTspawnpoints().at(spawnpointIndex));
                 }
                 else {
-                    myPlayer->setPosition(gameState_.getCTspawnpoints().at(spawnpointIndex));
-                    myPlayer->move();
+                    myPlayer->move(gameState_.getCTspawnpoints().at(spawnpointIndex));
                 }
                 delete message;
                 break;

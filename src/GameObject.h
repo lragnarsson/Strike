@@ -9,12 +9,13 @@
 class GameObject : public sf::Sprite, public PhysicalCircle {
 public:
   GameObject(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-             sf::Vector2f position,float radius, float CHDistance, std::string name);
+             sf::Vector2f position,float radius, float CHDistance, std::string name
+             , float viewDistanceMultiplier);
     ~GameObject() noexcept {}
 
     void equip(int clientID);
     virtual void unEquip(sf::Vector2f position, sf::Vector2f velocity);
-    void calculateMoveVector(float elpased);
+    void calculateMoveVector(float elapsed);
     sf::Vector2f& getMoveVector();
     void move();
     virtual bool isStationary();
@@ -23,6 +24,8 @@ public:
     void markForRemoval();
     bool isMarkedForRemoval();
     std::string getName();
+    float getViewDistanceMultiplier() const;
+    void setViewDistanceMultiplier(float newConstant);
     
 protected:
     std::string weaponName_{"Granat"};
@@ -34,12 +37,14 @@ protected:
     float CHDistance_;
     bool markedForRemoval_{false};
     sf::SoundBuffer* soundBuffer_;
+    float viewDistanceMultiplier_ = 1;
 };
 
 class Grenade : public GameObject {
 public:
     Grenade(sf::Texture* texture, sf::SoundBuffer* soundBuffer,
-            sf::Vector2f position, float radius, float CHDistance, std::string name);
+            sf::Vector2f position, float radius, float CHDistance, std::string name,
+            float viewDistanceMultiplier);
     ~Grenade() noexcept {}
 
     bool isStationary() override;

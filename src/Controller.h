@@ -42,6 +42,7 @@ public:
     void isSprinting();
 
 private:
+    sf::Vector2f standardViewSize_{2560, 1440};
     sf::Vector2f inputVector_;
     Player* player_;
     sf::View* view_;
