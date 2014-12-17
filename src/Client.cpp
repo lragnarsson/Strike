@@ -37,6 +37,7 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike", sf::Style::
     hud_.setCrosshair(player->getCrosshair());
 
     gameState_.setPlayerSpawnPoints();
+    roundRestart();
 }
 
 Client::~Client() noexcept {
@@ -58,7 +59,8 @@ void Client::run() {
     while (renderWindow_.isOpen()) {
         //nh_.update();
         readFromNetwork();
-        handleInput();
+        if (roundRestartClock_.getElapsedTime() > freezeTime_)
+            handleInput();
         handleCollisions();
         handleSounds();
         handleGameLogic();
@@ -74,7 +76,7 @@ bool Client::connectToServer(std::string name,
 }
 
 void Client::roundRestart() {
-//TODO
+    roundRestartClock_.restart();
 }
 
 void Client::readFromNetwork() {
@@ -90,6 +92,7 @@ void Client::readFromNetwork() {
                                                    sf::Vector2f(msg->endPointXPos, msg->endPointYPos),
                                                    msg->damage,
                                                    soundBuffers_["ak47.wav"]));
+                createDecals();
                 break;
                 delete msg;
             }
@@ -110,13 +113,13 @@ void Client::readFromNetwork() {
             case GAME_OBJ_UPDATE: {
                 GameObjUpdate* goumsg {static_cast<GameObjUpdate*>(message)};
                 // Do some stuff to handle the game object update...
-                
-                
+
+
                 std::cout << "I recieved a GAME_OBJECT_UPDATE! It had the following members: \n"
                             << "(xpos, yPos): (" << goumsg->xPos << ", " << goumsg->yPos << ")\n"
                             << "(isEquipped, ownerID (Probalby yibberish if not equipped)): ("
                 << goumsg->isEquipped << ", " << goumsg->ownerID << ")" << std::endl;
-                
+
                 // ... finished with updating the state of gameObjects =)
                 delete message;
                 break;
@@ -126,7 +129,7 @@ void Client::readFromNetwork() {
                 gameState_.tTeam()->setScore(rrmsg->tTeamScore);
                 gameState_.ctTeam()->setScore(rrmsg->ctTeamScore);
                 int spawnpointIndex {rrmsg->spawnpointIndex};
-
+                roundRestart();
                 Player* myPlayer {controller_.getPlayer()};
                 if (myPlayer->getTeam()->getTeamID() == T_TEAM) {
                     myPlayer->move(gameState_.getTspawnpoints().at(spawnpointIndex));
@@ -134,6 +137,7 @@ void Client::readFromNetwork() {
                 else {
                     myPlayer->move(gameState_.getCTspawnpoints().at(spawnpointIndex));
                 }
+                //sf::sleep(sf::seconds(2.0f));
                 delete message;
                 break;
             }

@@ -64,7 +64,10 @@ private:
     void handleSounds();
     void handleGameObjects();
 
-    int clientID_ = 1337;
+    int clientID_ = 1337; // this changes after you connect to a server and recieve a new one.
+    
+    sf::Clock roundRestartClock_;
+    sf::Time freezeTime_ {sf::seconds(3.0f)};
     NetworkHandler nh_;
     GameState gameState_;
     HUD hud_;

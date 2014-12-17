@@ -22,7 +22,7 @@ Filip Östman
 GameState::GameState() {}
 
 void GameState::initWorld(){
-    map_.load("de_mansion.tmx");
+    map_.load("map2.tmx");
     stationaryGameObjects_ = map_.getSpawnedObjects();
 }
 
@@ -92,13 +92,14 @@ void GameState::draw(sf::RenderWindow* window) {
     }
     for (auto player : players_) {
         if (player->getLastSeen() < 500) {
-            player->setColor(sf::Color(255, 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 100, player->getLastSeen()))));
+            player->setColor(sf::Color((player->getTeam()->getTeamID() == T_TEAM ? 255 : 0 ), 255, 255, (sf::Uint8)255*(1 - smoothstep(0, 100, player->getLastSeen()))));
             window->draw(*player);
         }
     }
 
     for (auto shot : handledShots_) {
-        window->draw(*shot);
+        if (gameTime_.getElapsedTime().asMilliseconds() - shot->getTimestamp().asMilliseconds() < 50)
+            window->draw(*shot);
     }
 
     for (auto decal : animatedDecals_) {
