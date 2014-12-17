@@ -14,7 +14,7 @@ Isak Wiberg
 #include <vector>
 
 Controller::Controller() {
-  view_ = new sf::View(sf::FloatRect(0, 0, 2560, 1440));
+  view_ = new sf::View(sf::FloatRect(0, 0, standardViewSize_.x, standardViewSize_.y));
 }
 
 std::vector<Shot*> Controller::playerFire() {
@@ -137,13 +137,11 @@ void Controller::setPlayerRotation(const sf::RenderWindow& window) {
 }
 
 void Controller::updateView() {
-    std::cout << "Entered updateView" << std:: endl;
     if (player_->getEquippedGameobject() != nullptr)
         if (view_->getSize() != standardViewSize_ * player_->getEquippedGameobject()->getViewDistanceMultiplier())
             view_->setSize(standardViewSize_ * player_->getEquippedGameobject()->getViewDistanceMultiplier());
         
     view_->setCenter(player_->getPosition());
-    std::cout << "Exited updateView" << std::endl;
 }
 
 sf::View* Controller::getView() {

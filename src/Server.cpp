@@ -64,12 +64,12 @@ void Server::readFromNetwork() {
           case PLAYER_UPDATE: {
               //std::cout << "got player update from " << static_cast<PlayerUpdate*>(message)->playerID << std::endl;
               updatePlayer(static_cast<PlayerUpdate*>(message));
-              delete message;
+              //delete message;
               break;
           }
           case ADD_SHOT: {
               handleShot(static_cast<AddShot*>(message));
-              delete message;
+              //delete message;
               break;
           }
           case GAME_OBJ_UPDATE: {
@@ -84,7 +84,7 @@ void Server::readFromNetwork() {
               
               
               // ... finished with updating the state of gameObjects =)
-              delete message;
+              //delete message;
               break;
           }
           case ADD_PLAYER: {
@@ -92,12 +92,12 @@ void Server::readFromNetwork() {
               if (ap->teamID == CT_TEAM) {
                   gameState_.addPlayer(new Player{ap->playerID, gameState_.ctTeam()});
                   std::cout << "added player to CT_TEAM with id: " << ap->playerID << std::endl;
-                  delete ap;
+                  //delete ap;
               }
               else if (ap->teamID == T_TEAM) {
                   gameState_.addPlayer(new Player{ap->playerID, gameState_.tTeam()});
                   std::cout << "added player to CT_TEAM with id: " << ap->playerID << std::endl;
-                  delete ap;
+                  //delete ap;
               }
               else
                   std::cout << "Team index did not match any of CT_TEAM or T_Team. No player was created." << std::endl;
@@ -105,6 +105,7 @@ void Server::readFromNetwork() {
           }
 
       }
+      delete message;
   }
 }
 
@@ -131,23 +132,28 @@ void Server::writeToNetwork() {
 }
 
 void Server::handleGameLogic() {
+    int numberOfLivingCTs = 0;
+    int numberOfLivingTs = 0;
     for (auto player : gameState_.getPlayers()) {
-        if (player->getHealth() <= 0) {
+        if (player->getHealth() > 0) {
             if (player->getTeam() == gameState_.ctTeam()) {// comparison between pointers should work?
-                gameState_.tTeam()->increaseScore();
-                std::cout << "Increased score of tTeam. Score is now T, CT: "
-                    << gameState_.tTeam()->getScore() << ", "
-                << gameState_.ctTeam()->getScore() << std::endl;
+                numberOfLivingCTs++;
             }
-            else {
-                gameState_.ctTeam()->increaseScore();
-                std::cout << "Increased score of ctTeam. Score is now T, CT: "
-                << gameState_.tTeam()->getScore() << ", "
-                << gameState_.ctTeam()->getScore() << std::endl;
+            if (player->getTeam() == gameState_.tTeam()) {
+                numberOfLivingTs++;
             }
-            roundRestart();
+            
         }
     }
+    if (numberOfLivingCTs == 0) {
+        gameState_.tTeam()->increaseScore();
+        roundRestart();
+    }
+    if (numberOfLivingTs == 0) {
+        gameState_.ctTeam()->increaseScore();
+        roundRestart();
+    }
+    
 }
 
 void Server::acceptConnections() {
@@ -188,7 +194,7 @@ void Server::initRemotePlayers() {
 
 void Server::roundRestart() {
     //std::vector<Message*> outboundMessages;
-
+    
     int ti = 0;
     int cti = 0;
     for (auto player : gameState_.getPlayers()) {
@@ -205,7 +211,7 @@ void Server::updatePlayer(PlayerUpdate* message) {
           player->move(message->xCoord, message->yCoord);
           player->setRotation(message->rotation);
       }
-      delete message;
+      //delete message;
 }
 
 void Server::handleShot(AddShot* message) {
@@ -221,7 +227,7 @@ void Server::handleShot(AddShot* message) {
     for (auto physObj : gameState_.getPhysicalObjects()) {
         if (physObj->intersectRay(shot->getRay(), centerAfterCollision))
             if (length(centerAfterCollision - shot->getOrigin()) < maxDistance) {
-                std::cout << "Hej, ett skott fick ny endpoint" << std::endl;
+                //std::cout << "Hej, ett skott fick ny endpoint" << std::endl;
                 shot->setEndPoint(centerAfterCollision);
                 maxDistance = length(centerAfterCollision - shot->getOrigin());
             }
@@ -232,8 +238,8 @@ void Server::handleShot(AddShot* message) {
                 shot->setEndPoint(centerAfterCollision);
                 maxDistance = length(centerAfterCollision - shot->getOrigin());
                 hitPlayer = player;
-                int ralleTest = shot->getDamage();
-                std::cout << "skada: " << ralleTest << std::endl;
+                //int ralleTest = shot->getDamage();
+                //std::cout << "skada: " << ralleTest << std::endl;
             }
     }
     //std::cout << "Shot damage: " << ralleTest << std::endl;
@@ -242,5 +248,5 @@ void Server::handleShot(AddShot* message) {
     
         //std::cout << "Handleshot without any player hit." << std::endl;
     gameState_.addHandledShot(shot);
-    delete message;
+    //delete message;
 }
