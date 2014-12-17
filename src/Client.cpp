@@ -94,7 +94,6 @@ void Client::readFromNetwork() {
                                                    soundBuffers_["ak47.wav"]));
                 createDecals();
                 break;
-                delete msg;
             }
             case PLAYER_UPDATE: {
                 PlayerUpdate* msg = static_cast<PlayerUpdate*>(message);
@@ -107,7 +106,6 @@ void Client::readFromNetwork() {
                         }
                     }
                 }
-                delete message;
                 break;
             }
             case GAME_OBJ_UPDATE: {
@@ -121,7 +119,6 @@ void Client::readFromNetwork() {
                 << goumsg->isEquipped << ", " << goumsg->ownerID << ")" << std::endl;
 
                 // ... finished with updating the state of gameObjects =)
-                delete message;
                 break;
             }
             case ROUND_RESTART: {
@@ -138,7 +135,6 @@ void Client::readFromNetwork() {
                     myPlayer->move(gameState_.getCTspawnpoints().at(spawnpointIndex));
                 }
                 //sf::sleep(sf::seconds(2.0f));
-                delete message;
                 break;
             }
             case ADD_PLAYER: {
@@ -146,7 +142,6 @@ void Client::readFromNetwork() {
                 if (msg->playerID == controller_.getPlayer()->getClientID())
                     break;
                 gameState_.addPlayer(new Player(msg->playerID, (msg->teamID == T_TEAM ? gameState_.tTeam() : gameState_.ctTeam()), textures_["cage3.png"]));
-                delete message;
                 break;
             }
             case INITIAL_INFORMATION: {
@@ -157,12 +152,11 @@ void Client::readFromNetwork() {
                 myPlayer->setTeam((msg->teamID == T_TEAM ? gameState_.tTeam() : gameState_.ctTeam()));
 
                 std::cout << "ClientID and TeamID (0 = T, 1 = CT) of player updated to: " << msg->clientID << ", " << msg->teamID << std::endl;
-                delete message;
                 break;
             }
         }
 
-        //delete message;
+        delete message;
     }
 }
 
