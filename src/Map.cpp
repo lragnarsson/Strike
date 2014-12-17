@@ -171,6 +171,8 @@ void Map::load(std::string filename){
                         spawnedObjects_.push_back (w.createFrag(weaponCoords));
                     else if (whatWeapon == "PPK")
                         spawnedObjects_.push_back (w.createPPK(weaponCoords));
+                    else if (whatWeapon == "Awp")
+                        spawnedObjects_.push_back (w.createAwp(weaponCoords));
                     else
                         std::cerr << "can't find: " << whatWeapon << std::endl;
                 }
