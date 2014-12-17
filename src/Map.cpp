@@ -21,7 +21,7 @@ Lage Ragnarsson
 #define TIXML_USE_STL
 
 Map::Map() {
-    renderTexture_.create(3200, 3200);
+    renderTexture_.create(5120, 2880);
     renderTexture_.clear();
     renderTexture_.display();
 }

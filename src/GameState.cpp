@@ -22,7 +22,7 @@ Filip Östman
 GameState::GameState() {}
 
 void GameState::initWorld(){
-    map_.load("map2.tmx");
+    map_.load("de_mansion.tmx");
     stationaryGameObjects_ = map_.getSpawnedObjects();
 }
 

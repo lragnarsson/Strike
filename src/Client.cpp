@@ -35,9 +35,6 @@ Client::Client() : renderWindow_(sf::VideoMode(1280, 720), "Strike", sf::Style::
     gameState_.initWorld();
 
     hud_.setCrosshair(player->getCrosshair());
-    //player->setHealth(30);
-
-    hud_.setCrosshair(player->getCrosshair());
 
     gameState_.setPlayerSpawnPoints();
 }
