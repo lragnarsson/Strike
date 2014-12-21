@@ -18,7 +18,7 @@ Isak: Player 2h, NetworkHandler 2h, Client 3h
 
 v. 50
 Erik: NetworkHandler och Server 12h
-Filip:
+Filip: HUD 2h, Player 1h, weapon 1h, Client 1h, Map 2h, Strike 1h, Server 1h
 Lage:
 Jesper: Map 2h, Client 5h, GameState 3h, PhysicalObject-hierarki 5h, Team 1h, Server 1h, Player 1h
 Rasmus: Map 12h
