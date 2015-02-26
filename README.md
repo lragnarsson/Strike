@@ -1,6 +1,4 @@
-#Strike
-======
-## Strike: local defensive
+# Strike: local defensive
 ### Projekt i kursen TDDC76, Linköpings Universitet
 ###### Projektmedlemmar:
 *	Jesper Otterholm
